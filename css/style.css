@@ -61,3 +61,4 @@ body {
 .asset .name { font-size: 14px; }
 .asset .cost { font-size: 11px; }
 
+.viewHidden{ display: none;}
