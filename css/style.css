@@ -32,5 +32,32 @@ body {
 }
 #ctrl .inside {
   padding: 5px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
+.assets {
+  list-style: none;
+  padding: 0;
+}
+.asset {
+  float: left;
+  display: block;
+  width: 64px;
+  height: 64px;
+  border: 1px solid #000;
+  box-shadow: 0 0 12px rgba(100, 100, 100, .5);
+  margin: 5px;
+  cursor: pointer;
+}
+.asset .name,
+.asset .cost {
+  display: block;
+  text-align: center;
+}
+.asset .name { font-size: 14px; }
+.asset .cost { font-size: 11px; }
 

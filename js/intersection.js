@@ -12,7 +12,7 @@
     };
     var map = new google.maps.Map(document.getElementById("map"), options);
   }
-  google.maps.event.addDomListener(window, 'load', map_init);
+  //google.maps.event.addDomListener(window, 'load', map_init);
 
   var
     cities = [
@@ -31,14 +31,16 @@
       {
         name: "Soldier",
         class: "soldier",
-        power: 100,
-        speed: 10
+        projS: .5, // projectiles per second
+        speed: 10,
+        cost: 1000
       },
       {
         name: "Turret",
         class: "turret",
-        power: 10000,
-        speed: 0
+        projS: 10,
+        speed: 0,
+        cost: 1500
       }
     ],
 
@@ -46,7 +48,13 @@
   ;
 
   $(document).ready(function(){
+    // make lobby
+    return false;
+
     $d.ctrl = $("#ctrl").children(".inside");
+
+    // start new server section
+    $d.sns = $("#section-start-new-server");
 
     // make and populate the list of cities
     var $lc = $("<div></div>"),
@@ -60,16 +68,19 @@
     }
     
     $lc.append($lc_select);
-    $d.ctrl.append($lc);
+    $d.sns.append($lc);
 
     // switch modes area
     var $sm = $("<div></div>"),
         $sm_form = $("<form></form>"),
         $sm_defend = $("<input></input>")
-          .attr({ type: "radio", name: "mode", title: "Defend" })
+          .attr({ type: "radio", name: "mode", title: "Defend", value: "defend" })
           .select()
         $sm_attack = $("<input></input>")
-          .attr({ type: "radio", name: "mode", title: "Attack" });
+          .attr({ type: "radio", name: "mode", title: "Attack", value: "attack" });
+
+    $sm_attack.val(['defend']);
+    $sm_defend.val(['defend']);
 
     $sm_form
       .append($sm_defend)
@@ -78,16 +89,37 @@
       .append($sm_attack)
       .append("<span>Attack</span>");
     $sm.append($sm_form);
-    $d.ctrl.append($sm);
+    $d.sns.append($sm);
 
-    var $go_btn = $("<button></button>").text("Play!");
+    // name of server
+    var $ns = $("<div></div>"),
+        $ns_ip = $("<input></input>");
+
+    $ns.append($("<span></span>").text("Server name: "))
+      .append($ns_ip);
+
+    $d.sns.append($ns);
+
+    var $go_btn = $("<button></button>").text("Start new server");
 
     $d.ctrl.append($go_btn);
 
-
-    // make and populate soldiers list
+    // make and populate assets list
     var $sl = $("<div></div>"),
-        $sl_ul = $("<ul></ul>");
+        $sl_ul = $("<ul></ul>").addClass("assets");
+
+    for (var i = 0; i < assets.length; i++) {
+      var $li = $("<li></li>")
+        .attr("class", "asset")
+        .append($("<span></span>").attr("class", "name").text(assets[i].name))
+        .append($("<span></span>").attr("class", "cost")
+          .html("&pound;" + assets[i].cost));
+
+      $sl_ul.append($li);
+    }
+
+    $sl.append($sl_ul);
+    $d.ctrl.append($sl);
   });
 })(jQuery);
 
