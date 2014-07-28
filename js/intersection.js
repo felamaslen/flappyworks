@@ -55,7 +55,7 @@
     $d = {},
 
     me = {
-      nickname: "player" + makeid()
+      nickname: "player-" + makeid()
     },
 
     // firebase
@@ -97,6 +97,17 @@
 
   function update_lobby_list() {
     $d.sessionList.empty();
+
+    lobby = [
+    {
+      name: "session1",
+      hash: "f8218avksk31091a"
+    },
+    {
+      name: "welovecakes",
+      hash: "a691akvc92aka23"
+    }
+    ];
 
     if (!lobby.length) {
       $d.sessionList.append($("<li></li>")
