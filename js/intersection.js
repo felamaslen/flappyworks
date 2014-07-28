@@ -13,6 +13,14 @@
     var map = new google.maps.Map(document.getElementById("map"), options);
   }
   //google.maps.event.addDomListener(window, 'load', map_init);
+  
+  function server(options) {
+    return true;
+  }
+
+  server.prototype.init = function(){
+    return true;
+  };
 
   var
     cities = [
