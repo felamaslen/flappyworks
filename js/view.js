@@ -3,13 +3,18 @@ view.current = "";
 view.change = function(newView){
   view.current = newView;
   $(".view").each(function(index) {
-    $(this).css('display','none');
+    if (!($(this).hasClass("viewHidden"))){
+      $(this).addClass("viewHidden");
+    }
   });
-  $('#'+newView).css('display','block');
+  $('#'+newView).removeClass("viewHidden");
 }
 $(document).ready(function(){
+  view.current = $('.viewDefualt')[0].id;
   $(".view").each(function(index) {
-    $(this).css('display','none');
+    if (!($(this).hasClass("viewHidden"))){
+      $(this).addClass("viewHidden");
+    }
   });
-  $('.viewDefualt').css('display','block');
+  $('.viewDefualt').removeClass("viewHidden");
 });
