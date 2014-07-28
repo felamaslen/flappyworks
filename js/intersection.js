@@ -55,6 +55,9 @@
     $d = {}
   ;
 
+  // firebase
+  var fb = new Firebase("https://flappyworks.firebaseio.com");
+
   $(document).ready(function(){
     // make lobby
     return false;
