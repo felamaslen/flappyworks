@@ -68,3 +68,7 @@ body {
   background-color: orange;
   border-color: orange;
 }  
+.btn-default:hover{
+  background-color: #e04a09;
+  border-color: #e04a09;
+}  
