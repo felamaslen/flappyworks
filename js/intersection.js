@@ -60,6 +60,18 @@
     lobby = []
   ;
 
+  function new_session() {
+    // main function for creating a new session
+    
+    return true;
+  }
+
+  function join_session() {
+    // main function for joining an existing session
+
+    return true;
+  }
+
   function update_lobby_list() {
     $d.sessionList.empty();
 
