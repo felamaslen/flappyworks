@@ -5,3 +5,28 @@
 body {
   font: 1em Arial, Helvetica, sans-serif;
 }
+#map_outer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 300px;
+  bottom: 0;
+  background: #fff;
+}
+#map_inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+#map {
+  width: 100%;
+  height: 100%;
+}
+#ctrl {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  box-shadow: -3px 0 12px rgba(40, 40, 40, .6);
+}
