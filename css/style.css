@@ -3,7 +3,7 @@
  */
 
 body {
-  font: 1em Arial, Helvetica, sans-serif;
+  margin: 0;
 }
 #map_outer {
   position: fixed;
@@ -29,4 +29,7 @@ body {
   bottom: 0;
   width: 300px;
   box-shadow: -3px 0 12px rgba(40, 40, 40, .6);
+}
+#ctrl .inside {
+  padding: 5px;
 }
