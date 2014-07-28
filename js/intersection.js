@@ -52,20 +52,66 @@
       }
     ],
 
-    $d = {}
+    $d = {},
+
+    // firebase
+    fb = new Firebase("https://interception.firebaseio.com"),
+
+    lobby = []
   ;
 
-  // firebase
-  var fb = new Firebase("https://flappyworks.firebaseio.com");
+  function update_lobby_list() {
+    $d.sessionList.empty();
+
+    if (!lobby.length) {
+      $d.sessionList.append($("<li></li>")
+        .text("There are no sessions, or an error occurred. :(")
+      );
+    }
+    else {
+      for (var i = 0; i < lobby.length; i++) {
+        $d.sessionList.append($("<li></li>")
+          .text(lobby[i].name)
+          .attr("data-hash", lobby[i].hash)
+        );
+      }
+    }
+    return true;
+  }
+
+  function get_sessions() {
+    lobby = [];
+
+    fb.on("value", function (sessions) {
+      for (var i in sessions) {
+        lobby[lobby.length] = {
+          name: i,
+          hash: sessions[i]
+        };
+      }
+
+      update_lobby_list();
+    }, function (errorObject) {
+      console.log('[ERROR] The read failed: ' + errorObject.code);
+
+      update_lobby_list();
+    });
+
+    return true;
+  }
 
   $(document).ready(function(){
-    // make lobby
-    return false;
-
     $d.ctrl = $("#ctrl").children(".inside");
 
     // start new server section
     $d.sns = $("#section-start-new-server");
+
+    // session list
+    $d.sessionList = $("#sessionList");
+
+    get_sessions();
+
+    return false;
 
     // make and populate the list of cities
     var $lc = $("<div></div>"),
