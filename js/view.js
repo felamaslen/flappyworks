@@ -7,3 +7,9 @@ view.change = function(newView){
   });
   $('#'+newView).css('display','block');
 }
+$(document).ready(function(){
+  $(".view").each(function(index) {
+    $(this).css('display','none');
+  });
+  $('.viewDefualt').css('display','block');
+});

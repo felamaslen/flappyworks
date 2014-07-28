@@ -65,12 +65,14 @@
 
     if (!lobby.length) {
       $d.sessionList.append($("<li></li>")
+        .addClass("list-group-item")
         .text("There are no sessions, or an error occurred. :(")
       );
     }
     else {
       for (var i = 0; i < lobby.length; i++) {
         $d.sessionList.append($("<li></li>")
+          .addClass("list-group-item")
           .text(lobby[i].name)
           .attr("data-hash", lobby[i].hash)
         );
@@ -82,11 +84,13 @@
   function get_sessions() {
     lobby = [];
 
-    fb.on("value", function (sessions) {
-      for (var i in sessions) {
+    fb.on("value", function (snapshot) {
+      var sessions = snapshot.val();
+
+      for (var name in sessions) {
         lobby[lobby.length] = {
-          name: i,
-          hash: sessions[i]
+          name: name,
+          hash: sessions[name]
         };
       }
 
