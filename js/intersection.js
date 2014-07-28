@@ -54,14 +54,37 @@
 
     $d = {},
 
+    me = {
+      nickname: "player" + makeid()
+    },
+
     // firebase
     fb = new Firebase("https://interception.firebaseio.com"),
 
     lobby = []
   ;
 
+  function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  }
+
   function new_session() {
     // main function for creating a new session
+    
+    var newSessionRef = fb.push();
+    newSessionRef.set({
+      state: 0,
+      player1: me,
+      player2: null
+    });
+
+    console.log(newSessionRef);
     
     return true;
   }
@@ -124,6 +147,8 @@
 
     // session list
     $d.sessionList = $("#sessionList");
+
+    $("#txtname").val(me.nickname);
 
     get_sessions();
 
