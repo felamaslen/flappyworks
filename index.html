@@ -8,55 +8,68 @@
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/style.css">
 		<script src="js/jquery.min.js"></script>
+    <script src="js/jquery.cookie.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto"></script>
 		<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script> 
 		<script src="js/intersection.js"></script>
 		<script src="js/view.js"></script>
 	</head>
-	<body> 
-	<div id="viewNickname" class="view viewDefualt">
-		<div class="container">
-			<h1><img alt="Intercection" src="img/intersection.png" /></h1>
-			<p>A tower defense game based on open data.</p>
-			
-			<div class="input-group">
-				<span class="input-group-addon"><span class="glyphicon glyphicon glyphicon-user"></span></spans>
-				<input id="txtname" type="text" class="form-control" placeholder="Nickname">
-			</div>
-			<button class="btn btn-default" onclick="view.change('viewLobby');">Set Nickname</button>
-		</div>
-	</div>
-
-	<div>
-
-
-	<div id="viewLobby" class="view">
-		<ul id="sessionList" class="list-group ">
-			
-		</ul>
- </div>
-
-	 
-
-		 <div id="wrap" class="view viewHidden">
-			<div id="map_outer">
-				<div id="map_inner">
-					<div id="map"></div>
-				</div>
-			</div>
-			<div id="ctrl">
-				<div class="inside">
-					<h2>Control</h2>
-					<div id="section-start-new-server">
-						<h3>Start new server</h3>
-					</div>
-				</div>
-			</div>
-			<div id="blurbg"></div>
-			<div id="lobby">
-				
-			</div>
-		</div>
-	</body>
+	<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Intersection</a>
+        </div>
+      </div>
+    </div>
+    <div class="container" id="main-wrapper"> 
+      <div id="viewNickname" class="view viewDefault">
+        <div class="container">
+          <h1>
+            <img alt="Intersection" src="img/intersection.png" />
+          </h1>
+          <div id="subtitle">
+            <p>A tower defense game based on open data.</p>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon glyphicon-user"></span></span>
+            <input id="inputNickname" type="text" class="form-control" placeholder="Nickname">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" id="btnSetNick">Set Nickname</button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div id="viewLobby" class="view">
+        <h3>Lobby<span class="nick-display" id="lobby-nick-display"></span></h3>
+        <ul id="sessionList" class="list-group "></ul>
+        <div id="newSessionSection" class="form-group">
+          <h4>New Session</h4>
+          <p>You can create a new session here and invite a player to join.</p>
+          <div class="form-group">
+            <label for="sessionName" class="control-label col-xs-3">Session name</label>
+            <div class="col-xs-7 input-group">
+              <input type="text" class="form-control" name="sessionName" id="sessionName">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" id="btnNewSession">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="game" class="view viewHidden">
+        <div id="map_outer">
+          <div id="map_inner">
+            <div id="map"></div>
+          </div>
+        </div>
+        <div id="ctrl">
+          <div class="inside">
+            <h2>Control</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

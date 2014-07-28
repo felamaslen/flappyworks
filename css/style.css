@@ -5,6 +5,14 @@
 body {
   margin: 0;
 }
+#main-wrapper {
+  margin-top: 50px;
+}
+
+#viewNickname, #viewLobby {
+  margin: 20px 0;
+}
+
 #map_outer {
   position: fixed;
   left: 0;
@@ -64,11 +72,49 @@ body {
 .viewHidden{ display: none;}
 .view{}
 
-.btn-default{
+.btn-default,
+.btn-default:focus {
   background-color: orange;
   border-color: orange;
-}  
+  outline: none !important;
+}
+.btn-default:focus {
+  border-color: #ad7819;
+}
 .btn-default:hover{
-  background-color: #B57205;
-  border-color: #B57205;
-}  
+  background-color: #DA911C;
+  border-color: #DA911C;
+}
+.btn-default:active {
+  background-color: #AD7819;
+  border-color: #AD7819;
+  outline: none !important;
+}
+.btn-join {
+  margin: 0 1em;
+  float: right;
+}
+
+.session-item .name {
+  font-size: 1.3em;
+  margin-right: 1em;
+}
+.session-item.accepting .status::after {
+  content: "Accepting players!";
+  font-weight: bold;
+  margin-left: 1em;
+  border: 1px solid orange;
+  padding: 2px;
+  border-radius: 2px;
+  background: #f5dfb7;
+}
+
+.nick-display {
+  font-size: 65%;
+  font-weight: bold;
+  color: #999;
+  font-style: italic;
+}
+.nick-display::before {
+  content: " - ";
+}

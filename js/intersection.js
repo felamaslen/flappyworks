@@ -13,15 +13,179 @@
     var map = new google.maps.Map(document.getElementById("map"), options);
   }
   //google.maps.event.addDomListener(window, 'load', map_init);
-  
-  function server(options) {
+
+  function debug_log(msg, level) {
+    switch (level) {
+      case 0: // error
+        alert("Fatal error: " + msg);
+        window.console && console.log("[FATAL]", msg);
+        break;
+      case 1: // warning
+        window.console && console.log("[WARN]", msg);
+        break;
+      case 2: // debug
+        window.console && console.log("[DEBUG]", msg);
+        break;
+    }
+
     return true;
   }
 
-  server.prototype.init = function(){
+  function game(options) {
+    //this.init(options);
+
+    return true;
+  }
+
+  game.prototype.init = function(options){
     return true;
   };
 
+  function makeid(length) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    var length = typeof length == "undefined" ? 5 : length;
+
+    for ( var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return text;
+  }
+
+  function new_session(options) {
+    // main function for creating a new session
+    if (!options.name.length) {
+      debug_log("please enter a name for the session.", 0);
+      return false;
+    }
+    
+    var hash = makeid(40);
+
+    var newSessionRef = fb.push();
+    newSessionRef.set({
+      hash: hash,
+      name: options.name,
+      state: 0,
+      player1: me,
+      player2: null
+    }, function(){
+      debug_log("added new session with name " + name, 2);
+      get_sessions(function(){
+        var ind = null;
+        for (var i = 0; i < lobby.length; i++) {
+          if (lobby[i].hash == hash) {
+            ind = i;
+            break;
+          }
+        }
+
+        if (ind == null) {
+          debug_log("unknown error while adding session; couldn't join", 0);
+        }
+      });
+    });
+    
+    return true;
+  }
+
+  function join_session(ind) {
+    // main function for joining an existing session
+    var session = fb.child(lobby[ind].uid);
+
+    session.child("player2").set({
+      nickname: me.nickname
+    });
+    session.child("state").set(1, function(){
+      view.change("game");
+    });
+
+    return true;
+  }
+
+  function update_lobby_list() {
+    $d.sessionList.empty();
+
+    if (!lobby.length) {
+      $d.sessionList.append($("<li></li>")
+        .addClass("list-group-item")
+        .text("There are no open sessions - why not create one?")
+      );
+    }
+    else {
+      for (var i = 0; i < lobby.length; i++) {
+        var players = [];
+        if (typeof lobby[i].player1 == "object") {
+          players[players.length] = lobby[i].player1.nickname;
+        }
+        if (typeof lobby[i].player2 == "object") {
+          players[players.length] = lobby[i].player2.nickname;
+        }
+
+        players = players.join(", ");
+
+        var open = lobby[i].state == 0;
+        var myOwn = false;
+
+        // make sure you can't (re-)join your own game
+        if (lobby[i].player1.nickname == me.nickname) {
+          myOwn = true;
+        }
+
+        $d.sessionList.append($("<li></li>")
+          .addClass("list-group-item")
+          .addClass("session-item")
+          .toggleClass("accepting", open)
+          .append($("<span></span>")
+            .addClass("name")
+            .text(lobby[i].name)
+          )
+          .attr("data-ind", i.toString())
+          .append($("<span></span>")
+            .addClass("status")
+            .text("Players: " + players)
+          )
+          .append($("<button></button>")
+            .addClass("btn")
+            .addClass("btn-xs")
+            .addClass("btn-primary")
+            .addClass("btn-join")
+            .prop("disabled", !open || myOwn)
+            .text("Join")
+          )
+        );
+      }
+    }
+    return true;
+  }
+
+  function get_sessions(callback) {
+    lobby = [];
+
+    fb.on("value", function (snapshot) {
+      var sessions = snapshot.val();
+
+      var k = 0;
+      for (var i in sessions) {
+        lobby[k] = sessions[i];
+        lobby[k].uid = i;
+
+        k++;
+      }
+
+      update_lobby_list();
+
+      if (typeof callback == "function") callback();
+    }, function (errorObject) {
+      debug_log('The read failed: ' + errorObject.code, 0);
+
+      update_lobby_list();
+    });
+
+    return true;
+  }
+  
   var
     cities = [
       /*
@@ -54,117 +218,86 @@
 
     $d = {},
 
+    G = game(),
+
     me = {
-      nickname: "player-" + makeid()
+      nickname: "player-" + makeid(),
+      balance: 2000 // bank balance
     },
 
-    // firebase
+    // Main Firebase object
     fb = new Firebase("https://interception.firebaseio.com"),
 
     lobby = []
   ;
 
-  function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var straightToLobby = typeof $.cookie("nickname") != "undefined";
 
-    for( var i=0; i < 5; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
-  }
-
-  function new_session() {
-    // main function for creating a new session
-    
-    var newSessionRef = fb.push();
-    newSessionRef.set({
-      state: 0,
-      player1: me,
-      player2: null
-    });
-
-    console.log(newSessionRef);
-    
-    return true;
-  }
-
-  function join_session() {
-    // main function for joining an existing session
-
-    return true;
-  }
-
-  function update_lobby_list() {
-    $d.sessionList.empty();
-
-    lobby = [
-    {
-      name: "session1",
-      hash: "f8218avksk31091a"
-    },
-    {
-      name: "welovecakes",
-      hash: "a691akvc92aka23"
-    }
-    ];
-
-    if (!lobby.length) {
-      $d.sessionList.append($("<li></li>")
-        .addClass("list-group-item")
-        .text("There are no sessions, or an error occurred. :(")
-      );
-    }
-    else {
-      for (var i = 0; i < lobby.length; i++) {
-        $d.sessionList.append($("<li></li>")
-          .addClass("list-group-item")
-          .text(lobby[i].name)
-          .attr("data-hash", lobby[i].hash)
-        );
-      }
-    }
-    return true;
-  }
-
-  function get_sessions() {
-    lobby = [];
-
-    fb.on("value", function (snapshot) {
-      var sessions = snapshot.val();
-
-      for (var name in sessions) {
-        lobby[lobby.length] = {
-          name: name,
-          hash: sessions[name]
-        };
-      }
-
-      update_lobby_list();
-    }, function (errorObject) {
-      console.log('[ERROR] The read failed: ' + errorObject.code);
-
-      update_lobby_list();
-    });
-
-    return true;
-  }
+  if (straightToLobby) me.nickname = $.cookie("nickname");
 
   $(document).ready(function(){
     $d.ctrl = $("#ctrl").children(".inside");
 
-    // start new server section
-    $d.sns = $("#section-start-new-server");
-
-    // session list
+    // session list in lobby
     $d.sessionList = $("#sessionList");
 
-    $("#txtname").val(me.nickname);
+    // session name button in new session section
+    $d.sessionName = $("#sessionName");
 
+    // handle nickname stuff
+    $d.inputNickname = $("#inputNickname");
+    $d.inputNickname.val(me.nickname);
+
+    var origRandNick = $d.inputNickname.val();
+
+    $("#btnSetNick").on("click", function(){
+      me.nickname = $d.inputNickname.val();
+      
+      if (me.nickname != origRandNick) {
+        $.cookie("nickname", me.nickname, { expires: 30 });
+      }
+
+      $(".nick-display").text(me.nickname);
+
+      view.change("viewLobby");
+    });
+
+    // load open sessions from Firebase
     get_sessions();
 
-    return false;
+    view.current = $(".viewDefault").attr("id");
+    $(".view").addClass("viewHidden");
+    $(".viewDefault").removeClass("viewHidden");
 
+    if (straightToLobby) {
+      $(".nick-display").text(me.nickname);
+
+      view.change("viewLobby");
+    }
+
+    $d.sessionName.val("newsess-" + makeid());
+
+    $("#btnNewSession").on("click", function(){
+      var name = $d.sessionName.val();
+
+      new_session({ name: name });
+
+      return true;
+    });
+
+    $d.sessionList.on("click", function(e) {
+      var $target = $(e.target);
+
+      if (!$target.is("button.btn-join")) return false;
+
+      var ind = parseInt($target.parent().attr("data-ind"));
+
+      join_session(ind);
+
+      return true;
+    });
+
+    /*
     // make and populate the list of cities
     var $lc = $("<div></div>"),
         $lc_select = $("<select></select>").append($("<option></option>")
@@ -175,6 +308,10 @@
         .text(cities[i].name)
       );
     }
+    
+    // start new server section
+    $d.sns = $("#section-start-new-server");
+
     
     $lc.append($lc_select);
     $d.sns.append($lc);
@@ -229,6 +366,7 @@
 
     $sl.append($sl_ul);
     $d.ctrl.append($sl);
+    // */
   });
 })(jQuery);
 
