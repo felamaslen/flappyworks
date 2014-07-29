@@ -52,28 +52,25 @@
             <div class="col-xs-7 input-group">
               <input type="text" class="form-control" name="sessionName" id="sessionName">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" id="btnNewSession" >Go!</button>
+                <button class="btn btn-default" type="button" id="btnSetSessName" >Go!</button>
               </span>
-              
-        </div>
             </div>
           </div>
         </div>
       </div>
       <div id="viewSetup" class="view viewHidden">
         <h1>Game Setup</h1>
-           <div id="selectLocation">
-            <h2>Select Location:</h2>
-                <ul class="list-group">
-                  <li class="list-group-item" id="plymouth" onclick="">Plymouth</li>
-            </ul> 
-
-            <h1>Map Preview:</h1>
-            <div id="mapPreview"></div>
-            <button id="beginGame" class="btn btn-success">Begin Game </button>
-
+        <h2 id="setupSessName">Session name: <span id="newSessInd"></span></h2>
+        <div id="selectLocation">
+          <h2>Select Location:</h2>
+          <ul class="list-group">
+            <li class="list-group-item" id="plymouth" onclick="">Plymouth</li>
+          </ul> 
+          <h1>Map Preview:</h1>
+          <div id="mapPreview"></div>
+          <button id="beginGame" class="btn btn-success">Begin Game</button>
+        </div>
       </div>
-     
       <div id="viewGame" class="view viewHidden">
         <div id="map_outer">
           <div id="map_inner">

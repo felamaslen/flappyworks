@@ -19,6 +19,12 @@
   margin: 20px 0;
 }
 
+#setupSessName {
+  color: #666;
+  font-style: italic;
+  font-size: .9em;
+}
+
 #map_outer {
   position: fixed;
   left: 0;

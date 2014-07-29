@@ -321,6 +321,8 @@ var dummy = true;
 
     G = null, // this becomes the game
 
+    newSessName = "",
+
     me = {
       nickname: "player-" + makeid(),
       balance: 2000 // bank balance
@@ -378,10 +380,13 @@ var dummy = true;
 
     $d.sessionName.val("newsess-" + makeid());
 
-    $("#btnNewSession").on("click", function(){
-      var name = $d.sessionName.val();
+    $("#btnSetSessName").on("click", function(){
+      newSessName = $d.sessionName.val();
 
-      new_session({ name: name });
+      // change to setup screen
+      $("#newSessInd").text(newSessName);
+      view.change("viewSetup");
+      //new_session({ name: name });
 
       return true;
     });
