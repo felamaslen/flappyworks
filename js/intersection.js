@@ -4,7 +4,7 @@
  * Fela, Jacob, Saul, Malachy
  */
 
-debug;
+//debugger;
 
 // start dummy game
 var dummy = true;
@@ -48,18 +48,7 @@ var dummy = true;
   function start_game() {
     G = new game();
 
-    view.change("game");
-    
-    // make and populate the list of cities
-    var $lc = $("<div></div>"),
-        $lc_select = $("<select></select>").append($("<option></option>")
-          .prop("selected", true)
-          .text("Select a city..."))
-    for (var i = 0; i < cities.length; i++) {
-      $lc_select.append($("<option></option>")
-        .text(cities[i].name)
-      );
-    }
+    view.change("viewGame");
     
     // switch modes area
     var $sm = $("<div></div>"),
@@ -268,10 +257,14 @@ var dummy = true;
         debug_log("session started; starting game!", 2);
         start_game(ind);
       }
-      
-      var session = fb.child(lobby[ind].uid);
 
-      session.on("child_changed", function(snapshot) {
+      if (sessionWatch != null) {
+        sessionWatch.off("child_changed");
+      }
+      
+      sessionWatch = fb.child(lobby[ind].uid);
+
+      sessionWatch.on("child_changed", function(snapshot) {
         if (snapshot.val() == "1") {
           // someone joined the game, let's join it too!
           
@@ -320,6 +313,7 @@ var dummy = true;
 
     newSessName = "",
     addedSession = false,
+    sessionWatch = null,
 
     me = {
       nickname: "player-" + makeid(),
@@ -349,7 +343,16 @@ var dummy = true;
     // handle nickname stuff
     $d.inputNickname = $("#inputNickname");
     $d.inputNickname.val(me.nickname);
-
+    
+    // populate the list of cities
+    var $lc = $("#citySelect");
+    for (var i = 0; i < cities.length; i++) {
+      $lc.append($("<option></option>")
+        .text(cities[i].name)
+        .attr("value", i)
+      );
+    }
+    
     var origRandNick = $d.inputNickname.val();
 
     $("#btnSetNick").on("click", function(){
@@ -391,6 +394,7 @@ var dummy = true;
 
       // change to setup screen
       $("#newSessInd").text(newSessName);
+      $("#beginGame").prop("disabled", true); // can't start game without another player
       view.change("viewSetup");
       //new_session({ name: name });
 
@@ -399,8 +403,7 @@ var dummy = true;
 
     $("#beginGame").on("click", function() {
       debug_log("Clicked begin game button", 2);
-      G = true; // prevents the loop from loading the lobby constantly
-      view.change("viewGame");
+      start_game();
     });
 
     $d.sessionList.on("click", function(e) {
