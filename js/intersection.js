@@ -4,6 +4,8 @@
  * Fela, Jacob, Saul, Malachy
  */
 
+debug;
+
 // start dummy game
 var dummy = true;
 
@@ -384,6 +386,8 @@ var dummy = true;
 
     $("#btnSetSessName").on("click", function() {
       newSessName = $d.sessionName.val();
+     
+      new_session({ name: newSessName });
 
       // change to setup screen
       $("#newSessInd").text(newSessName);
@@ -395,7 +399,6 @@ var dummy = true;
 
     $("#beginGame").on("click", function() {
       debug_log("Clicked begin game button", 2);
-      new_session({ name: newSessName });
       G = true; // prevents the loop from loading the lobby constantly
       view.change("viewGame");
     });
