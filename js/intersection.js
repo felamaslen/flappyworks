@@ -384,6 +384,8 @@ var dummy = true;
     $("#beginGame").on("click", function() {
       debug_log("Clicked begin game button", 2);
       start_game();
+
+      return false;
     });
 
     $d.sessionList.on("click", function(e) {
