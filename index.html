@@ -54,24 +54,27 @@
               <span class="input-group-btn">
                 <button class="btn btn-default" type="button" id="btnNewSession" >Go!</button>
               </span>
-              <h1>Game Setup</h1>
-                <div id="sessionName">
-                  <input id="" />
-                </div>
-                <div id="selectLocation">
-                  <h2>Select Location:</h2>
-                    <ul class="list-group">
-                      <li class="list-group-item" id="plymouth" onclick="">Plymouth</li>
-            </ul>
+              
         </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="viewSetup" class="view viewHidden"> 
-        
+      <div id="viewSetup" class="view viewHidden">
+        <h1>Game Setup</h1>
+           <div id="selectLocation">
+            <h2>Select Location:</h2>
+                <ul class="list-group">
+                  <li class="list-group-item" id="plymouth" onclick="">Plymouth</li>
+            </ul> 
+
+            <h1>Map Preview:</h1>
+            <div id="mapPreview"></div>
+            <button id="beginGame" class="btn btn-success">Begin Game </button>
+
       </div>
-      <div id="game" class="view viewHidden">
+     
+      <div id="viewGame" class="view viewHidden">
         <div id="map_outer">
           <div id="map_inner">
             <div id="map"></div>
@@ -79,7 +82,7 @@
         </div>
         <div id="ctrl">
           <div class="inside">
-            <h2>Control</h2>
+            
           </div>
         </div>
       </div>
