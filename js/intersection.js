@@ -282,7 +282,7 @@ var me;
     if (ind != null) {
       // joining somebody's session; wait in game setup view
       if (lobby[ind].state == 1) {
-        debug_log("session started already", 2);
+        //debug_log("session started already", 2);
         view.change("viewSetup");
         $("#beginGame").prop("disabled", false);
 
@@ -297,6 +297,10 @@ var me;
       else if (lobby[ind].state == 2) {
         debug_log("player 1 entered game; following...", 2);
         start_game();
+      }
+
+      if (typeof gameSession == "undefined") {
+        gameSession = fb.child(lobby[ind].uid);
       }
 
       if (sessionWatch != null) {
@@ -374,7 +378,7 @@ var me;
     if (typeof gameSession != "undefined") {
       var param = {};
       gameSession.child(isFirstPlayer ? "player1" : "player2").update({
-        keepAlive: fb.ServerValue.TIMESTAMP
+        keepAlive: new Date().getTime()
       });
     }
   }, 1e4);
