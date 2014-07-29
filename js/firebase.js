@@ -2,6 +2,8 @@
 
 fb.on('value', function (snapshot) {
 
+	$('.data').html('');
+
     $.each( snapshot.val(), function( data, index ){
         
         $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
