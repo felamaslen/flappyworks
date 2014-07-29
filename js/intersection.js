@@ -6,8 +6,7 @@
 
 //debugger;
 
-// start dummy game
-var dummy = true;
+var me;
 
 (function($){
   function map_init(options) {
@@ -141,6 +140,8 @@ var dummy = true;
     
     sessionHash = makeid(40);
 
+    isFirstPlayer = true;
+
     gameSession = fb.push();
     gameSession.set({
       hash: sessionHash,
@@ -168,10 +169,10 @@ var dummy = true;
       "state": 1
     }, function() {
       debug_log("joining session...", 2);
-      //start_game(ind);
       $("#beginGame").prop("disabled", true);
       $("#newSessInd").text(lobby[ind].name);
       view.change("viewSetup");
+      isFirstPlayer = false;
     });
 
     return true;
@@ -247,9 +248,11 @@ var dummy = true;
       if (lobby[k].player1.nickname == me.nickname) {
         // this is our session
         ind = k;
+        isFirstPlayer = true;
       }
       else if (sessionHash && lobby[k].hash == sessionHash) {
         ind = k;
+        isFirstPlayer = false;
       }
 
       k++;
@@ -259,6 +262,7 @@ var dummy = true;
 
     if (G != null) return true;
 
+    // verify that the session was actually added, when adding a session
     if (addedSession) {
       addedSession = false;
 
@@ -275,15 +279,16 @@ var dummy = true;
       }
     }
 
-    //if (typeof callback == "function") callback();
-
     if (ind != null) {
       // if someone's already joined the game, let's start it
       if (lobby[ind].state == 1) {
         debug_log("session started already", 2);
         view.change("viewSetup");
         $("#beginGame").prop("disabled", false);
-        //start_game(ind);
+
+        // set all the form elements to player1's values
+        $("#selectLocation").val(lobby[ind].city);
+        $(".inputMode").val(lobby[ind].mode);
       }
       else if (lobby[ind].state == 2) {
         debug_log("player 1 entered game; following...", 2);
@@ -348,17 +353,18 @@ var dummy = true;
     sessionWatch = null,
     sessionHash = null,
     gameSession,
-
-    me = {
-      nickname: "player-" + makeid(),
-      balance: 2000 // bank balance
-    },
+    isFirstPlayer = null,
 
     // Main Firebase object
     fb = new Firebase("https://interception.firebaseio.com"),
 
     lobby = []
   ;
+    
+  me = {
+    nickname: "player-" + makeid(),
+    balance: 2000 // bank balance
+  };
 
   var straightToLobby = typeof $.cookie("nickname") != "undefined";
 
@@ -428,8 +434,7 @@ var dummy = true;
 
       // change to setup screen
       $("#newSessInd").text(newSessName);
-      if (!dummy)
-        $("#beginGame").prop("disabled", true); // can't start game without another player
+      $("#beginGame").prop("disabled", true); // can't start game without another player
       view.change("viewSetup");
       //new_session({ name: name });
 
