@@ -48,24 +48,30 @@ var me;
     return true;
   };
 
-  function start_game() {
+  function getFormParams() {
     // get parameters
-    var formParam = {};
+    var formParams = {};
     $.each($("#sessionParamForm").serializeArray(), function(_, kv) {
-      if (formParam.hasOwnProperty(kv.name)) {
-        formParam[kv.name] = $.makeArray(formParam[kv.name]);
-        formParam[kv.name].push(kv.value);
+      if (formParams.hasOwnProperty(kv.name)) {
+        formParams[kv.name] = $.makeArray(formParams[kv.name]);
+        formParams[kv.name].push(kv.value);
       }
       else {
-        formParam[kv.name] = kv.value;
+        formParams[kv.name] = kv.value;
       }
     });
 
+    return formParams;
+  }
+
+  function start_game() {
+    var formParams = getFormParams();
+    
     var error = [];
 
-    if (typeof formParam.mode == "undefined")
+    if (typeof formParams.mode == "undefined")
       error[error.length] = "must choose a role (defend or attack)";
-    if (formParam.citySelect == "null")
+    if (formParams.citySelect == "null")
       error[error.length] = "must choose a city";
 
     if (error.length > 0) {
@@ -74,8 +80,8 @@ var me;
       return false;
     }
 
-    var mode = formParam.mode;
-    var city = parseInt(formParam.citySelect);
+    var mode = formParams.mode;
+    var city = parseInt(formParams.citySelect);
 
     G = new game();
 
@@ -84,7 +90,9 @@ var me;
     // change server data
     if (typeof gameSession != "undefined") {
       gameSession.update({
-        state: 2
+        state: 2,
+        mode: mode,
+        city: city
       });
     }
 
@@ -287,7 +295,7 @@ var me;
         $("#beginGame").prop("disabled", false);
 
         if (!isFirstPlayer) {
-          //$(document.body
+          $("#sessionParamForm :input").prop("disabled", true);
         }
 
         // set all the form elements to player1's values
@@ -296,6 +304,11 @@ var me;
       }
       else if (lobby[ind].state == 2) {
         debug_log("player 1 entered game; following...", 2);
+        
+        // set all the form elements to the stored values
+        $("#selectLocation").val(lobby[ind].city);
+        $(".inputMode").val(lobby[ind].mode);
+
         start_game();
       }
 
@@ -423,6 +436,8 @@ var me;
 
       view.change("viewLobby");
     });
+
+    $("#sessionParamForm").attr("action", "javascript:void(0);");
    
     // set up session watching mechanism
     fb.on("value", get_sessions, function(errorObject) {
@@ -458,10 +473,12 @@ var me;
       return true;
     });
 
-    $("#beginGame").on("click", function() {
+    $("#beginGame").on("click", function(e) {
       debug_log("Clicked begin game button", 2);
       start_game();
 
+      e.preventDefault();
+      e.stopPropagation();
       return false;
     });
 
