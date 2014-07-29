@@ -11,6 +11,10 @@ body {
   }
 }
 
+.navbar {
+  display: none;
+}
+
 #main-wrapper {
   margin-top: 50px;
 }
