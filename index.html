@@ -62,13 +62,18 @@
         <h1>Game Setup</h1>
         <h2 id="setupSessName">Session name: <span id="newSessInd"></span></h2>
         <div id="selectLocation">
-          <h2>Select Location:</h2>
-          <select id="citySelect">
-            <option value="null">Select a city...</option>
-          </select>
-          <h1>Map Preview:</h1>
-          <div id="mapPreview"></div>
-          <button id="beginGame" class="btn btn-success">Begin Game</button>
+          <form>
+            <h3>Select Location:</h3>
+            <select id="citySelect">
+              <option value="null">Select a city...</option>
+            </select>
+            <h3>Mode:</h3>
+            <input type="radio" name="mode" value="defend" selected>Defend<br>
+            <input type="radio" name="mode" value="attack">Attack
+            <h3>Map Preview:</h3>
+            <div id="mapPreview"></div>
+            <button id="beginGame" class="btn btn-success">Begin Game</button>
+          </form>
         </div>
       </div>
       <div id="viewGame" class="view viewHidden">
