@@ -280,11 +280,14 @@ var me;
     }
 
     if (ind != null) {
-      // if someone's already joined the game, let's start it
+      // joining somebody's session; wait in game setup view
       if (lobby[ind].state == 1) {
         debug_log("session started already", 2);
         view.change("viewSetup");
         $("#beginGame").prop("disabled", false);
+
+        if (!isFirstPlayer) {
+          $(document.body
 
         // set all the form elements to player1's values
         $("#selectLocation").val(lobby[ind].city);
@@ -358,13 +361,22 @@ var me;
     // Main Firebase object
     fb = new Firebase("https://interception.firebaseio.com"),
 
-    lobby = []
+    lobby = [],
   ;
     
   me = {
     nickname: "player-" + makeid(),
     balance: 2000 // bank balance
   };
+
+  var keepAlive = window.setInterval(function(){
+    if (typeof gameSession != "undefined") {
+      var param = {};
+      gameSession.child(isFirstPlayer ? "player1" : "player2").update({
+        keepAlive: fb.ServerValue.TIMESTAMP
+      });
+    }
+  }, 1e4);
 
   var straightToLobby = typeof $.cookie("nickname") != "undefined";
 
