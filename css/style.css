@@ -129,3 +129,7 @@ body {
   background-color: #fff;
   border-color: #ccc;
 }
+/*Temporaray*/
+.navbar{
+  display: none;
+}
