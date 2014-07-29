@@ -3,8 +3,14 @@
  */
 
 body {
-  margin: 0;
+  padding-top: 60px;
 }
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
+}
+
 #main-wrapper {
   margin-top: 50px;
 }
@@ -128,8 +134,4 @@ body {
   color: #333;
   background-color: #fff;
   border-color: #ccc;
-}
-/*Temporaray*/
-.navbar{
-  display: none;
 }
