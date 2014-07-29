@@ -70,7 +70,8 @@ var dummy = true;
       error[error.length] = "must choose a city";
 
     if (error.length > 0) {
-      debug_log("Errors were encountered: " + error.join("; "), 0);
+      debug_log("something happened and you couldn't join the game.", 0);
+//      debug_log("Errors were encountered: " + error.join("; "), 0);
       return false;
     }
 
