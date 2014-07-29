@@ -118,3 +118,14 @@ body {
 .nick-display::before {
   content: " - ";
 }
+
+.btn[disabled]:hover{
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+.btn[disabled]{
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
