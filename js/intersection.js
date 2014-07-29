@@ -10,11 +10,15 @@
 var dummy = true;
 
 (function($){
-  function map_init() {
-    var options = {
+  function map_init(options) {
+    if (typeof options.coords != "undefined") {
+      options.center = new google.maps.LatLng(options.coords[0], options.coords[1]);
+      delete options.coords;
+    }
+    var options = $.extend({
       center: new google.maps.LatLng(54.7, -3),
       zoom: 6
-    };
+    }, options);
     var map = new google.maps.Map(document.getElementById("map"), options);
   }
 
@@ -46,10 +50,44 @@ var dummy = true;
   };
 
   function start_game() {
+    // get parameters
+    var formParam = {};
+    $.each($("#sessionParamForm").serializeArray(), function(_, kv) {
+      if (formParam.hasOwnProperty(kv.name)) {
+        formParam[kv.name] = $.makeArray(formParam[kv.name]);
+        formParam[kv.name].push(kv.value);
+      }
+      else {
+        formParam[kv.name] = kv.value;
+      }
+    });
+
+    var error = [];
+
+    if (typeof formParam.mode == "undefined")
+      error[error.length] = "must choose a role (defend or attack)";
+    if (formParam.citySelect == "null")
+      error[error.length] = "must choose a city";
+
+    if (error.length > 0) {
+      debug_log("Errors were encountered: " + error.join("; "), 0);
+      return false;
+    }
+
+    var mode = formParam.mode;
+    var city = parseInt(formParam.citySelect);
+
     G = new game();
 
     view.change("viewGame");
-    
+
+    // change server data
+    if (typeof gameSession != "undefined") {
+      gameSession.update({
+        state: 2
+      });
+    }
+
     // make and populate assets list
     var $sl = $("<div></div>"),
         $sl_ul = $("<ul></ul>").addClass("assets");
@@ -67,7 +105,13 @@ var dummy = true;
     $sl.append($sl_ul);
     $d.ctrl.append($sl);
 
-    map_init();
+    var map_options = {};
+    if (typeof cities[city].zoom != "undefined")
+      map_options.zoom = cities[city].zoom;
+    
+    map_options.coords = cities[city].coords;
+
+    map_init(map_options);
 
     return true;
   }
@@ -96,8 +140,8 @@ var dummy = true;
     
     sessionHash = makeid(40);
 
-    var newSessionRef = fb.push();
-    newSessionRef.set({
+    gameSession = fb.push();
+    gameSession.set({
       hash: sessionHash,
       name: options.name,
       state: 0,
@@ -115,9 +159,10 @@ var dummy = true;
     // main function for joining an existing session
     if (G != null) return false;
 
-    var session = fb.child(lobby[ind].uid);
+    gameSession = fb.child(lobby[ind].uid);
+    sessionHash = lobby[ind].hash;
     
-    session.update({
+    gameSession.update({
       "player2": me,
       "state": 1
     }, function() {
@@ -202,6 +247,9 @@ var dummy = true;
         // this is our session
         ind = k;
       }
+      else if (sessionHash && lobby[k].hash == sessionHash) {
+        ind = k;
+      }
 
       k++;
     }
@@ -213,15 +261,15 @@ var dummy = true;
     if (addedSession) {
       addedSession = false;
 
-      var ind = null;
+      var ind2 = null;
       for (var i = 0; i < lobby.length; i++) {
         if (lobby[i].hash == sessionHash) {
-          ind = i;
+          ind2 = i;
           break;
         }
       }
 
-      if (ind == null) {
+      if (ind2 == null) {
         debug_log("unknown error while adding session; couldn't join", 0);
       }
     }
@@ -235,6 +283,10 @@ var dummy = true;
         view.change("viewSetup");
         $("#beginGame").prop("disabled", false);
         //start_game(ind);
+      }
+      else if (lobby[ind].state == 2) {
+        debug_log("player 1 entered game; following...", 2);
+        start_game();
       }
 
       if (sessionWatch != null) {
@@ -258,15 +310,15 @@ var dummy = true;
 
   var
     cities = [
-      /*
       {
         name: "London",
-        coord: [51.514756, -0.125631]
+        coords: [51.514756, -0.125631],
+        zoom: 10
       },
-      //*/
       {
         name: "Plymouth",
-        coord: [50.375935, -4.143126]
+        coords: [50.375935, -4.143126],
+        zoom: 12
       }
     ],
     assets = [ // weapons / soldiers / etc.
@@ -294,6 +346,7 @@ var dummy = true;
     addedSession = false,
     sessionWatch = null,
     sessionHash = null,
+    gameSession,
 
     me = {
       nickname: "player-" + makeid(),
@@ -374,7 +427,8 @@ var dummy = true;
 
       // change to setup screen
       $("#newSessInd").text(newSessName);
-      $("#beginGame").prop("disabled", true); // can't start game without another player
+      if (!dummy)
+        $("#beginGame").prop("disabled", true); // can't start game without another player
       view.change("viewSetup");
       //new_session({ name: name });
 
