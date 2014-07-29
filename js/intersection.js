@@ -4,6 +4,9 @@
  * Fela, Jacob, Saul, Malachy
  */
 
+// start dummy game
+var dummy = true;
+
 (function($){
   function map_init() {
     var options = {
@@ -40,6 +43,12 @@
   game.prototype.init = function(options){
     return true;
   };
+
+  function start_game() {
+    view.change("game");
+
+    return true;
+  }
 
   function makeid(length) {
     var text = "";
@@ -83,7 +92,10 @@
 
         if (ind == null) {
           debug_log("unknown error while adding session; couldn't join", 0);
+          return false;
         }
+
+        return true;
       });
     });
     
@@ -93,12 +105,13 @@
   function join_session(ind) {
     // main function for joining an existing session
     var session = fb.child(lobby[ind].uid);
-
-    session.child("player2").set({
-      nickname: me.nickname
-    });
-    session.child("state").set(1, function(){
-      view.change("game");
+    
+    session.update({
+      "player2": me,
+      "state": 1
+    }, function() {
+      debug_log("starting game...", 2);
+      start_game();
     });
 
     return true;
@@ -166,10 +179,15 @@
     fb.on("value", function (snapshot) {
       var sessions = snapshot.val();
 
-      var k = 0;
+      var k = 0, ind = null;
       for (var i in sessions) {
         lobby[k] = sessions[i];
         lobby[k].uid = i;
+
+        if (lobby[k].player1.nickname == me.nickname) {
+          // this is our session
+          ind = k;
+        }
 
         k++;
       }
@@ -177,6 +195,24 @@
       update_lobby_list();
 
       if (typeof callback == "function") callback();
+  
+      debug_log("ind: " + ind, 2);
+      if (ind != null) {
+        var session = fb.child(lobby[ind].uid);
+        console.log(session);
+
+        session.on("child_changed", function(snapshot) {
+          debug_log("changed state - " + snapshot.val(), 2);
+          if (snapshot.val() == "1") {
+            // someone joined the game, let's join it too!
+            
+            debug_log("someone joined the session; starting game!", 2);
+            start_game();
+          }
+        });
+      }
+
+      return true;
     }, function (errorObject) {
       debug_log('The read failed: ' + errorObject.code, 0);
 
