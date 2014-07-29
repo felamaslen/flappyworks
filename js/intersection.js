@@ -50,32 +50,6 @@ var dummy = true;
 
     view.change("viewGame");
     
-    // switch modes area
-    var $sm = $("<div></div>"),
-        $sm_form = $("<form></form>"),
-        $sm_defend = $("<input></input>")
-          .attr({ type: "radio", name: "mode", title: "Defend", value: "defend" })
-          .select()
-        $sm_attack = $("<input></input>")
-          .attr({ type: "radio", name: "mode", title: "Attack", value: "attack" });
-
-    $sm_attack.val(['defend']);
-    $sm_defend.val(['defend']);
-
-    $sm_form
-      .append($sm_defend)
-      .append("<span>Defend</span>")
-      .append("<br>")
-      .append($sm_attack)
-      .append("<span>Attack</span>");
-    $sm.append($sm_form);
-
-    $d.ctrl.append($sm);
-
-    var $go_btn = $("<button></button>").text("Start game!");
-
-    $d.ctrl.append($go_btn);
-
     // make and populate assets list
     var $sl = $("<div></div>"),
         $sl_ul = $("<ul></ul>").addClass("assets");
@@ -120,11 +94,11 @@ var dummy = true;
       return false;
     }
     
-    var hash = makeid(40);
+    sessionHash = makeid(40);
 
     var newSessionRef = fb.push();
     newSessionRef.set({
-      hash: hash,
+      hash: sessionHash,
       name: options.name,
       state: 0,
       player1: me,
@@ -147,8 +121,10 @@ var dummy = true;
       "player2": me,
       "state": 1
     }, function() {
-      debug_log("starting game...", 2);
-      start_game(ind);
+      debug_log("joining session...", 2);
+      //start_game(ind);
+      $("#beginGame").prop("disabled", true);
+      view.change("viewSetup");
     });
 
     return true;
@@ -238,7 +214,7 @@ var dummy = true;
 
       var ind = null;
       for (var i = 0; i < lobby.length; i++) {
-        if (lobby[i].hash == hash) {
+        if (lobby[i].hash == sessionHash) {
           ind = i;
           break;
         }
@@ -254,8 +230,10 @@ var dummy = true;
     if (ind != null) {
       // if someone's already joined the game, let's start it
       if (lobby[ind].state == 1) {
-        debug_log("session started; starting game!", 2);
-        start_game(ind);
+        debug_log("session started already", 2);
+        view.change("viewSetup");
+        $("#beginGame").prop("disabled", false);
+        //start_game(ind);
       }
 
       if (sessionWatch != null) {
@@ -266,10 +244,10 @@ var dummy = true;
 
       sessionWatch.on("child_changed", function(snapshot) {
         if (snapshot.val() == "1") {
-          // someone joined the game, let's join it too!
-          
-          debug_log("someone joined the session; starting game!", 2);
-          start_game(ind);
+          // someone joined the game, so allow us to start it
+          debug_log("Someone joined the session!");
+
+          $("#beginGame").prop("disabled", false);
         }
       });
     }
@@ -314,6 +292,7 @@ var dummy = true;
     newSessName = "",
     addedSession = false,
     sessionWatch = null,
+    sessionHash = null,
 
     me = {
       nickname: "player-" + makeid(),
