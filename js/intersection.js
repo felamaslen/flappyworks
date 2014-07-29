@@ -124,6 +124,7 @@ var dummy = true;
       debug_log("joining session...", 2);
       //start_game(ind);
       $("#beginGame").prop("disabled", true);
+      $("#newSessInd").text(lobby[ind].name);
       view.change("viewSetup");
     });
 
