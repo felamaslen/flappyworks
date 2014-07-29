@@ -5,6 +5,19 @@
  */
 
 //debugger;
+  
+function makeid(length) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  var length = typeof length == "undefined" ? 5 : length;
+
+  for ( var i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  return text;
+}
 
 var me;
 
@@ -124,19 +137,6 @@ var me;
     return true;
   }
 
-  function makeid(length) {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    var length = typeof length == "undefined" ? 5 : length;
-
-    for ( var i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-
-    return text;
-  }
-
   function new_session(options) {
     // main function for creating a new session
     if (G != null) return false;
@@ -253,7 +253,9 @@ var me;
       lobby[k] = sessions[i];
       lobby[k].uid = i;
 
-      if (lobby[k].player1.nickname == me.nickname) {
+      if (typeof lobby[k].player1 != "undefined" &&
+          typeof lobby[k].player1.nickname != "undefined" &&
+          lobby[k].player1.nickname == me.nickname) {
         // this is our session
         ind = k;
         isFirstPlayer = true;
@@ -340,12 +342,14 @@ var me;
       {
         name: "London",
         coords: [51.514756, -0.125631],
-        zoom: 10
+        zoom: 10,
+        balance: 2515202
       },
       {
         name: "Plymouth",
         coords: [50.375935, -4.143126],
-        zoom: 12
+        zoom: 12,
+        balance: 2568000
       }
     ],
     assets = [ // weapons / soldiers / etc.
