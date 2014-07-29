@@ -139,23 +139,8 @@ var dummy = true;
       player1: me,
       player2: null
     }, function(){
-      debug_log("added new session with name " + name, 2);
-      get_sessions(function(){
-        var ind = null;
-        for (var i = 0; i < lobby.length; i++) {
-          if (lobby[i].hash == hash) {
-            ind = i;
-            break;
-          }
-        }
-
-        if (ind == null) {
-          debug_log("unknown error while adding session; couldn't join", 0);
-          return false;
-        }
-
-        return true;
-      });
+      debug_log("adding new session with name " + name, 2);
+      addedSession = true; // on the next get_session, a callback will be issued
     });
     
     return true;
@@ -234,59 +219,69 @@ var dummy = true;
     return true;
   }
 
-  function get_sessions(callback) {
-    if (G != null) return false;
+  // lobby updates
+  function get_sessions(snapshot) {
+    var sessions = snapshot.val();
+
     lobby = [];
 
-    fb.on("value", function (snapshot) {
-      var sessions = snapshot.val();
+    var k = 0, ind = null;
+    for (var i in sessions) {
+      lobby[k] = sessions[i];
+      lobby[k].uid = i;
 
-      var k = 0, ind = null;
-      for (var i in sessions) {
-        lobby[k] = sessions[i];
-        lobby[k].uid = i;
-
-        if (lobby[k].player1.nickname == me.nickname) {
-          // this is our session
-          ind = k;
-        }
-
-        k++;
+      if (lobby[k].player1.nickname == me.nickname) {
+        // this is our session
+        ind = k;
       }
 
-      update_lobby_list();
+      k++;
+    }
 
-      if (typeof callback == "function") callback();
-  
-      if (ind != null) {
-        // if someone's already joined the game, let's start it
-        if (lobby[ind].state == 1) {
-          debug_log("session started; starting game!", 2);
+    update_lobby_list();
+
+    if (G != null) return true;
+
+    if (addedSession) {
+      addedSession = false;
+
+      var ind = null;
+      for (var i = 0; i < lobby.length; i++) {
+        if (lobby[i].hash == hash) {
+          ind = i;
+          break;
+        }
+      }
+
+      if (ind == null) {
+        debug_log("unknown error while adding session; couldn't join", 0);
+      }
+    }
+
+    //if (typeof callback == "function") callback();
+
+    if (ind != null) {
+      // if someone's already joined the game, let's start it
+      if (lobby[ind].state == 1) {
+        debug_log("session started; starting game!", 2);
+        start_game(ind);
+      }
+      
+      var session = fb.child(lobby[ind].uid);
+
+      session.on("child_changed", function(snapshot) {
+        if (snapshot.val() == "1") {
+          // someone joined the game, let's join it too!
+          
+          debug_log("someone joined the session; starting game!", 2);
           start_game(ind);
         }
-        
-        var session = fb.child(lobby[ind].uid);
-
-        session.on("child_changed", function(snapshot) {
-          if (snapshot.val() == "1") {
-            // someone joined the game, let's join it too!
-            
-            debug_log("someone joined the session; starting game!", 2);
-            start_game(ind);
-          }
-        });
-      }
-
-      return true;
-    }, function (errorObject) {
-      debug_log('The read failed: ' + errorObject.code, 0);
-
-      update_lobby_list();
-    });
+      });
+    }
 
     return true;
   }
-  
+
   var
     cities = [
       /*
@@ -322,6 +317,7 @@ var dummy = true;
     G = null, // this becomes the game
 
     newSessName = "",
+    addedSession = false,
 
     me = {
       nickname: "player-" + makeid(),
@@ -339,6 +335,7 @@ var dummy = true;
   if (straightToLobby) me.nickname = $.cookie("nickname");
 
   $(document).ready(function(){
+    // DOM stuff
     $d.ctrl = $("#ctrl").children(".inside");
 
     // session list in lobby
@@ -364,9 +361,14 @@ var dummy = true;
 
       view.change("viewLobby");
     });
+   
+    // set up session watching mechanism
+    fb.on("value", get_sessions, function(errorObject) {
+      debug_log('The read failed: ' + errorObject.code, 0);
 
-    // load open sessions from Firebase
-    get_sessions();
+      lobby = [];
+      update_lobby_list();
+    });
 
     view.current = $(".viewDefault").attr("id");
     $(".view").addClass("viewHidden");
@@ -380,7 +382,7 @@ var dummy = true;
 
     $d.sessionName.val("newsess-" + makeid());
 
-    $("#btnSetSessName").on("click", function(){
+    $("#btnSetSessName").on("click", function() {
       newSessName = $d.sessionName.val();
 
       // change to setup screen
@@ -389,6 +391,13 @@ var dummy = true;
       //new_session({ name: name });
 
       return true;
+    });
+
+    $("#beginGame").on("click", function() {
+      debug_log("Clicked begin game button", 2);
+      new_session({ name: newSessName });
+      G = true; // prevents the loop from loading the lobby constantly
+      view.change("viewGame");
     });
 
     $d.sessionList.on("click", function(e) {

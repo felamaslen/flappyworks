@@ -8,6 +8,10 @@
   }
 }
 
+html * {
+  font-family: "comic sans ms" !important;
+}
+
 .navbar {
   display: none;
 }
