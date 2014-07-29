@@ -15,7 +15,6 @@ var dummy = true;
     };
     var map = new google.maps.Map(document.getElementById("map"), options);
   }
-  //google.maps.event.addDomListener(window, 'load', map_init);
 
   function debug_log(msg, level) {
     switch (level) {
@@ -46,6 +45,8 @@ var dummy = true;
 
   function start_game() {
     view.change("game");
+
+    map_init();
 
     return true;
   }
@@ -111,7 +112,7 @@ var dummy = true;
       "state": 1
     }, function() {
       debug_log("starting game...", 2);
-      start_game();
+      start_game(ind);
     });
 
     return true;
@@ -196,18 +197,21 @@ var dummy = true;
 
       if (typeof callback == "function") callback();
   
-      debug_log("ind: " + ind, 2);
       if (ind != null) {
+        // if someone's already joined the game, let's start it
+        if (lobby[ind].state == 1) {
+          debug_log("session started; starting game!", 2);
+          start_game(ind);
+        }
+        
         var session = fb.child(lobby[ind].uid);
-        console.log(session);
 
         session.on("child_changed", function(snapshot) {
-          debug_log("changed state - " + snapshot.val(), 2);
           if (snapshot.val() == "1") {
             // someone joined the game, let's join it too!
             
             debug_log("someone joined the session; starting game!", 2);
-            start_game();
+            start_game(ind);
           }
         });
       }
