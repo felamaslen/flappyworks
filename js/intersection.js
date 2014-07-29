@@ -44,6 +44,8 @@ var dummy = true;
   };
 
   function start_game() {
+    G = new game();
+
     view.change("game");
     
     // make and populate the list of cities
@@ -134,6 +136,8 @@ var dummy = true;
 
   function new_session(options) {
     // main function for creating a new session
+    if (G != null) return false;
+    
     if (!options.name.length) {
       debug_log("please enter a name for the session.", 0);
       return false;
@@ -173,6 +177,8 @@ var dummy = true;
 
   function join_session(ind) {
     // main function for joining an existing session
+    if (G != null) return false;
+
     var session = fb.child(lobby[ind].uid);
     
     session.update({
@@ -243,6 +249,7 @@ var dummy = true;
   }
 
   function get_sessions(callback) {
+    if (G != null) return false;
     lobby = [];
 
     fb.on("value", function (snapshot) {
@@ -326,7 +333,7 @@ var dummy = true;
 
     $d = {},
 
-    G = game(),
+    G = null, // this becomes the game
 
     me = {
       nickname: "player-" + makeid(),
