@@ -362,7 +362,7 @@ var me;
     // Main Firebase object
     fb = new Firebase("https://interception.firebaseio.com"),
 
-    lobby = [],
+    lobby = []
   ;
     
   me = {
