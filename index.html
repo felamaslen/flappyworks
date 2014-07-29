@@ -10,7 +10,7 @@
 		<script src="js/jquery.min.js"></script>
     <script src="js/jquery.cookie.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto"></script>
+	
 		<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script> 
 		<script src="js/intersection.js"></script>
 		<script src="js/view.js"></script>
@@ -54,18 +54,22 @@
               <span class="input-group-btn">
                 <button class="btn btn-default" type="button" id="btnNewSession" >Go!</button>
               </span>
+              <h1>Game Setup</h1>
+                <div id="sessionName">
+                  <input id="" />
+                </div>
+                <div id="selectLocation">
+                  <h2>Select Location:</h2>
+                    <ul class="list-group">
+                      <li class="list-group-item" id="plymouth" onclick="">Plymouth</li>
+            </ul>
+        </div>
             </div>
           </div>
         </div>
       </div>
       <div id="viewSetup" class="view viewHidden"> 
-        <h1>Game Setup</h1>
-        <div id="selectLocation">
-          <h2>Select Location:</h2>
-            <ul class="list-group">
-              <li class="list-group-item" id="plymouth" onclick="">Plymouth</li>
-            </ul>
-        </div>
+        
       </div>
       <div id="game" class="view viewHidden">
         <div id="map_outer">
@@ -80,5 +84,6 @@
         </div>
       </div>
     </div>
+      <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto"></script>
   </body>
 </html>
