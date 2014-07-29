@@ -59,12 +59,6 @@ var dummy = true;
       );
     }
     
-    // start new server section
-    $d.sns = $("#section-start-new-server");
-
-    $lc.append($lc_select);
-    $d.sns.append($lc);
-
     // switch modes area
     var $sm = $("<div></div>"),
         $sm_form = $("<form></form>"),
@@ -84,18 +78,10 @@ var dummy = true;
       .append($sm_attack)
       .append("<span>Attack</span>");
     $sm.append($sm_form);
-    $d.sns.append($sm);
 
-    // name of server
-    var $ns = $("<div></div>"),
-        $ns_ip = $("<input></input>");
+    $d.ctrl.append($sm);
 
-    $ns.append($("<span></span>").text("Server name: "))
-      .append($ns_ip);
-
-    $d.sns.append($ns);
-
-    var $go_btn = $("<button></button>").text("Start new server");
+    var $go_btn = $("<button></button>").text("Start game!");
 
     $d.ctrl.append($go_btn);
 
