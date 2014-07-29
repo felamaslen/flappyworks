@@ -45,6 +45,74 @@ var dummy = true;
 
   function start_game() {
     view.change("game");
+    
+    // make and populate the list of cities
+    var $lc = $("<div></div>"),
+        $lc_select = $("<select></select>").append($("<option></option>")
+          .prop("selected", true)
+          .text("Select a city..."))
+    for (var i = 0; i < cities.length; i++) {
+      $lc_select.append($("<option></option>")
+        .text(cities[i].name)
+      );
+    }
+    
+    // start new server section
+    $d.sns = $("#section-start-new-server");
+
+    $lc.append($lc_select);
+    $d.sns.append($lc);
+
+    // switch modes area
+    var $sm = $("<div></div>"),
+        $sm_form = $("<form></form>"),
+        $sm_defend = $("<input></input>")
+          .attr({ type: "radio", name: "mode", title: "Defend", value: "defend" })
+          .select()
+        $sm_attack = $("<input></input>")
+          .attr({ type: "radio", name: "mode", title: "Attack", value: "attack" });
+
+    $sm_attack.val(['defend']);
+    $sm_defend.val(['defend']);
+
+    $sm_form
+      .append($sm_defend)
+      .append("<span>Defend</span>")
+      .append("<br>")
+      .append($sm_attack)
+      .append("<span>Attack</span>");
+    $sm.append($sm_form);
+    $d.sns.append($sm);
+
+    // name of server
+    var $ns = $("<div></div>"),
+        $ns_ip = $("<input></input>");
+
+    $ns.append($("<span></span>").text("Server name: "))
+      .append($ns_ip);
+
+    $d.sns.append($ns);
+
+    var $go_btn = $("<button></button>").text("Start new server");
+
+    $d.ctrl.append($go_btn);
+
+    // make and populate assets list
+    var $sl = $("<div></div>"),
+        $sl_ul = $("<ul></ul>").addClass("assets");
+
+    for (var i = 0; i < assets.length; i++) {
+      var $li = $("<li></li>")
+        .attr("class", "asset")
+        .append($("<span></span>").attr("class", "name").text(assets[i].name))
+        .append($("<span></span>").attr("class", "cost")
+          .html("&pound;" + assets[i].cost));
+
+      $sl_ul.append($li);
+    }
+
+    $sl.append($sl_ul);
+    $d.ctrl.append($sl);
 
     map_init();
 
@@ -337,76 +405,6 @@ var dummy = true;
       return true;
     });
 
-    /*
-    // make and populate the list of cities
-    var $lc = $("<div></div>"),
-        $lc_select = $("<select></select>").append($("<option></option>")
-          .prop("selected", true)
-          .text("Select a city..."))
-    for (var i = 0; i < cities.length; i++) {
-      $lc_select.append($("<option></option>")
-        .text(cities[i].name)
-      );
-    }
-    
-    // start new server section
-    $d.sns = $("#section-start-new-server");
-
-    
-    $lc.append($lc_select);
-    $d.sns.append($lc);
-
-    // switch modes area
-    var $sm = $("<div></div>"),
-        $sm_form = $("<form></form>"),
-        $sm_defend = $("<input></input>")
-          .attr({ type: "radio", name: "mode", title: "Defend", value: "defend" })
-          .select()
-        $sm_attack = $("<input></input>")
-          .attr({ type: "radio", name: "mode", title: "Attack", value: "attack" });
-
-    $sm_attack.val(['defend']);
-    $sm_defend.val(['defend']);
-
-    $sm_form
-      .append($sm_defend)
-      .append("<span>Defend</span>")
-      .append("<br>")
-      .append($sm_attack)
-      .append("<span>Attack</span>");
-    $sm.append($sm_form);
-    $d.sns.append($sm);
-
-    // name of server
-    var $ns = $("<div></div>"),
-        $ns_ip = $("<input></input>");
-
-    $ns.append($("<span></span>").text("Server name: "))
-      .append($ns_ip);
-
-    $d.sns.append($ns);
-
-    var $go_btn = $("<button></button>").text("Start new server");
-
-    $d.ctrl.append($go_btn);
-
-    // make and populate assets list
-    var $sl = $("<div></div>"),
-        $sl_ul = $("<ul></ul>").addClass("assets");
-
-    for (var i = 0; i < assets.length; i++) {
-      var $li = $("<li></li>")
-        .attr("class", "asset")
-        .append($("<span></span>").attr("class", "name").text(assets[i].name))
-        .append($("<span></span>").attr("class", "cost")
-          .html("&pound;" + assets[i].cost));
-
-      $sl_ul.append($li);
-    }
-
-    $sl.append($sl_ul);
-    $d.ctrl.append($sl);
-    // */
   });
 })(jQuery);
 
