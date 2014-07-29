@@ -287,7 +287,8 @@ var me;
         $("#beginGame").prop("disabled", false);
 
         if (!isFirstPlayer) {
-          $(document.body
+          //$(document.body
+        }
 
         // set all the form elements to player1's values
         $("#selectLocation").val(lobby[ind].city);
