@@ -4,6 +4,9 @@
  * Fela, Jacob, Saul, Malachy
  */
 
+// start dummy game
+var dummy = true;
+
 (function($){
   function map_init() {
     var options = {
@@ -12,7 +15,6 @@
     };
     var map = new google.maps.Map(document.getElementById("map"), options);
   }
-  //google.maps.event.addDomListener(window, 'load', map_init);
 
   function debug_log(msg, level) {
     switch (level) {
@@ -40,6 +42,14 @@
   game.prototype.init = function(options){
     return true;
   };
+
+  function start_game() {
+    view.change("game");
+
+    map_init();
+
+    return true;
+  }
 
   function makeid(length) {
     var text = "";
@@ -83,7 +93,10 @@
 
         if (ind == null) {
           debug_log("unknown error while adding session; couldn't join", 0);
+          return false;
         }
+
+        return true;
       });
     });
     
@@ -93,12 +106,13 @@
   function join_session(ind) {
     // main function for joining an existing session
     var session = fb.child(lobby[ind].uid);
-
-    session.child("player2").set({
-      nickname: me.nickname
-    });
-    session.child("state").set(1, function(){
-      view.change("game");
+    
+    session.update({
+      "player2": me,
+      "state": 1
+    }, function() {
+      debug_log("starting game...", 2);
+      start_game(ind);
     });
 
     return true;
@@ -166,10 +180,15 @@
     fb.on("value", function (snapshot) {
       var sessions = snapshot.val();
 
-      var k = 0;
+      var k = 0, ind = null;
       for (var i in sessions) {
         lobby[k] = sessions[i];
         lobby[k].uid = i;
+
+        if (lobby[k].player1.nickname == me.nickname) {
+          // this is our session
+          ind = k;
+        }
 
         k++;
       }
@@ -177,6 +196,27 @@
       update_lobby_list();
 
       if (typeof callback == "function") callback();
+  
+      if (ind != null) {
+        // if someone's already joined the game, let's start it
+        if (lobby[ind].state == 1) {
+          debug_log("session started; starting game!", 2);
+          start_game(ind);
+        }
+        
+        var session = fb.child(lobby[ind].uid);
+
+        session.on("child_changed", function(snapshot) {
+          if (snapshot.val() == "1") {
+            // someone joined the game, let's join it too!
+            
+            debug_log("someone joined the session; starting game!", 2);
+            start_game(ind);
+          }
+        });
+      }
+
+      return true;
     }, function (errorObject) {
       debug_log('The read failed: ' + errorObject.code, 0);
 
