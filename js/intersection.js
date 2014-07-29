@@ -419,7 +419,7 @@ var me;
     for (var i = 0; i < cities.length; i++) {
       $lc.append($("<option></option>")
         .text(cities[i].name)
-        .attr("value", i)
+        .attr("value", cities[i].name)
       );
     }
     
