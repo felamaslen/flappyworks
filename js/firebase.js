@@ -7,10 +7,14 @@ fb.on('value', function (snapshot) {
         $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
 
     });
+    if(document.getElementById('lobbyList').innerHtml == ""){
+    	document.getElementById('lobbyList').innerHtml = "No lobbies to display."
+    }
     
 }, function (errorObject) {
   console.log('The read failed: ' + errorObject.code);
 });
+
 
 function killLobby( event ){
 	var ref = $(event.target).data('ref');
