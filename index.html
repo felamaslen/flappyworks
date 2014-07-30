@@ -13,11 +13,13 @@
 		<script src="js/jquery.min.js"></script>
     <script src="js/jquery.cookie.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+    <!--<script src="js/microevent.js"></script>-->
 		<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script> 
 	
     <!-- custom scripts -->
     <script src="js/intersection.js"></script>
 		<script src="js/view.js"></script>
+    <script src="js/mapstuff_fela.js"></script>
     
 	</head>
 	<body>
@@ -146,7 +148,10 @@
           </nav>
           <div class="inside">
             <script src="js/gameStats.js"></script>
-            <h1 id="js-budget">Budget:</h1>
+            <h3 id="js-budget">Balance: <span id="balanceDisplay"></span></h3>
+            <div id="nodeTypesContainer">
+              <ul class="list-group">
+            </div>
           </div>
         </div>
       </div>

@@ -98,16 +98,36 @@ game.prototype.init = function(options){
   // render map
   this.map_init();
 
+  // units stuff
+  this.units = []; // soldiers, turrets etc.
+  this.unitDrag = false; // turns to true when dragging a unit
+
+  this.trigger("init", this);
+
   return true;
 };
 
 game.prototype.map_init = function() {
   var opt = {
     center: new google.maps.LatLng(this.city.coords[0], this.city.coords[1]),
-    zoom: this.city.zoom
+    zoom: this.city.zoom,
+    mapTypeId: google.maps.MapTypeId.HYBRID,
+    mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID,
+        google.maps.MapTypeId.SATELLITE]
+    },
+    //disableDoubleClickZoom: true,
+    //scrollwheel: false,
+    //zoomControl: false,
+    draggable: true,
+    draggableCursor: "crosshair"
   };
 
   this.map = new google.maps.Map(document.getElementById("map"), opt);
+
+  this.mapService = new google.maps.DirectionsService();
+
+  $.trigger("map_init", [ this ]);
   
   return true;
 }
@@ -249,7 +269,10 @@ var evLeaveSession = function() {
   return true;
 }
 
-var evNewGame = function() {
+var evNewGame = function(e) {
+  e.stopPropagation();
+  e.preventDefault();
+
   if (sesId == null) {
     debug("tried to create a game before joining a session!", 1);
     return false;
@@ -593,6 +616,12 @@ $(document).ready(function(){
   $("#btnSetSessName").on("click", evNewSession);
   $d.sessionList.on("click", evJoinSession);
   $d.setupForm.begin.on("click", evNewGame);
+
+  // dev
+  startGame({
+    city: 0,
+    mode: 0
+  });
 });
 
 
