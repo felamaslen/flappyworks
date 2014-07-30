@@ -9,7 +9,6 @@ require.config({
         bootstrap: 'libs/bootstrap.min',
         jquerycookie: 'libs/jquery.cookie',
         firebase: 'http://cdn.firebase.com/js/client/1.0.15/firebase',
-        maps: 'http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto',
 
         intersection: 'modules/intersection',
         view: 'modules/view',

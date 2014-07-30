@@ -14,7 +14,6 @@ define([
         'jquery',
         'firebase',
         'jquerycookie',
-        'maps',
 
         'admin'
     ],
@@ -22,7 +21,6 @@ define([
         $,
         firebase,
         jquerycookie,
-        gmaps,
 
         Admin
     ) {
