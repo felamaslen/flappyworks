@@ -12,6 +12,7 @@
 
 define([
         'jquery',
+        'jqueryUI',
         'firebase',
         'jquerycookie',
         //'temp-global',
@@ -23,6 +24,7 @@ define([
     ],
     function(
         $,
+        jqui,
         firebase,
         jquerycookie,
         //global,
@@ -165,6 +167,8 @@ define([
 
       function startGame(options) {
         global.G = G = new game(options);
+
+        $(window).trigger("define_game", [this]);
         
         return true;
       }
@@ -439,7 +443,7 @@ define([
 
         // reload lobby list on lobby view
         global.$d.sessionList.empty();
-
+        
         if (!sizeof(lobby)) {
           global.$d.sessionList.append($("<li></li>")
               .addClass("list-group-item")

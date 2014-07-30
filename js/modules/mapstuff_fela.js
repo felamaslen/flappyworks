@@ -6,6 +6,7 @@ define([
   'jquery',
   'global',
   'units',
+  'jqueryUI',
   //'firebase'
 ],
   function($, global, units) {
@@ -50,6 +51,11 @@ define([
               .data({
                 unit: units[name]
               })
+              .append($("<div></div>")
+                .addClass("icon")
+                .append($("<img></img>").attr("src", typeof units[name].icon == "undefined"
+                    ? "about:blank" : units[name].icon))
+              )
             );
           }
 
@@ -101,16 +107,19 @@ define([
 
         $(window).on("game_init_start", function(game) {
           global.debug("triggered game_init_start()", 2);
-          // generate a test units list to drag
 
-          console.log(units);
+          renderUnitsList(units.units); // malachy assigned to this
 
-          //renderUnitsList(units); // malachy assigned to this
+          // draggable stuff
+          global.$d.unitsList.children().draggable({
+            revert: true,
+            helper: "clone"
+          });
         });
 
         $(window).on("map_init", function(game) {
           global.debug("triggered map_init()", 2);
-          game.units[0] = new gameUnit(game);
+//          game.units[0] = new gameUnit(game);
         });
 
         $(window).on("doc_ready", function() {
