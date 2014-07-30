@@ -158,7 +158,7 @@ define([
 
       game.prototype.init = function(options){
         // change to the appropriate view
-        View.change("viewGame");
+        view.change("viewGame");
 
         // render map
         this.map_init();
@@ -325,7 +325,9 @@ define([
         return true;
       }
 
-      var evNewGame = function() {
+      var evNewGame = function(e) {
+        e.preventDefault();
+
         if (sesId == null) {
           debug("tried to create a game before joining a session!", 1);
           return false;
