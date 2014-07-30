@@ -441,6 +441,8 @@ var fbListenSuccess = function(snapshot) {
             deleteSession(sesId);
             view.change("viewLobby");
             debug("We lost player 2!", 0);
+            sesId = null;
+            me.player = null;
           }
         }
         else if (me.player == 2) {
@@ -449,6 +451,8 @@ var fbListenSuccess = function(snapshot) {
             deleteSession(sesId);
             view.change("viewLobby");
             debug("We lost player 1!", 0);
+            sesId = null;
+            me.player = null;
           }
           else if (listenLast.state < 2 && lobby[i].state == 2) {
             // game started by player 1
