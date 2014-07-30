@@ -15,6 +15,25 @@ for (var i = 0; i < split.length; i++) {
 var devMode = typeof get.devMode != "undefined" && get.devMode == "true";
 
 function renderUnitsList(units) {
+  $d.unitsList.empty();
+
+  for (var name in units) {
+    $d.unitsList.append($("<li></li>")
+      .addClass("list-item")
+      .addClass("unit")
+      .addClass("unit-" + name)
+      .text(name)
+      .css({
+        color: units[name].color
+      })
+      .data({
+        unit: units[name]
+      })
+    );
+  }
+
+  return true;
+}
 
 
 function gameUnit(game, options) {
@@ -27,7 +46,7 @@ function gameUnit(game, options) {
 
   if (game.mode == 0) {
     // attack - attach poly events
-  }    
+  }
     
 
   this.poly = new google.maps.Polyline({ map: game.map });
@@ -61,6 +80,7 @@ gameUnit.prototype.createMarker = function() {
 }
 
 $(window).on("game_init", function(game) {
+  debug("triggered game_init()", 2);
   // generate a test units list to drag
   var units = {
     "soldier": {
@@ -69,14 +89,17 @@ $(window).on("game_init", function(game) {
       speed: 10
     }
   };
+
+  renderUnitsList(units);
 });
 
 $(window).on("map_init", function(game) {
-  game.units[0] = new gameUnit(g);
+  debug("triggered map_init()", 2);
+  game.units[0] = new gameUnit(game);
 });
 
 $(window).on("doc_ready", function() {
-  $d.nodesList = $("#nodesList");
+  $d.unitsList = $("#unitsList");
 
   if (devMode) {
     startGame({

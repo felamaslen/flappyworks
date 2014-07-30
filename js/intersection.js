@@ -95,6 +95,8 @@ game.prototype.init = function(options){
   // change to the appropriate view
   view.change("viewGame");
 
+  $(window).trigger("game_init_start", [ this ]);
+
   // render map
   this.map_init();
 
@@ -102,7 +104,7 @@ game.prototype.init = function(options){
   this.units = []; // soldiers, turrets etc.
   this.unitDrag = false; // turns to true when dragging a unit
 
-  $(window).trigger("game_init", [ this ]);
+  $(window).trigger("game_init_end", [ this ]);
 
   return true;
 };
