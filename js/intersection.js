@@ -102,7 +102,7 @@ game.prototype.init = function(options){
   this.units = []; // soldiers, turrets etc.
   this.unitDrag = false; // turns to true when dragging a unit
 
-  $.trigger("game_init", [ this ]);
+  $(window).trigger("game_init", [ this ]);
 
   return true;
 };
@@ -127,7 +127,7 @@ game.prototype.map_init = function() {
 
   this.mapService = new google.maps.DirectionsService();
 
-  $.trigger("map_init", [ this ]);
+  $(window).trigger("map_init", [ this ]);
   
   return true;
 }
@@ -616,7 +616,6 @@ $(document).ready(function(){
   $("#btnSetSessName").on("click", evNewSession);
   $d.sessionList.on("click", evJoinSession);
   $d.setupForm.begin.on("click", evNewGame);
+
+  $(window).trigger("doc_ready");
 });
-
-
-

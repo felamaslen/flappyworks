@@ -45,6 +45,26 @@ function gameUnit(game, options) {
 gameUnit.prototype.createMarker = function() {
 }
 
-game.on("map_init", function(g) {
+// dev GET parameters
+var href = window.location.href;
+var split = href.split("?")[1].split("&");
+var get = {};
+for (var i = 0; i < split.length; i++) {
+  var sp = split[i].split("=");
+  get[sp[0]] = sp[1];
+}
+
+var startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
+
+$(window).on("map_init", function(g) {
   g.units[0] = new gameUnit(g);
+});
+
+$(window).on("doc_ready", function() {
+  if (startGameOnLoad) {
+    startGame({
+      city: 0,
+      mode: 0 // attack
+    });
+  }
 });
