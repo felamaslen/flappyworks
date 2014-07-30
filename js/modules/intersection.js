@@ -14,6 +14,7 @@ define([
         'jquery',
         'firebase',
         'jquerycookie',
+        'temp-global',
 
         'admin'
     ],
@@ -21,6 +22,7 @@ define([
         $,
         firebase,
         jquerycookie,
+        global,
 
         Admin
     ) {
@@ -189,7 +191,7 @@ define([
       }
 
       function startGame(options) {
-        G = new game(options);
+        global.G = G = new game(options);
         
         return true;
       }
