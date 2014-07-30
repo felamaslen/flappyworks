@@ -17,6 +17,7 @@ require.config({
     },
 
     shim: {
+        'jquery': {exports: '$'},
         'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
         'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'}
     }
