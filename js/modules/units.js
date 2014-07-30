@@ -10,15 +10,54 @@ function testUnit(unit){
   
 }
 
-solider_example = unit{
-  this.role = "soldier";
-  this.health = 50;
-  this.lat;
-  this.lon;
+solider = {
+  role : "soldier",
+  health : 50,
+  lat : 0 ,
+  lon : 0,
+  speed : 1,
+  range : 10,
+  cost: 2000,
+  level: 1,
+  power: 5,
+  sps: 2
   
 }
+turret = {
+  role : "turret",
+  health : 10,
+  lat : 0 ,
+  lon : 0,
+  speed : 0,
+  range : 20,
+  cost: 3000,
+  level: 1,
+  power: 7,
+  sps: 5
+  
+}
+
+
+
 function plopUnit(unit){
-  var unitPlopped = new google.maps.Marker{
+  if(!testUnit(unit)){
+    console.log('Unit invalid');
+    return false;
+  }
+  if(unit.role == "turret"){
+   var unitPlopped = new google.maps.Marker{
+    position: new google.maps.LatLng(unit.lat, unit.lon),
+    map: global.G.maps,
+    icon : 'img/turret.png'
+
+    }
+    me.balance -= unit.cost;
+  }
+  else{
+    var unitPlopped = new google.maps.Marker{
     position: new google.maps.LatLng(unit.lat, unit.lon),
     map: global.G.maps
   }
+  me.balance -= unit.cost;
+  }
+}
