@@ -132,9 +132,6 @@ game.prototype.map_init = function() {
   return true;
 }
 
-// microevents
-MicroEvent.mixin(game);
-
 function startGame(options) {
   G = new game(options);
   
