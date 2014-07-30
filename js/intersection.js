@@ -5,7 +5,10 @@
  */
 
 //debugger;
-  
+
+/**
+ * GENERIC FUNCTIONS
+ */
 function makeid(length) {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -18,488 +21,573 @@ function makeid(length) {
 
   return text;
 }
-
-var me;
-
-(function($)
- {
-  function map_init(options) {
-    if (typeof options.coords != "undefined") {
-      options.center = new google.maps.LatLng(options.coords[0], options.coords[1]);
-      delete options.coords;
-    }
-    var options = $.extend({
-      center: new google.maps.LatLng(54.7, -3),
-      zoom: 6
-    }, options);
-    var map = new google.maps.Map(document.getElementById("map"), options);
+  
+function debug(msg, level) {
+  level = typeof level == "undefined" ? 2 : level;
+  switch (level) {
+    case 0: // error
+      alert("Fatal error: " + msg);
+      window.console && console.log("[FATAL]", msg);
+      break;
+    case 1: // warning
+      window.console && console.log("[WARN]", msg);
+      break;
+    case 2: // debug
+      window.console && console.log("[DEBUG]", msg);
+      break;
   }
 
-  function debug_log(msg, level) {
-    switch (level) {
-      case 0: // error
-        alert("Fatal error: " + msg);
-        window.console && console.log("[FATAL]", msg);
-        break;
-      case 1: // warning
-        window.console && console.log("[WARN]", msg);
-        break;
-      case 2: // debug
-        window.console && console.log("[DEBUG]", msg);
-        break;
-    }
+  return true;
+}
 
-    return true;
+function deleteSession(key) {
+  //this.init(options);
+  fb.child(key).remove(function(error) {
+    debug(error ? "failure while removing session (" + key + ") from FireBase"
+      : "successfully removed session (" + key + ") from FireBase", 1);
+  });
+  return true;
+}
+
+function sizeof(obj) {
+  if (typeof Object.keys == "function")
+    return Object.keys(obj).length;
+
+  var size = 0, key;
+  for (key in obj) {
+    if (obj.hasOwnProperty(key)) size++;
   }
-
-  function game(options) {
-    //this.init(options);
-
-    return true;
-  }
-
-  game.prototype.init = function(options){
-    return true;
-  };
-
-  function getFormParams() {
-    // get parameters
-    var formParams = {};
-    $.each($("#sessionParamForm").serializeArray(), function(_, kv) {
-      if (formParams.hasOwnProperty(kv.name)) {
-        formParams[kv.name] = $.makeArray(formParams[kv.name]);
-        formParams[kv.name].push(kv.value);
-      }
-      else {
-        formParams[kv.name] = kv.value;
-      }
-    });
-
-    return formParams;
-  }
-
-  function start_game() {
-    var formParams = getFormParams();
-    
-    var error = [];
-
-    if (typeof formParams.mode == "undefined")
-      error[error.length] = "must choose a role (defend or attack)";
-    if (formParams.citySelect == "null")
-      error[error.length] = "must choose a city";
-
-    if (error.length > 0) {
-//      debug_log("something happened and you couldn't join the game.", 0);
-      debug_log("Errors were encountered: " + error.join("; "), 0);
-      return false;
-    }
-
-    var mode = formParams.mode;
-    var city = parseInt(formParams.citySelect);
-
-    G = new game();
-
-    view.change("viewGame");
-
-    // change server data
-    if (typeof gameSession != "undefined") {
-      gameSession.update({
-        state: 2,
-        mode: mode,
-        city: city
-      });
-    }
-
-    // make and populate assets list
-    var $sl = $("<div></div>"),
-        $sl_ul = $("<ul></ul>").addClass("assets");
-
-    for (var i = 0; i < assets.length; i++) {
-      var $li = $("<li></li>")
-        .attr("class", "asset")
-        .append($("<span></span>").attr("class", "name").text(assets[i].name))
-        .append($("<span></span>").attr("class", "cost")
-          .html("&pound;" + assets[i].cost));
-
-      $sl_ul.append($li);
-    }
-
-    $sl.append($sl_ul);
-    $d.ctrl.append($sl);
-
-    var map_options = {};
-    if (typeof cities[city].zoom != "undefined")
-      map_options.zoom = cities[city].zoom;
-    
-    map_options.coords = cities[city].coords;
-
-    map_init(map_options);
-
-    return true;
-  }
-
-  function new_session(options) {
-    // main function for creating a new session
-    if (G != null) return false;
-    
-    if (!options.name.length) {
-      debug_log("please enter a name for the session.", 0);
-      return false;
-    }
-    
-    sessionHash = makeid(40);
-
-    isFirstPlayer = true;
-
-    gameSession = fb.push();
-    gameSession.set({
-      hash: sessionHash,
-      name: options.name,
-      state: 0,
-      player1: me,
-      player2: null
-    }, function(){
-      debug_log("adding new session with name " + name, 2);
-      addedSession = true; // on the next get_session, a callback will be issued
-    });
-    
-    return true;
-  }
-
-  function join_session(ind) {
-    // main function for joining an existing session
-    if (G != null) return false;
-
-    gameSession = fb.child(lobby[ind].uid);
-    sessionHash = lobby[ind].hash;
-    
-    gameSession.update({
-      "player2": me,
-      "state": 1
-    }, function() {
-      debug_log("joining session...", 2);
-      $("#beginGame").prop("disabled", true);
-      $("#newSessInd").text(lobby[ind].name);
-      view.change("viewSetup");
-      isFirstPlayer = false;
-    });
-
-    return true;
-  }
-
-  function update_lobby_list() {
-    $d.sessionList.empty();
-
-    if (!lobby.length) {
-      $d.sessionList.append($("<li></li>")
-        .addClass("list-group-item")
-        .text("There are no open sessions - why not create one?")
-      );
+  return size;
+};
+  
+function getFormParams() {
+  // get parameters
+  var formParams = {};
+  $.each($d.setupForm.form.serializeArray(), function(_, kv) {
+    if (formParams.hasOwnProperty(kv.name)) {
+      formParams[kv.name] = $.makeArray(formParams[kv.name]);
+      formParams[kv.name].push(kv.value);
     }
     else {
-      for (var i = 0; i < lobby.length; i++) {
-        var players = [];
-        if (typeof lobby[i].player1 == "object") {
-          players[players.length] = lobby[i].player1.nickname;
-        }
-        if (typeof lobby[i].player2 == "object") {
-          players[players.length] = lobby[i].player2.nickname;
-        }
-
-        players = players.join(", ");
-
-        var open = lobby[i].state == 0;
-        var myOwn = false;
-
-        // make sure you can't (re-)join your own game
-        if (lobby[i].player1.nickname == me.nickname) {
-          myOwn = true;
-        }
-
-        $d.sessionList.append($("<li></li>")
-          .addClass("list-group-item")
-          .addClass("session-item")
-          .toggleClass("accepting", open)
-          .append($("<span></span>")
-            .addClass("name")
-            .text(lobby[i].name)
-          )
-          .attr("data-ind", i.toString())
-          .append($("<span></span>")
-            .addClass("status")
-            .text("Players: " + players)
-          )
-          .append($("<button></button>")
-            .addClass("btn")
-            .addClass("btn-xs")
-            .addClass("btn-primary")
-            .addClass("btn-join")
-            .prop("disabled", !open || myOwn)
-            .text("Join")
-          )
-        );
-      }
+      formParams[kv.name] = kv.value;
     }
-    return true;
-  }
+  });
 
-  // lobby updates
-  function get_sessions(snapshot) {
-    var sessions = snapshot.val();
+  return formParams;
+}
 
-    lobby = [];
+/**
+ * GAME BACKEND
+ */
+function game(options) {
+  this.city = cities[options.city];
+  this.mode = me.player == 1 ? options.mode : (options.mode == 0 ? 1 : 0);
 
-    var k = 0, ind = null;
-    for (var i in sessions) {
-      lobby[k] = sessions[i];
-      lobby[k].uid = i;
+  this.init();
 
-      if (typeof lobby[k].player1 != "undefined" &&
-          typeof lobby[k].player1.nickname != "undefined" &&
-          lobby[k].player1.nickname == me.nickname) {
-        // this is our session
-        ind = k;
-        isFirstPlayer = true;
-      }
-      else if (sessionHash && lobby[k].hash == sessionHash) {
-        ind = k;
-        isFirstPlayer = false;
-      }
+  return true;
+}
 
-      k++;
-    }
+game.prototype.init = function(options){
+  // change to the appropriate view
+  view.change("viewGame");
 
-    update_lobby_list();
+  // render map
+  this.map_init();
 
-    if (G != null) return true;
+  return true;
+};
 
-    // verify that the session was actually added, when adding a session
-    if (addedSession) {
-      addedSession = false;
-
-      var ind2 = null;
-      for (var i = 0; i < lobby.length; i++) {
-        if (lobby[i].hash == sessionHash) {
-          ind2 = i;
-          break;
-        }
-      }
-
-      if (ind2 == null) {
-        debug_log("unknown error while adding session; couldn't join", 0);
-      }
-    }
-
-    if (ind != null) {
-      // joining somebody's session; wait in game setup view
-      if (lobby[ind].state == 1) {
-        //debug_log("session started already", 2);
-        view.change("viewSetup");
-        $("#beginGame").prop("disabled", false);
-
-        if (!isFirstPlayer) {
-          $("#sessionParamForm :input").prop("disabled", true);
-        }
-
-        // set all the form elements to player1's values
-        $("#selectLocation").val(lobby[ind].city);
-        $(".inputMode").val(lobby[ind].mode);
-      }
-      else if (lobby[ind].state == 2) {
-        debug_log("player 1 entered game; following...", 2);
-        
-        // set all the form elements to the stored values
-        $("#selectLocation").val(lobby[ind].city);
-        $(".inputMode").val(lobby[ind].mode);
-
-        start_game();
-      }
-
-      if (typeof gameSession == "undefined") {
-        gameSession = fb.child(lobby[ind].uid);
-      }
-
-      if (sessionWatch != null) {
-        sessionWatch.off("child_changed");
-      }
-      
-      sessionWatch = fb.child(lobby[ind].uid);
-
-      sessionWatch.on("child_changed", function(snapshot) {
-        if (snapshot.val() == "1") {
-          // someone joined the game, so allow us to start it
-          debug_log("Someone joined the session!");
-
-          $("#beginGame").prop("disabled", false);
-        }
-      });
-    }
-
-    return true;
-  }
-
-  var
-    cities = [
-      {
-        name: "London",
-        coords: [51.514756, -0.125631],
-        zoom: 10,
-        balance: 2515202
-      },
-      {
-        name: "Plymouth",
-        coords: [50.375935, -4.143126],
-        zoom: 12,
-        balance: 2568000
-      }
-    ],
-    assets = [ // weapons / soldiers / etc.
-      {
-        name: "Soldier",
-        class: "soldier",
-        projS: .5, // projectiles per second
-        speed: 10,
-        cost: 1000
-      },
-      {
-        name: "Turret",
-        class: "turret",
-        projS: 10,
-        speed: 0,
-        cost: 1500
-      }
-    ],
-
-    $d = {},
-
-    G = null, // this becomes the game
-
-    newSessName = "",
-    addedSession = false,
-    sessionWatch = null,
-    sessionHash = null,
-    gameSession,
-    isFirstPlayer = null,
-
-    // Main Firebase object
-    fb = new Firebase("https://interception.firebaseio.com"),
-
-    lobby = []
-  ;
-    
-  me = {
-    nickname: "player-" + makeid(),
-    balance: 2000 // bank balance
+game.prototype.map_init = function() {
+  var opt = {
+    center: new google.maps.LatLng(this.city.coords[0], this.city.coords[1]),
+    zoom: this.city.zoom
   };
 
-  var keepAlive = window.setInterval(function(){
-    if (typeof gameSession != "undefined") {
-      var param = {};
-      gameSession.child(isFirstPlayer ? "player1" : "player2").update({
-        keepAlive: new Date().getTime()
-      });
-    }
-  }, 1e4);
+  this.map = new google.maps.Map(document.getElementById("map"), opt);
+  
+  return true;
+}
 
-  var straightToLobby = typeof $.cookie("nickname") != "undefined";
+function startGame(options) {
+  G = new game(options);
+  
+  return true;
+}
 
-  if (straightToLobby) me.nickname = $.cookie("nickname");
+/**
+ * MAPPING BACKEND FUNCTIONS
+ */
 
-  $(document).ready(function(){
-    // DOM stuff
-    $d.ctrl = $("#ctrl").children(".inside");
 
-    // session list in lobby
-    $d.sessionList = $("#sessionList");
+/**
+ * EVENTS
+ */
+// pre-game
+var evSetNick = function() {
+  me.name = $d.inputNickname.val();
 
-    // session name button in new session section
-    $d.sessionName = $("#sessionName");
+  if (me.name != origNick) {
+    $.cookie("name", me.name, { expires: 30 });
+  }
 
-    // handle nickname stuff
-    $d.inputNickname = $("#inputNickname");
-    $d.inputNickname.val(me.nickname);
-    
-    // populate the list of cities
-    var $lc = $("#citySelect");
-    for (var i = 0; i < cities.length; i++) {
-      $lc.append($("<option></option>")
-        .text(cities[i].name)
-        .attr("value", cities[i].name)
-      );
-    }
-    
-    var origRandNick = $d.inputNickname.val();
+  $(".nick-display").text(me.name);
 
-    $("#btnSetNick").on("click", function(){
-      me.nickname = $d.inputNickname.val();
-      
-      if (me.nickname != origRandNick) {
-        $.cookie("nickname", me.nickname, { expires: 30 });
+  // main listener for FireBase
+  fb.on("value", fbListenSuccess, fbListenError);
+
+  view.change("viewLobby");
+};
+
+var evNewSession = function() {
+  // create a new session
+  if (sesId != null) {
+    debug("please leave the current session before creating a new one.");
+    return false;
+  }
+  
+  var sessionName = $d.sessionName.val();
+
+  if (!sessionName.length) {
+    debug("please enter a name for the session.", 0);
+    return false;
+  }
+
+  // we are the first player
+  me.player = 1;
+
+  var session = fb.push();
+  session.set({
+    name: sessionName,
+    state: 0, // 0: waiting for players, 1: waiting for config, 2: in play
+    player1: me,
+    player2: null
+  }, function() {
+    debug("adding new session with name " + sessionName, 2);
+  });
+
+  // handle timeouts / disconnects
+  session.onDisconnect().remove();
+
+  sesId = session.path.m[1];
+  $d.newSessInd.text(sessionName);
+  $d.setupForm.begin.prop("disabled", true); // can't start without another player
+  view.change("viewSetup");
+
+  return true;
+}
+
+var evJoinSession = function(e) {
+  // join an existing session
+  var $target = $(e.target);
+  if (!$target.is("button.btn-join")) return false;
+
+  var key = $target.parent().attr("data-ind");
+
+  if (sesId != null) {
+    debug("please leave the current session before trying to join another.", 1);
+    return false;
+  }
+
+  switch (lobby[key].state) {
+    case 0: // awaiting players
+      if (typeof lobby[key].player1 == "undefined" || typeof lobby[key].player2 != "undefined") {
+        // stale session
+        debug("tried to join a broken session - deleting", 1);
+        deleteSession(key);
+        return false;
       }
 
-      $(".nick-display").text(me.nickname);
+      // we are the second player
+      me.player = 2;
 
-      view.change("viewLobby");
-    });
+      var con = fb.child(key);
 
-    $("#sessionParamForm").attr("action", "javascript:void(0);");
-   
-    // set up session watching mechanism
-    fb.on("value", get_sessions, function(errorObject) {
-      debug_log('The read failed: ' + errorObject.code, 0);
+      con.update({
+        state: 1,
+        player2: me
+      })
+    
+      con.onDisconnect().update({
+        state: 0,
+        player2: null
+      });
 
-      lobby = [];
-      update_lobby_list();
-    });
+      debug("joining session with key " + key, 2);
 
-    view.current = $(".viewDefault").attr("id");
-    $(".view").addClass("viewHidden");
-    $(".viewDefault").removeClass("viewHidden");
+      break;
 
-    if (straightToLobby) {
-      $(".nick-display").text(me.nickname);
-
-      view.change("viewLobby");
-    }
-
-    $d.sessionName.val("newsess-" + makeid());
-
-    $("#btnSetSessName").on("click", function() {
-      newSessName = $d.sessionName.val();
-     
-      new_session({ name: newSessName });
-
-      // change to setup screen
-      $("#newSessInd").text(newSessName);
-      $("#beginGame").prop("disabled", true); // can't start game without another player
-      view.change("viewSetup");
-      //new_session({ name: name });
-
-      return true;
-    });
-
-    $("#beginGame").on("click", function(e) {
-      debug_log("Clicked begin game button", 2);
-      start_game();
-
-      e.preventDefault();
-      e.stopPropagation();
+    default:
+      debug("tried to join a session which is already full.", 1);
       return false;
-    });
+  }
 
-    $d.sessionList.on("click", function(e) {
-      var $target = $(e.target);
-
-      if (!$target.is("button.btn-join")) return false;
-
-      var ind = parseInt($target.parent().attr("data-ind"));
-
-      join_session(ind);
-
-      return true;
-    });
-
-  });
+  return true;
 }
-)(jQuery);
+
+var evLeaveSession = function() {
+  if (sesId == null) {
+    debug("tried to leave a session when none was connected!", 1);
+    return false;
+  }
+
+  if (me.player == 1) {
+    deleteSession(sesId);
+  }
+  else {
+    fb.child(sesId).update({
+      state: 0,
+      player2: undefined
+    });
+  }
+  sesId = null;
+  me.player = null;
+
+  return true;
+}
+
+var evNewGame = function() {
+  if (sesId == null) {
+    debug("tried to create a game before joining a session!", 1);
+    return false;
+  }
+
+  if (lobby[sesId].state == 0) {
+    debug("tried to create a game before player 2 arrived!", 1);
+    return false;
+  }
+
+  // validate parameters
+  var city = parseInt($d.setupForm.cities.val()),
+      mode = parseInt($d.setupForm.mode.filter(":checked").val());
+
+  var errors = [];
+  if (isNaN(city))  errors[errors.length] = "you must select a city";
+  if (isNaN(mode))  errors[errors.length] = "you must select a mode";
+
+  if (errors.length > 0) {
+    debug(errors.join("; "), 0);
+    return false;
+  }
+  
+  // start the game!
+  fb.child(sesId).update({
+    city: city,
+    mode: mode,
+    state: 2
+  });
+
+  startGame({
+    city: city,
+    mode: mode
+  });
+  
+  return true;
+}
+
+// main FireBase listener events
+var fbListenSuccess = function(snapshot) {
+  var val = snapshot.val();
+
+  if (typeof val != "object" || val == null) val = {};
+
+  lobby = val;
+
+  // see if we are a member of any of the existing sessions
+  if (sesId == null) {
+    for (var key in lobby) {
+      var iAmPlayer1 = typeof lobby[key].player1 != "undefined" &&
+        lobby[key].player1.name == me.name,
+          iAmPlayer2 = typeof lobby[key].player2 != "undefined" &&
+        lobby[key].player2.name == me.name;
+
+      if (iAmPlayer1 && iAmPlayer2) {
+        // bad session - remove
+        deleteSession(key);
+      }
+      else if (!iAmPlayer1 && !iAmPlayer2) {
+        continue;
+      }
+      else {
+        var stale = false;
+
+        switch (lobby[key].state) {
+          case 0: // waiting for players
+            if ((iAmPlayer1 && typeof lobby[key].player2 != "undefined") ||
+                (iAmPlayer2 && typeof lobby[key].player1 != "undefined")) {
+              stale = true;
+              debug("stale - zero state with extraneous player data", 2);
+            }
+            else {
+              sesId = key;
+              me.player = iAmPlayer1 ? 1 : 2;
+            
+              $d.newSessInd.text(sessionName);
+              $d.setupForm.begin.prop("disabled", true); // can't start without another player
+              view.change("viewSetup");
+            }
+
+            break;
+          case 1: // waiting for config
+            if (iAmPlayer1) {
+              // go to config page, since we are player 1
+              if (typeof lobby[key].player2 == "undefined")
+                stale = true;
+              else
+                view.change("viewSetup");
+            }
+            else {
+              // we are player 2, so go to the "wait for config" page
+              if (typeof lobby[key].player1 == "undefined")
+                stale = true;
+              else
+                view.change("viewWaitP1");                
+            }
+
+            if (!stale) {
+              sesId = key;
+              me.player = iAmPlayer1 ? 1 : 2;
+              $d.setupForm.begin.prop("disabled", false);
+            }
+            break;
+          case 2: // in play
+            if (typeof lobby[key].player1 == "undefined" || typeof lobby[key].player2 == "undefined") {
+              stale = true;
+              debug("stale - less than two players defined for an in-play session", 2);
+            }
+            else {
+              // start a new game
+              sesId = key;
+              me.player = iAmPlayer1 ? 1 : 2;
+              
+              startGame({
+                city: lobby[key].city,
+                mode: lobby[key].mode // 0: p1 is attacker, 1: p1 is defender
+              });
+            }
+
+            break;
+        }
+
+        if (stale) {
+          // remove offending data
+          deleteSession(key);
+        }
+      }
+    }
+  }
+
+  // reload lobby list on lobby view
+  $d.sessionList.empty();
+
+  if (!sizeof(lobby)) {
+    $d.sessionList.append($("<li></li>")
+        .addClass("list-group-item")
+        .text(noSessionsMsg));
+  }
+  else {
+    for (var i in lobby) {
+      if (typeof lobby[i].player1 == "undefined") {
+        deleteSession(i);
+        break;
+      }
+
+      var players = [];
+      
+      players[players.length] = lobby[i].player1.name;
+      if (typeof lobby[i].player2 != "undefined")
+        players[players.length] = lobby[i].player2.name;
+
+      players = players.join(", ");
+
+      var open = lobby[i].state == 0;
+
+      // add session to the session list in the lobby
+      $d.sessionList.append($("<li></li>")
+        .addClass("list-group-item")
+        .addClass("session-item")
+        .toggleClass("accepting", open)
+        .append($("<span></span>")
+          .addClass("name")
+          .text(lobby[i].name)
+        )
+        .attr("data-ind", i.toString())
+        .append($("<span></span>")
+          .addClass("status")
+          .text("Players: " + players)
+        )
+        .append($("<button></button>")
+          .addClass("btn")
+          .addClass("btn-xs")
+          .addClass("btn-primary")
+          .addClass("btn-join")
+          .prop("disabled", !open)
+          .text("Join")
+        )
+      );
+
+      if (sesId == i) {
+        // scan for changes
+        if (me.player == 1) {
+          if (listenLast.state == 0 && lobby[i].state == 1) {
+            // someone joined!
+            $d.setupForm.begin.prop("disabled", false);
+          }
+          else if (listenLast.state == 1 && lobby[i].state == 0) {
+            $d.setupForm.begin.prop("disabled", true);
+          }
+          else if (listenLast.state == 2 && lobby[i].state < 2) {
+            // player 2 left (or timed out)!
+            deleteSession(sesId);
+            view.change("viewLobby");
+            debug("We lost player 2!", 0);
+          }
+        }
+        else if (me.player == 2) {
+          if (listenLast.state > lobby[i].state) {
+            // player 1 left (or timed out)!
+            deleteSession(sesId);
+            view.change("viewLobby");
+            debug("We lost player 1!", 0);
+          }
+          else if (listenLast.state < 2 && lobby[i].state == 2) {
+            // game started by player 1
+            debug("game started by player 1 - joining", 2);
+
+            startGame({
+              city: lobby[i].city,
+              mode: lobby[i].mode // 0: p1 is attacker, 1: p1 is defender
+            });
+          }
+        }
+      }
+    }
+  }
+  
+  if (me.player == 2 && sesId != null && typeof lobby[sesId] == "undefined") {
+    view.change("viewLobby");
+    sesId = null;
+    me.player = null;
+    debug("player 1 left!", 0);
+  }
+
+  listenLast = {
+    sesId: sesId,
+    state: typeof lobby[sesId] == "undefined" ? null : lobby[sesId].state
+  };
+
+  return true;
+}
+
+var fbListenError = function(errorObject) {
+  debug("error on FireBase listen: " + errorObject.code, 0);
+
+  return true;
+}
+
+
+
+/**
+ * GLOBAL VARIABLES
+ */
+var
+  me = {
+    name: "player-" + makeid(),
+    balance: 2000,
+    player: null // becomes 1 or 2 when joining / creating session
+  },
+  $d = {}, // dom objects
+  G = null, // game object
+  
+  sesId = null,
+  lobby = [],
+  fb = new Firebase("https://interception.firebaseio.com/sessions"),
+
+  listenLast = { // what things were on the last listen
+    sesId: null,
+    state: null
+  },
+
+  cities = [
+    {
+      name: "London",
+      coords: [51.514756, -0.125631],
+      zoom: 10,
+      balance: 2515202
+    },
+    {
+      name: "Plymouth",
+      coords: [50.375935, -4.143126],
+      zoom: 12,
+      balance: 2568000
+    }
+  ],
+  assets = [ // weapons / soldiers / etc.
+    {
+      name: "Soldier",
+      class: "soldier",
+      projS: .5, // projectiles per second
+      speed: 10,
+      cost: 1000
+    },
+    {
+      name: "Turret",
+      class: "turret",
+      projS: 10,
+      speed: 0,
+      cost: 1500
+    }
+  ],
+  noSessionsMsg = "There are no open sessions - why not create one?" 
+; 
+
+/**
+ * onload
+ */
+var nickCookie = typeof $.cookie("name") != "undefined";
+if (nickCookie) me.name = $.cookie("name");
+var origNick = me.name;
+
+$(document).ready(function(){
+  // initialise views
+  view.current = $(".viewDefault").attr("id");
+  $(".view").addClass("viewHidden");
+  $(".viewDefault").removeClass("viewHidden");
+
+  // DOM elements
+  $d.ctrl = $("#ctrl").children(".inside"); // game items
+  $d.sessionList = $("#sessionList"); // lobby
+  $d.sessionName = $("#sessionName"); // session name input in new session section
+  $d.newSessInd = $("#newSessInd");
+  $d.inputNickname = $("#inputNickname");
+  $d.inputNickname.val(me.name);
+
+  // FORMS
+  // session form
+  $d.sessionName.val("newsess-" + makeid());
+  // setup form
+  $d.setupForm = {
+    form:   $("#sessionParamForm"),
+    cities: $("#citySelect"),
+    mode:   $(".inputMode"),
+    begin:  $("#beginGame")
+  };
+
+  // populate the list of cities
+  for (var i = 0; i < cities.length; i++) {
+    $d.setupForm.cities.append($("<option></option>")
+      .text(cities[i].name)
+      .attr("value", i)
+    );
+  }
+
+  // attach events
+  $("#btnSetNick").on("click", evSetNick);
+  $("#btnSetSessName").on("click", evNewSession);
+  $d.sessionList.on("click", evJoinSession);
+  $d.setupForm.form.on("submit", function() { return false; });
+  $d.setupForm.begin.on("click", evNewGame);
+});
+
+
 
