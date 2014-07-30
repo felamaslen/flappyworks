@@ -62,22 +62,6 @@ define([
           balance: 2568000
         }
       ],
-      assets: [
-      {
-        name: "Soldier",
-        class: "soldier",
-        projS: .5, // projectiles per second
-        speed: 10,
-        cost: 1000
-      },
-      {
-        name: "Turret",
-        class: "turret",
-        projS: 10,
-        speed: 0,
-        cost: 1500
-      }
-      ],
       noSessionsMsg: "There are no open sessions - why not create one?"
     };
 
