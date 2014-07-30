@@ -21,7 +21,7 @@ var soldier = {
   level: 1,
   power: 5,
   sps: 2
-  
+}  
 };
 
 var turret = {
