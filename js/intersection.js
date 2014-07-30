@@ -102,7 +102,7 @@ game.prototype.init = function(options){
   this.units = []; // soldiers, turrets etc.
   this.unitDrag = false; // turns to true when dragging a unit
 
-  this.trigger("init", this);
+  $.trigger("game_init");
 
   return true;
 };
@@ -616,12 +616,6 @@ $(document).ready(function(){
   $("#btnSetSessName").on("click", evNewSession);
   $d.sessionList.on("click", evJoinSession);
   $d.setupForm.begin.on("click", evNewGame);
-
-  // dev
-  startGame({
-    city: 0,
-    mode: 0
-  });
 });
 
 
