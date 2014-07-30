@@ -12,6 +12,7 @@
 
 define([
         'jquery',
+        'jqueryUI',
         'firebase',
         'jquerycookie',
         //'temp-global',
@@ -23,6 +24,7 @@ define([
     ],
     function(
         $,
+        jqui,
         firebase,
         jquerycookie,
         //global,
