@@ -12,6 +12,7 @@ require.config({
 
         intersection: 'modules/intersection',
         view: 'modules/view',
+        'temp-global': 'modules/temp-global',
         admin: 'modules/admin'
 
     },
@@ -19,7 +20,8 @@ require.config({
     shim: {
         'jquery': {exports: '$'},
         'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
-        'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'}
+        'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
+        'firebase': {exports: 'Firebase'}
     }
 });
 
