@@ -45,7 +45,7 @@ var units = {
 }
 
 function plopUnit(unit){
-  //if (global.G == null) return false;
+  if (global.G == null) return false;
 
  /* if(!testUnit(unit)){
     //global.debug('Unit invalid', 1);
