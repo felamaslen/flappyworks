@@ -83,6 +83,9 @@ function game(options) {
   this.city = cities[options.city];
   this.mode = me.player == 1 ? options.mode : (options.mode == 0 ? 1 : 0);
 
+  if (typeof this.city.balance == "number" && this.mode == 1)
+    me.balance = this.city.balance;
+
   this.init();
 
   return true;
@@ -589,13 +592,6 @@ $(document).ready(function(){
   $("#btnSetNick").on("click", evSetNick);
   $("#btnSetSessName").on("click", evNewSession);
   $d.sessionList.on("click", evJoinSession);
-  $d.setupForm.form.on("submit", function() {
-   if(formParams.citySelect == "London"){
-      me.balance = 2515202;
-    }
-    if(formParams.citySelect == "Plymouth"){
-      me.balance = 2568000;
-    } });
   $d.setupForm.begin.on("click", evNewGame);
 });
 
