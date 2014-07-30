@@ -27,34 +27,37 @@
 
             eventHandlers: function(){
 
-                this.fb.on('value', function (snapshot) {
+                this.fb.on('value', $.proxy( this.firebaseCallback, this ) );
 
-                    var dataObj = snapshot.val();
+                $('body').on( 'click', '.removeItem', $.proxy( this.killLobby, this ) );
 
-                    $('.data').html('');
+            },
 
-                    if ( dataObj === null ) { return false; }
+            firebaseCallback: function( snapshot ){
 
-                    $.each( dataObj, function( data, index ){
+                var dataObj = snapshot.val();
 
-                        $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
+                $('.data').html('');
 
-                        });
+                if ( dataObj === null ) { return false; }
 
-                        }, function (errorObject) {
-                            console.log('The read failed: ' + errorObject.code);
-                        });
+                $.each( dataObj, function( data, index ){
 
-                        function killLobby( event ){
-                            var ref = $(event.target).data('ref');
-                            toDie = new Firebase('https://interception.firebaseio.com/sessions'+ref)
-                            toDie.set( null, function( data ){
-                            console.log( data );
-                        } );
+                    $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
 
-                };
+                });
 
-                $('body').on( 'click', '.removeItem', killLobby);
+            },
+
+            killLobby: function( event ){
+
+                var ref = $(event.target).data('ref');
+
+                toDie = new Firebase('https://interception.firebaseio.com/sessions'+ref)
+                
+                toDie.set( null, function( data ){
+                        console.log( data );
+                } );
 
             }
 
