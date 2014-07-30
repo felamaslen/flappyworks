@@ -66,9 +66,11 @@ function plopUnit(unit){
 
 return {
   plopUnit: plopUnit,
-  soldier: soldier,
-  turret: turret,
-  testUnit: testUnit
+  testUnit: testUnit,
+  units: {
+    turret: turret,
+    soldier: soldier
+  }
 }
 
 });
