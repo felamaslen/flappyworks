@@ -165,6 +165,8 @@ define([
 
       function startGame(options) {
         global.G = G = new game(options);
+
+        $(window).trigger("define_game", [this]);
         
         return true;
       }
