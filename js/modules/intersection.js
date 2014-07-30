@@ -163,16 +163,27 @@ define([
         // render map
         this.map_init();
 
+        $.trigger('game_init', [this]);
+
         return true;
       };
 
       game.prototype.map_init = function() {
         var opt = {
           center: new google.maps.LatLng(this.city.coords[0], this.city.coords[1]),
-          zoom: this.city.zoom
+          zoom: this.city.zoom,
+          mapTypeId: google.maps.MapTypeId.HYBRID,
+          mapTypeControlOptions: {
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID,
+              google.maps.MapTypeId.SATELLITE]
+          },
+          draggable: true,
+          draggableCursor: "crosshair"
         };
 
         this.map = new google.maps.Map(document.getElementById("map"), opt);
+
+        $.trigger('map_init', [this]);
         
         return true;
       }
@@ -659,6 +670,8 @@ define([
         $("#btnSetSessName").on("click", evNewSession);
         $d.sessionList.on("click", evJoinSession);
         $d.setupForm.begin.on("click", evNewGame);
+
+        $(window).trigger('doc_ready');
       });
 
 });
