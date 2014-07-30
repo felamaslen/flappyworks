@@ -10,7 +10,7 @@ function testUnit(unit){
   
 }
 
-solider = {
+soldier = {
   role : "soldier",
   health : 50,
   lat : 0 ,
@@ -65,7 +65,7 @@ function plopUnit(unit){
 
 return {
   plopUnit: plopUnit,
-  solider: solider,
+  soldier: soldier,
   turret: turret,
   testUnit: testUnit
 }
