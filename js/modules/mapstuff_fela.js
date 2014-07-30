@@ -17,16 +17,18 @@ define([
 
     mapstuff_fela.prototype = {
       init: function() {
-        //debug("mapstuff_fela loaded", 2);
-        console.log("foo");
+        global.debug("mapstuff_fela loaded", 2);
 
         // dev GET parameters
-        var href = window.location.href;
-        var split = href.split("?")[1].split("&");
+        var href = window.location.href || "";
+        var split = href.split("?");
         var get = {};
-        for (var i = 0; i < split.length; i++) {
-          var sp = split[i].split("=");
-          get[sp[0]] = sp[1];
+        if (typeof split[1] != "undefined") {
+          split = split[1].split("&");
+          for (var i = 0; i < split.length; i++) {
+            var sp = split[i].split("=");
+            get[sp[0]] = sp[1];
+          }
         }
 
         //var global.startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
@@ -111,7 +113,7 @@ define([
         });
 
         $(window).on("map_init", function(game) {
-          debug("triggered map_init()", 2);
+          global.debug("triggered map_init()", 2);
           game.units[0] = new gameUnit(game);
         });
 
