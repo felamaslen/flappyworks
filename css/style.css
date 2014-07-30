@@ -2,6 +2,10 @@
  * @file css/style.css
  */
 
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
 @media (max-width: 979px) {
   body {
     padding-top: 0px;
@@ -17,6 +21,12 @@
 
 #viewNickname, #viewLobby {
   margin: 20px 0;
+}
+
+#setupSessName {
+  color: #666;
+  font-style: italic;
+  font-size: .9em;
 }
 
 #map_outer {

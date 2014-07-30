@@ -7,13 +7,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/style.css">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+   
+    <!-- libraries --> 
 		<script src="js/jquery.min.js"></script>
     <script src="js/jquery.cookie.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-	
 		<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script> 
-		<script src="js/intersection.js"></script>
+	
+    <!-- custom scripts -->
+    <script src="js/intersection.js"></script>
 		<script src="js/view.js"></script>
+    
 	</head>
 	<body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -24,6 +29,9 @@
       </div>
     </div>
     <div class="container clearfix" id="main-wrapper"> 
+      <div id="viewWaitP1" class="view">
+        <h2>Please wait for player 1 to configure and start the game...</h2>
+      </div>
       <div id="viewNickname" class="view viewDefault">
         <div class="container">
           <h1>
@@ -52,28 +60,30 @@
             <div class="col-xs-7 input-group">
               <input type="text" class="form-control" name="sessionName" id="sessionName">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" id="btnNewSession" >Go!</button>
+                <button class="btn btn-default" type="button" id="btnSetSessName" >Go!</button>
               </span>
-              
-        </div>
             </div>
           </div>
         </div>
       </div>
       <div id="viewSetup" class="view viewHidden">
         <h1>Game Setup</h1>
-           <div id="selectLocation">
-            <h2>Select Location:</h2>
-                <ul class="list-group">
-                  <li class="list-group-item" id="plymouth" onclick="">Plymouth</li>
-            </ul> 
-
-            <h1>Map Preview:</h1>
+        <h2 id="setupSessName">Session name: <span id="newSessInd"></span></h2>
+        <div id="selectLocation">
+          <form id="sessionParamForm">
+            <h3>Select Location:</h3>
+            <select name="citySelect" id="citySelect">
+              <option value="null">Select a city...</option>
+            </select>
+            <h3>Mode:</h3>
+            <input type="radio" class="inputMode" name="mode" value="1">Defend<br>
+            <input type="radio" class="inputMode" name="mode" value="0">Attack
+            <h3>Map Preview:</h3>
             <div id="mapPreview"></div>
-            <button id="beginGame" class="btn btn-success">Begin Game </button>
-
+            <button id="beginGame" class="btn btn-success">Begin Game</button>
+          </form>
+        </div>
       </div>
-     
       <div id="viewGame" class="view viewHidden">
         <div id="map_outer">
           <div id="map_inner">
@@ -81,12 +91,66 @@
           </div>
         </div>
         <div id="ctrl">
+          <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Brand</a>
+              </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li class="active"><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">One more separated link</a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <form class="navbar-form navbar-left" role="search">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="#">Link</a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+          </nav>
           <div class="inside">
-            
+            <script src="js/gameStats.js"></script>
+            <h1 id="js-budget">Budget:</h1>
           </div>
         </div>
       </div>
     </div>
-      <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto"></script>
   </body>
 </html>
