@@ -13,8 +13,8 @@ require.config({
 
         intersection: 'modules/intersection',
         view: 'modules/view',
-        admin: 'modules/admin'
-
+        admin: 'modules/admin',
+        mapstuff_fela: 'modules/mapstuff_fela'
     },
 
     shim: {
