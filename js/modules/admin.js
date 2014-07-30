@@ -1,4 +1,4 @@
-﻿require([
+﻿define([
         'jquery',
         'firebase'
     ],
@@ -7,31 +7,59 @@
         firebase
     ) {
 
-        var fb = new Firebase("https://interception.firebaseio.com/");
+        var Admin = function( window ){
 
-        fb.on('value', function (snapshot) {
+            this.window = window;
+            this.init( window );
 
-        $('.data').html('');
+        };
 
-        $.each( snapshot.val(), function( data, index ){
+        Admin.prototype = {
 
-        $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
+            constructor: Admin,
 
-        });
+            init: function( window ){
 
-        }, function (errorObject) {
-        console.log('The read failed: ' + errorObject.code);
-        });
+                this.fb = new Firebase("https://interception.firebaseio.com/sessions");
+                this.eventHandlers();
 
-        function killLobby( event ){
-        var ref = $(event.target).data('ref');
-        toDie = new Firebase('https://interception.firebaseio.com/'+ref)
-        toDie.set( null, function( data ){
-        console.log( data );
-        } );
-        }
+            },
 
-        // Event Handlers
-        $('body').on( 'click', '.removeItem', killLobby);
+            eventHandlers: function(){
+
+                this.fb.on('value', function (snapshot) {
+
+                    var dataObj = snapshot.val();
+
+                    $('.data').html('');
+
+                    if ( dataObj === null ) { return false; }
+
+                    $.each( dataObj, function( data, index ){
+
+                        $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
+
+                        });
+
+                        }, function (errorObject) {
+                            console.log('The read failed: ' + errorObject.code);
+                        });
+
+                        function killLobby( event ){
+                            var ref = $(event.target).data('ref');
+                            toDie = new Firebase('https://interception.firebaseio.com/sessions'+ref)
+                            toDie.set( null, function( data ){
+                            console.log( data );
+                        } );
+
+                };
+
+                $('body').on( 'click', '.removeItem', killLobby);
+
+            }
+
+        };
+
+        return Admin;
 
 });

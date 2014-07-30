@@ -10,18 +10,69 @@
  * GENERIC FUNCTIONS
  */
 
-require([
+define([
         'jquery',
         'firebase',
         'jquerycookie',
-        'maps'
+        'maps',
+
+        'admin'
     ],
     function(
         $,
         firebase,
         jquerycookie,
-        gmaps
+        gmaps,
+
+        Admin
     ) {
+
+
+      // Basic page module loading - refactor
+      if (  window.location.pathname.indexOf( 'admin' ) === 1 ) {
+
+        var admin = new Admin( window );
+
+      };
+
+      // Refactor into AMD
+
+        var view = {};
+
+        view.current = "";
+        
+        view.event = {};
+        
+        view.event.change = {};
+        
+        view.event.change.listeners = [];
+        // Add a listener for the view change event
+        
+        view.event.change.addListener = function(listener){
+          view.event.change.listeners.push(listener);
+        }
+
+        // Trigger the change event 
+        view.event.change.trigger = function(newView){
+          for(var i in view.event.change.listeners){
+            if (!newView){
+              newView = "Unknown";
+            }
+            var e = {}
+            e.newView = newView;
+            view.event.change.listeners[i](e);
+          }
+        }
+
+        view.change = function(newView){
+          view.current = newView;
+          $(".view").addClass("viewHidden");
+          $('#'+newView).removeClass("viewHidden");
+          view.event.change.trigger(newView);
+        }
+
+        // Refactor into AMD
+
 
       function makeid(length) {
         var text = "";
@@ -571,47 +622,8 @@ require([
 
       $(document).ready(function(){
 
-        // Refactor into AMD
-
-        var View = {};
-
-        View.current = "";
-        
-        View.event = {};
-        
-        View.event.change = {};
-        
-        View.event.change.listeners = [];
-        // Add a listener for the view change event
-        
-        View.event.change.addListener = function(listener){
-          view.event.change.listeners.push(listener);
-        }
-
-        // Trigger the change event 
-        View.event.change.trigger = function(newView){
-          for(var i in view.event.change.listeners){
-            if (!newView){
-              newView = "Unknown";
-            }
-            var e = {}
-            e.newView = newView;
-            view.event.change.listeners[i](e);
-          }
-        }
-
-        View.change = function(newView){
-          view.current = newView;
-          $(".view").addClass("viewHidden");
-          $('#'+newView).removeClass("viewHidden");
-          view.event.change.trigger(newView);
-        }
-
-        // Refactor into AMD
-
-
         // initialise views
-        View.current = $(".viewDefault").attr("id");
+        view.current = $(".viewDefault").attr("id");
         $(".view").addClass("viewHidden");
         $(".viewDefault").removeClass("viewHidden");
 
