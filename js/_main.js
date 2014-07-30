@@ -9,7 +9,7 @@ require.config({
         bootstrap: 'libs/bootstrap.min',
         jquerycookie: 'libs/jquery.cookie',
         firebase: 'http://cdn.firebase.com/js/client/1.0.15/firebase',
-
+        units: 'modules/units',
         intersection: 'modules/intersection',
         view: 'modules/view',
         admin: 'modules/admin'
