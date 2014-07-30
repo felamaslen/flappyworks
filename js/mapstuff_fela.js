@@ -15,17 +15,17 @@ function gameUnit(game, options) {
   }    
     
 
-  this.poly = new google.maps.Polyline({ map: g.map });
+  this.poly = new google.maps.Polyline({ map: game.map });
   this.path = new google.maps.MVCArray();
 
-  google.maps.event.addListener(g.map, "click", function(e) {
+  google.maps.event.addListener(game.map, "click", function(e) {
     debug("map clicked", 2);
     if (self.path.getLength() === 0) {
       self.path.push(e.latLng);
       self.poly.setPath(self.path);
     }
     else {
-      g.mapService.route({
+      game.mapService.route({
         origin: self.path.getAt(self.path.getLength() - 1),
         destination: e.latLng,
         travelMode: google.maps.DirectionsTravelMode.DRIVING
@@ -56,8 +56,8 @@ for (var i = 0; i < split.length; i++) {
 
 var startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
 
-$(window).on("map_init", function(g) {
-  g.units[0] = new gameUnit(g);
+$(window).on("map_init", function(game) {
+  game.units[0] = new gameUnit(g);
 });
 
 $(window).on("doc_ready", function() {
