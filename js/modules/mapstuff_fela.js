@@ -5,9 +5,10 @@
 define([
   'jquery',
   'global',
+  'units',
   //'firebase'
 ],
-  function($, global) {
+  function($, global, units) {
     var mapstuff_fela = function( window ){
 
         this.window = window;
@@ -101,15 +102,10 @@ define([
         $(window).on("game_init", function(game) {
           debug("triggered game_init()", 2);
           // generate a test units list to drag
-          var units = {
-            "soldier": {
-              cost: 10,
-              color: "#00f",
-              speed: 10
-            }
-          };
 
-          renderUnitsList(units);
+          console.log(units);
+
+          //renderUnitsList(units); // malachy assigned to this
         });
 
         $(window).on("map_init", function(game) {
