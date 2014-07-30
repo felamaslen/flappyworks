@@ -6,6 +6,7 @@ define([
   'jquery',
   'global',
   'units',
+  'jqueryUI',
   //'firebase'
 ],
   function($, global, units) {
@@ -108,6 +109,12 @@ define([
           global.debug("triggered game_init_start()", 2);
 
           renderUnitsList(units.units); // malachy assigned to this
+
+          // draggable stuff
+          global.$d.unitsList.children().draggable({
+            revert: true,
+            helper: "clone"
+          });
         });
 
         $(window).on("map_init", function(game) {
