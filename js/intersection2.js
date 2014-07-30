@@ -41,6 +41,7 @@ function debug(msg, level) {
 }
 
 function deleteSession(key) {
+  //this.init(options);
   fb.child(key).remove(function(error) {
     debug(error ? "failure while removing session (" + key + ") from FireBase"
       : "successfully removed session (" + key + ") from FireBase", 1);
@@ -79,32 +80,44 @@ function getFormParams() {
  * GAME BACKEND
  */
 function game(options) {
-  //this.init(options);
+  this.city = cities[options.city];
+  this.mode = me.player == 1 ? options.mode : (options.mode == 0 ? 1 : 0);
+
+  this.init();
 
   return true;
 }
 
 game.prototype.init = function(options){
+  // change to the appropriate view
+  view.change("viewGame");
+
+  // render map
+  this.map_init();
+
   return true;
 };
 
+game.prototype.map_init = function() {
+  var opt = {
+    center: new google.maps.LatLng(this.city.coords[0], this.city.coords[1]),
+    zoom: this.city.zoom
+  };
 
+  this.map = new google.maps.Map(document.getElementById("map"), opt);
+  
+  return true;
+}
+
+function startGame(options) {
+  G = new game(options);
+  
+  return true;
+}
 
 /**
  * MAPPING BACKEND FUNCTIONS
  */
-function map_init(options) {
-  if (typeof options.coords != "undefined") {
-    options.center = new google.maps.LatLng(options.coords[0], options.coords[1]);
-    delete options.coords;
-  }
-  var options = $.extend({
-    center: new google.maps.LatLng(54.7, -3),
-    zoom: 6
-  }, options);
-  var map = new google.maps.Map(document.getElementById("map"), options);
-}
-
 
 
 /**
@@ -188,12 +201,16 @@ var evJoinSession = function(e) {
       // we are the second player
       me.player = 2;
 
-      fb.child(key).update({
+      var con = fb.child(key);
+
+      con.update({
         state: 1,
         player2: me
-      }).onDisconnect().update({
+      })
+    
+      con.onDisconnect().update({
         state: 0,
-        player2: undefined
+        player2: null
       });
 
       debug("joining session with key " + key, 2);
@@ -230,7 +247,40 @@ var evLeaveSession = function() {
 }
 
 var evNewGame = function() {
+  if (sesId == null) {
+    debug("tried to create a game before joining a session!", 1);
+    return false;
+  }
+
+  if (lobby[sesId].state == 0) {
+    debug("tried to create a game before player 2 arrived!", 1);
+    return false;
+  }
+
+  // validate parameters
+  var city = parseInt($d.setupForm.cities.val()),
+      mode = parseInt($d.setupForm.mode.filter(":checked").val());
+
+  var errors = [];
+  if (isNaN(city))  errors[errors.length] = "you must select a city";
+  if (isNaN(mode))  errors[errors.length] = "you must select a mode";
+
+  if (errors.length > 0) {
+    debug(errors.join("; "), 0);
+    return false;
+  }
   
+  // start the game!
+  fb.child(sesId).update({
+    city: city,
+    mode: mode,
+    state: 2
+  });
+
+  startGame({
+    city: city,
+    mode: mode
+  });
   
   return true;
 }
@@ -337,9 +387,14 @@ var fbListenSuccess = function(snapshot) {
   }
   else {
     for (var i in lobby) {
+      if (typeof lobby[i].player1 == "undefined") {
+        deleteSession(i);
+        break;
+      }
+
       var players = [];
-      if (typeof lobby[i].player1 != "undefined")
-        players[players.length] = lobby[i].player1.name;
+      
+      players[players.length] = lobby[i].player1.name;
       if (typeof lobby[i].player2 != "undefined")
         players[players.length] = lobby[i].player2.name;
 
@@ -379,13 +434,41 @@ var fbListenSuccess = function(snapshot) {
             $d.setupForm.begin.prop("disabled", false);
           }
           else if (listenLast.state == 1 && lobby[i].state == 0) {
-            // player 2 left!
             $d.setupForm.begin.prop("disabled", true);
-            alert("Player 2 left the game!");
+          }
+          else if (listenLast.state == 2 && lobby[i].state < 2) {
+            // player 2 left (or timed out)!
+            deleteSession(sesId);
+            view.change("viewLobby");
+            debug("We lost player 2!", 0);
+          }
+        }
+        else if (me.player == 2) {
+          if (listenLast.state > lobby[i].state) {
+            // player 1 left (or timed out)!
+            deleteSession(sesId);
+            view.change("viewLobby");
+            debug("We lost player 1!", 0);
+          }
+          else if (listenLast.state < 2 && lobby[i].state == 2) {
+            // game started by player 1
+            debug("game started by player 1 - joining", 2);
+
+            startGame({
+              city: lobby[i].city,
+              mode: lobby[i].mode // 0: p1 is attacker, 1: p1 is defender
+            });
           }
         }
       }
     }
+  }
+  
+  if (me.player == 2 && sesId != null && typeof lobby[sesId] == "undefined") {
+    view.change("viewLobby");
+    sesId = null;
+    me.player = null;
+    debug("player 1 left!", 0);
   }
 
   listenLast = {
@@ -457,7 +540,6 @@ var
   ],
   noSessionsMsg = "There are no open sessions - why not create one?" 
 ; 
-
 
 /**
  * onload

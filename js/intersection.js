@@ -21,7 +21,8 @@ function makeid(length) {
 
 var me;
 
-(function($){
+(function($)
+ {
   function map_init(options) {
     if (typeof options.coords != "undefined") {
       options.center = new google.maps.LatLng(options.coords[0], options.coords[1]);
@@ -499,5 +500,6 @@ var me;
     });
 
   });
-})(jQuery);
+}
+)(jQuery);
 

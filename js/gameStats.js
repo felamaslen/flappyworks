@@ -11,10 +11,11 @@ $(document).ready(function(){
       break;
   }*/
 
-	 me = {
+	 /*me = {
     nickname: "player-" + makeid(),
     balance: 2000 // bank balance
   	};
+    */
   /*
     if(formParams.citySelect == "London"){
       me.balance = 2515202;
