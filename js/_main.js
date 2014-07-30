@@ -6,7 +6,7 @@ require.config({
     paths : {
         
       jquery:     'libs/jquery.min',
-      jqueryUI:   'libs/jquery-ui.min',
+      //jqueryUI:   'libs/jquery-ui.min',
       bootstrap:  'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
 //      firebase: 'https://cdn.firebase.com/js/client/1.0.15/firebase',
@@ -26,7 +26,7 @@ require.config({
 
     shim: {
       'jquery': {exports: '$'},
-      'jqueryUI': { deps: ['jquery'] },
+      //'jqueryUI': { deps: ['jquery'] },
       'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
       'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
       'firebase' : {deps:[], exports: 'Firebase'},

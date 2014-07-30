@@ -4,15 +4,13 @@
  * Fela, Jacob, Saul, Malachy
  */
 
-//debugger;
-
 /**
  * GENERIC FUNCTIONS
  */
 
 define([
         'jquery',
-        'jqueryUI',
+        //'jqueryUI',
         'firebase',
         'jquerycookie',
         //'temp-global',
@@ -24,7 +22,7 @@ define([
     ],
     function(
         $,
-        jqui,
+        //jqui,
         firebase,
         jquerycookie,
         //global,
