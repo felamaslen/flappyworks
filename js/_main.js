@@ -21,7 +21,7 @@ require.config({
       global:     'modules/global',
       mapstuff_fela: 'modules/mapstuff_fela',
       units: 'modules/units',
-      unitPopulation: 'modules/unitPopulation'
+      //unitPopulation: 'modules/unitPopulation'
 
     },
 
@@ -37,7 +37,7 @@ require.config({
 require([
         'jquery',
         'intersection',
-        'unitPopulation',
+        //'unitPopulation',
         'units'
     ],
     function(
