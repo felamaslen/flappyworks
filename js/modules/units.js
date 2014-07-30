@@ -1,3 +1,4 @@
+
 define([ 'global'], function ( global) { 
 
 function testUnit(unit){
@@ -38,13 +39,19 @@ var turret = {
   icon: "img/turret_128.png"
 };
 
-function plopUnit(unit){
-  if (global.G == null) return false;
+var units = {
+  soldier: soldier,
+  turret: turret
+}
 
-  if(!testUnit(unit)){
-    global.debug('Unit invalid', 1);
+function plopUnit(unit){
+  //if (global.G == null) return false;
+
+ /* if(!testUnit(unit)){
+    //global.debug('Unit invalid', 1);
+    console.log("OOPS");
     return false;
-  }
+  }*/
 
   var unitPlopped = new google.maps.Marker({
     position: new google.maps.LatLng(unit.lat, unit.lon),
@@ -56,14 +63,11 @@ function plopUnit(unit){
 
   return true;
 }
-
+plopUnit(soldier);
 return {
   plopUnit: plopUnit,
-  testUnit: testUnit,
-  units: {
-    turret: turret,
-    soldier: soldier
-  }
+  units: units,
+  testUnit: testUnit
 }
 
 });

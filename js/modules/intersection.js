@@ -304,7 +304,7 @@ define([
         return true;
       }
 
-      var evNewGame = function(e) {
+      var evNewGame = function(e, force) {
         e.preventDefault();
 
         if (global.sesId == null) {
@@ -312,7 +312,7 @@ define([
           return false;
         }
 
-        if (lobby[global.sesId].state == 0) {
+        if (!force && lobby[global.sesId].state == 0) {
          global.debug("tried to create a game before player 2 arrived!", 1);
           return false;
         }
@@ -580,7 +580,8 @@ define([
           form:   $("#sessionParamForm"),
           cities: $("#citySelect"),
           mode:   $(".inputMode"),
-          begin:  $("#beginGame")
+          begin:  $("#beginGame"),
+          force:  $('#forceGame')
         };
 
         // populate the list of global.cities
@@ -596,6 +597,7 @@ define([
         $("#btnSetSessName").on("click", evNewSession);
         global.$d.sessionList.on("click", evJoinSession);
         global.$d.setupForm.begin.on("click", evNewGame);
+        global.$d.setupForm.force.on("click", function (e) { evNewGame(e, true); });
 
         $(window).trigger('doc_ready');
       });
