@@ -1,4 +1,4 @@
-define([ 'global', 'units'], function ( global, units) {
+define([ 'global', 'jquery'], function ($, global) {
 
   function upgradeUnit(unit){
   	unit.health += 5;
@@ -10,7 +10,10 @@ define([ 'global', 'units'], function ( global, units) {
   	unit.sps *= 1.5;
   	unit.level += 1;
     global.me.balance -=unit.level * 1.5;
-
+    $(window).on('budgetUpdate', function (e) { 
+      $('#balanceDisplay').html(global.me.balance);
+    } );
+    $(window).trigger('budgetUpdate');     
   }
   return{
     upgradeUnit: upgradeUnit
