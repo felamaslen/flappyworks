@@ -5,23 +5,27 @@ require.config({
     
     paths : {
         
-        jquery: 'libs/jquery.min',
-        bootstrap: 'libs/bootstrap.min',
-        jquerycookie: 'libs/jquery.cookie',
-        firebase: 'http://cdn.firebase.com/js/client/1.0.15/firebase',
+      jquery: 'libs/jquery.min',
+      bootstrap: 'libs/bootstrap.min',
+      jquerycookie: 'libs/jquery.cookie',
+//      firebase: 'https://cdn.firebase.com/js/client/1.0.15/firebase',
+//      maps: 'http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto',
+    
+      firebase: 'libs/firebase',
+      maps: 'libs/googlemaps',
 
-        intersection: 'modules/intersection',
-        view: 'modules/view',
-        'temp-global': 'modules/temp-global',
-        admin: 'modules/admin'
-
+      intersection: 'modules/intersection',
+      view: 'modules/view',
+      admin: 'modules/admin',
+      global: 'modules/global',
+      mapstuff_fela: 'modules/mapstuff_fela'
     },
 
     shim: {
-        'jquery': {exports: '$'},
-        'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
-        'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
-        'firebase': {exports: 'Firebase'}
+      'jquery': {exports: '$'},
+      'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
+      'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
+      'firebase' : {deps:[], exports: 'Firebase'},
     }
 });
 
