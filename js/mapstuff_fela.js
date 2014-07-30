@@ -2,6 +2,40 @@
  * @file js/mapstuff_fela.js
  */
 
+// dev GET parameters
+var href = window.location.href;
+var split = href.split("?")[1].split("&");
+var get = {};
+for (var i = 0; i < split.length; i++) {
+  var sp = split[i].split("=");
+  get[sp[0]] = sp[1];
+}
+
+//var startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
+var devMode = typeof get.devMode != "undefined" && get.devMode == "true";
+
+function renderUnitsList(units) {
+  $d.unitsList.empty();
+
+  for (var name in units) {
+    $d.unitsList.append($("<li></li>")
+      .addClass("list-item")
+      .addClass("unit")
+      .addClass("unit-" + name)
+      .text(name)
+      .css({
+        color: units[name].color
+      })
+      .data({
+        unit: units[name]
+      })
+    );
+  }
+
+  return true;
+}
+
+
 function gameUnit(game, options) {
   // soldier, turret etc.
   var self = this;
@@ -12,7 +46,7 @@ function gameUnit(game, options) {
 
   if (game.mode == 0) {
     // attack - attach poly events
-  }    
+  }
     
 
   this.poly = new google.maps.Polyline({ map: game.map });
@@ -45,23 +79,29 @@ function gameUnit(game, options) {
 gameUnit.prototype.createMarker = function() {
 }
 
-// dev GET parameters
-var href = window.location.href;
-var split = href.split("?")[1].split("&");
-var get = {};
-for (var i = 0; i < split.length; i++) {
-  var sp = split[i].split("=");
-  get[sp[0]] = sp[1];
-}
+$(window).on("game_init", function(game) {
+  debug("triggered game_init()", 2);
+  // generate a test units list to drag
+  var units = {
+    "soldier": {
+      cost: 10,
+      color: "#00f",
+      speed: 10
+    }
+  };
 
-var startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
+  renderUnitsList(units);
+});
 
 $(window).on("map_init", function(game) {
-  game.units[0] = new gameUnit(g);
+  debug("triggered map_init()", 2);
+  game.units[0] = new gameUnit(game);
 });
 
 $(window).on("doc_ready", function() {
-  if (startGameOnLoad) {
+  $d.unitsList = $("#unitsList");
+
+  if (devMode) {
     startGame({
       city: 0,
       mode: 0 // attack
