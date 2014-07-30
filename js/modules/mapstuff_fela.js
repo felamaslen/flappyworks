@@ -66,20 +66,16 @@ define([
           // soldier, turret etc.
           var self = this;
 
-          this.game = game;
-
           this.createMarker();
 
           if (game.mode == 0) {
             // attack - attach poly events
           }
-            
 
           this.poly = new google.maps.Polyline({ map: game.map });
           this.path = new google.maps.MVCArray();
 
           google.maps.event.addListener(game.map, "click", function(e) {
-            debug("map clicked", 2);
             if (self.path.getLength() === 0) {
               self.path.push(e.latLng);
               self.poly.setPath(self.path);
@@ -88,7 +84,7 @@ define([
               game.mapService.route({
                 origin: self.path.getAt(self.path.getLength() - 1),
                 destination: e.latLng,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
+                travelMode: game.travelMode
               }, function (result, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
                   for (var i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
@@ -117,9 +113,9 @@ define([
           });
         });
 
-        $(window).on("map_init", function(game) {
+        $(window).on("map_init", function(e, game) {
           global.debug("triggered map_init()", 2);
-//          game.units[0] = new gameUnit(game);
+          game.units[0] = new gameUnit(game);
         });
 
         $(window).on("doc_ready", function() {

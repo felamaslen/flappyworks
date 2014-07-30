@@ -136,6 +136,8 @@ define([
         view.change("viewGame");
 
         $(window).trigger('game_init_start', [this]);
+        
+        this.units = [];
 
         // render map
         this.map_init();
@@ -159,6 +161,9 @@ define([
         };
 
         this.map = new google.maps.Map(document.getElementById("map"), opt);
+
+        this.mapService = new google.maps.DirectionsService();
+        this.travelMode = google.maps.DirectionsTravelMode.WALKING;
 
         $(window).trigger('map_init', [this]);
         
