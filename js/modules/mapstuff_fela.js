@@ -4,9 +4,10 @@
 
 define([
   'jquery',
+  'global',
   //'firebase'
 ],
-  function($) {
+  function($, global) {
     var mapstuff_fela = function( window ){
 
         this.window = window;
@@ -28,14 +29,14 @@ define([
           get[sp[0]] = sp[1];
         }
 
-        //var startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
+        //var global.startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
         var devMode = typeof get.devMode != "undefined" && get.devMode == "true";
 
         function renderUnitsList(units) {
-          $d.unitsList.empty();
+          global.$d.unitsList.empty();
 
           for (var name in units) {
-            $d.unitsList.append($("<li></li>")
+            global.$d.unitsList.append($("<li></li>")
               .addClass("list-item")
               .addClass("unit")
               .addClass("unit-" + name)
@@ -115,10 +116,10 @@ define([
         });
 
         $(window).on("doc_ready", function() {
-          $d.unitsList = $("#unitsList");
+          global.$d.unitsList = $("#unitsList");
 
           if (devMode) {
-            startGame({
+            global.startGame({
               city: 0,
               mode: 0 // attack
             });

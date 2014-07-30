@@ -119,10 +119,10 @@ define([
        */
       function game(options) {
         this.city = global.cities[options.city];
-        this.mode = me.player == 1 ? options.mode : (options.mode == 0 ? 1 : 0);
+        this.mode = global.me.player == 1 ? options.mode : (options.mode == 0 ? 1 : 0);
 
         if (typeof this.city.balance == "number" && this.mode == 1)
-          me.balance = this.city.balance;
+          global.me.balance = this.city.balance;
 
         this.init();
 
@@ -167,6 +167,10 @@ define([
         G = new game(options);
         
         return true;
+      }
+
+      global.startGame = function(options) {
+        return startGame(options);
       }
 
       /**
