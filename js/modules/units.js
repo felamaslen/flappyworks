@@ -38,6 +38,11 @@ var turret = {
   
 };
 
+var units = {
+  soldier: soldier;
+  turret: turret;
+}
+
 function plopUnit(unit){
   if (global.G == null) return false;
 
@@ -66,11 +71,8 @@ function plopUnit(unit){
 
 return {
   plopUnit: plopUnit,
-  testUnit: testUnit,
-  units: {
-    turret: turret,
-    soldier: soldier
-  }
+  units: units,
+  testUnit: testUnit
 }
 
 });
