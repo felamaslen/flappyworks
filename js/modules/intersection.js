@@ -14,18 +14,27 @@ define([
         'jquery',
         'firebase',
         'jquerycookie',
+        //'temp-global',
 
-        'admin'
+        'admin',
+        'global',
+
+        'mapstuff_fela'
     ],
     function(
         $,
         firebase,
         jquerycookie,
+        //global,
 
-        Admin
+        Admin,
+        global,
+
+        mapstuff_fela
     ) {
 
 
+      console.log(global);
       // Basic page module loading - refactor
       if (  window.location.pathname.indexOf( 'admin' ) === 1 ) {
 
@@ -33,22 +42,22 @@ define([
 
       };
 
-      // Refactor into AMD
+      var mapstuff = new mapstuff_fela( window );
 
-        var view = {};
+      var view = {};
 
-        view.current = "";
-        
-        view.event = {};
-        
-        view.event.change = {};
-        
-        view.event.change.listeners = [];
-        // Add a listener for the view change event
-        
-        view.event.change.addListener = function(listener){
-          view.event.change.listeners.push(listener);
-        }
+      view.current = "";
+      
+      view.event = {};
+      
+      view.event.change = {};
+      
+      view.event.change.listeners = [];
+      // Add a listener for the view change event
+      
+      view.event.change.addListener = function(listener){
+        view.event.change.listeners.push(listener);
+      }
 
         // Trigger the change event 
         view.event.change.trigger = function(newView){
@@ -62,45 +71,11 @@ define([
           }
         }
 
-        view.change = function(newView){
-          view.current = newView;
-          $(".view").addClass("viewHidden");
-          $('#'+newView).removeClass("viewHidden");
-          view.event.change.trigger(newView);
-        }
-
-        // Refactor into AMD
-
-
-      function makeid(length) {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        var length = typeof length == "undefined" ? 5 : length;
-
-        for ( var i = 0; i < length; i++) {
-          text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-
-        return text;
-      }
-        
-      function debug(msg, level) {
-        level = typeof level == "undefined" ? 2 : level;
-        switch (level) {
-          case 0: // error
-            alert("Fatal error: " + msg);
-            window.console && console.log("[FATAL]", msg);
-            break;
-          case 1: // warning
-            window.console && console.log("[WARN]", msg);
-            break;
-          case 2: // debug
-            window.console && console.log("[DEBUG]", msg);
-            break;
-        }
-
-        return true;
+      view.change = function(newView){
+        view.current = newView;
+        $(".view").addClass("viewHidden");
+        $('#'+newView).removeClass("viewHidden");
+        view.event.change.trigger(newView);
       }
 
       function deleteSession(key) {
@@ -126,7 +101,7 @@ define([
       function getFormParams() {
         // get parameters
         var formParams = {};
-        $.each($d.setupForm.form.serializeArray(), function(_, kv) {
+        $.each(global.$d.setupForm.form.serializeArray(), function(_, kv) {
           if (formParams.hasOwnProperty(kv.name)) {
             formParams[kv.name] = $.makeArray(formParams[kv.name]);
             formParams[kv.name].push(kv.value);
@@ -143,11 +118,11 @@ define([
        * GAME BACKEND
        */
       function game(options) {
-        this.city = cities[options.city];
-        this.mode = me.player == 1 ? options.mode : (options.mode == 0 ? 1 : 0);
+        this.city = global.cities[options.city];
+        this.mode = global.me.player == 1 ? options.mode : (options.mode == 0 ? 1 : 0);
 
         if (typeof this.city.balance == "number" && this.mode == 1)
-          me.balance = this.city.balance;
+          global.me.balance = this.city.balance;
 
         this.init();
 
@@ -156,6 +131,7 @@ define([
 
       game.prototype.init = function(options){
         // change to the appropriate view
+        
         view.change("viewGame");
 
         $(window).trigger('game_init_start', [this]);
@@ -189,9 +165,13 @@ define([
       }
 
       function startGame(options) {
-        G = new game(options);
+        global.G = G = new game(options);
         
         return true;
+      }
+
+      global.startGame = function(options) {
+        return startGame(options);
       }
 
       /**
@@ -204,7 +184,7 @@ define([
        */
       // pre-game
       var evSetNick = function() {
-        me.name = $d.inputNickname.val();
+        me.name = global.$d.inputNickname.val();
 
         if (me.name != origNick) {
           $.cookie("name", me.name, { expires: 30 });
@@ -225,7 +205,7 @@ define([
           return false;
         }
         
-        var sessionName = $d.sessionName.val();
+        var sessionName = global.$d.sessionName.val();
 
         if (!sessionName.length) {
           debug("please enter a name for the session.", 0);
@@ -249,8 +229,8 @@ define([
         session.onDisconnect().remove();
 
         sesId = session.path.m[1];
-        $d.newSessInd.text(sessionName);
-        $d.setupForm.begin.prop("disabled", true); // can't start without another player
+        global.$d.newSessInd.text(sessionName);
+        global.$d.setupForm.begin.prop("disabled", true); // can't start without another player
         view.change("viewSetup");
 
         return true;
@@ -339,8 +319,8 @@ define([
         }
 
         // validate parameters
-        var city = parseInt($d.setupForm.cities.val()),
-            mode = parseInt($d.setupForm.mode.filter(":checked").val());
+        var city = parseInt(global.$d.setupForm.global.cities.val()),
+            mode = parseInt(global.$d.setupForm.mode.filter(":checked").val());
 
         var errors = [];
         if (isNaN(city))  errors[errors.length] = "you must select a city";
@@ -403,8 +383,8 @@ define([
                     sesId = key;
                     me.player = iAmPlayer1 ? 1 : 2;
                   
-                    $d.newSessInd.text(sessionName);
-                    $d.setupForm.begin.prop("disabled", true); // can't start without another player
+                    global.$d.newSessInd.text(sessionName);
+                    global.$d.setupForm.begin.prop("disabled", true); // can't start without another player
                     view.change("viewSetup");
                   }
 
@@ -428,7 +408,7 @@ define([
                   if (!stale) {
                     sesId = key;
                     me.player = iAmPlayer1 ? 1 : 2;
-                    $d.setupForm.begin.prop("disabled", false);
+                    global.$d.setupForm.begin.prop("disabled", false);
                   }
                   break;
                 case 2: // in play
@@ -459,10 +439,10 @@ define([
         }
 
         // reload lobby list on lobby view
-        $d.sessionList.empty();
+        global.$d.sessionList.empty();
 
         if (!sizeof(lobby)) {
-          $d.sessionList.append($("<li></li>")
+          global.$d.sessionList.append($("<li></li>")
               .addClass("list-group-item")
               .text(noSessionsMsg));
         }
@@ -484,7 +464,7 @@ define([
             var open = lobby[i].state == 0;
 
             // add session to the session list in the lobby
-            $d.sessionList.append($("<li></li>")
+            global.$d.sessionList.append($("<li></li>")
               .addClass("list-group-item")
               .addClass("session-item")
               .toggleClass("accepting", open)
@@ -512,10 +492,10 @@ define([
               if (me.player == 1) {
                 if (listenLast.state == 0 && lobby[i].state == 1) {
                   // someone joined!
-                  $d.setupForm.begin.prop("disabled", false);
+                  global.$d.setupForm.begin.prop("disabled", false);
                 }
                 else if (listenLast.state == 1 && lobby[i].state == 0) {
-                  $d.setupForm.begin.prop("disabled", true);
+                  global.$d.setupForm.begin.prop("disabled", true);
                 }
                 else if (listenLast.state == 2 && lobby[i].state < 2) {
                   // player 2 left (or timed out)!
@@ -571,67 +551,12 @@ define([
       }
 
 
-
-      /**
-       * GLOBAL VARIABLES
-       */
-      var
-        me = {
-          name: "player-" + makeid(),
-          balance: 2000,
-          player: null // becomes 1 or 2 when joining / creating session
-        },
-        $d = {}, // dom objects
-        G = null, // game object
-        
-        sesId = null,
-        lobby = [],
-        fb = new Firebase("https://interception.firebaseio.com/sessions"),
-
-        listenLast = { // what things were on the last listen
-          sesId: null,
-          state: null
-        },
-
-        cities = [
-          {
-            name: "London",
-            coords: [51.514756, -0.125631],
-            zoom: 10,
-            balance: 2515202
-          },
-          {
-            name: "Plymouth",
-            coords: [50.375935, -4.143126],
-            zoom: 12,
-            balance: 2568000
-          }
-        ],
-        assets = [ // weapons / soldiers / etc.
-          {
-            name: "Soldier",
-            class: "soldier",
-            projS: .5, // projectiles per second
-            speed: 10,
-            cost: 1000
-          },
-          {
-            name: "Turret",
-            class: "turret",
-            projS: 10,
-            speed: 0,
-            cost: 1500
-          }
-        ],
-        noSessionsMsg = "There are no open sessions - why not create one?" 
-      ; 
-
       /**
        * onload
        */
       var nickCookie = typeof $.cookie("name") != "undefined";
-      if (nickCookie) me.name = $.cookie("name");
-      var origNick = me.name;
+      if (nickCookie) global.me.name = $.cookie("name");
+      var origNick = global.me.name;
 
       $(document).ready(function(){
 
@@ -641,28 +566,28 @@ define([
         $(".viewDefault").removeClass("viewHidden");
 
         // DOM elements
-        $d.ctrl = $("#ctrl").children(".inside"); // game items
-        $d.sessionList = $("#sessionList"); // lobby
-        $d.sessionName = $("#sessionName"); // session name input in new session section
-        $d.newSessInd = $("#newSessInd");
-        $d.inputNickname = $("#inputNickname");
-        $d.inputNickname.val(me.name);
+        global.$d.ctrl = $("#ctrl").children(".inside"); // game items
+        global.$d.sessionList = $("#sessionList"); // lobby
+        global.$d.sessionName = $("#sessionName"); // session name input in new session section
+        global.$d.newSessInd = $("#newSessInd");
+        global.$d.inputNickname = $("#inputNickname");
+        global.$d.inputNickname.val(global.me.name);
 
         // FORMS
         // session form
-        $d.sessionName.val("newsess-" + makeid());
+        global.$d.sessionName.val("newsess-" + global.makeid());
         // setup form
-        $d.setupForm = {
+        global.$d.setupForm = {
           form:   $("#sessionParamForm"),
           cities: $("#citySelect"),
           mode:   $(".inputMode"),
           begin:  $("#beginGame")
         };
 
-        // populate the list of cities
-        for (var i = 0; i < cities.length; i++) {
-          $d.setupForm.cities.append($("<option></option>")
-            .text(cities[i].name)
+        // populate the list of global.cities
+        for (var i = 0; i < global.cities.length; i++) {
+          global.$d.setupForm.cities.append($("<option></option>")
+            .text(global.cities[i].name)
             .attr("value", i)
           );
         }
@@ -670,8 +595,8 @@ define([
         // attach events
         $("#btnSetNick").on("click", evSetNick);
         $("#btnSetSessName").on("click", evNewSession);
-        $d.sessionList.on("click", evJoinSession);
-        $d.setupForm.begin.on("click", evNewGame);
+        global.$d.sessionList.on("click", evJoinSession);
+        global.$d.setupForm.begin.on("click", evNewGame);
 
         $(window).trigger('doc_ready');
       });

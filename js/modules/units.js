@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 define([ 'global'], function ( global) { 
+=======
+define([ 'global'], function ( global) {
+     console.log('blah');
+   
+>>>>>>> master
 
 function testUnit(unit){
   if(!unit.role || unit.role != "soldier" || unit.role != "turret"){
@@ -62,10 +68,12 @@ function plopUnit(unit){
   }
 }
 
+
 return {
   plopUnit: plopUnit,
   solider: solider,
   turret: turret,
   testUnit: testUnit
 }
+
 });
