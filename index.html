@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="container clearfix" id="main-wrapper"> 
-      <div id="viewWaitP1" class="view">
+      <div id="viewWaitP1" class="view viewHidden">
         <h2>Please wait for player 1 to configure and start the game...</h2>
       </div>
       <div id="viewNickname" class="view viewDefault">
@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-      <div id="viewLobby" class="view">
+      <div id="viewLobby" class="view viewHidden">
         <h3>Lobby<span class="nick-display" id="lobby-nick-display"></span></h3>
         <ul id="sessionList" class="list-group "></ul>
         <div id="newSessionSection" class="form-group">
@@ -73,6 +73,7 @@
             <h3>Map Preview:</h3>
             <div id="mapPreview"></div>
             <button id="beginGame" class="btn btn-success">Begin Game</button>
+            <button id="forceGame" class="btn btn-success">Force</button>
           </form>
         </div>
       </div>

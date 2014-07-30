@@ -20,8 +20,7 @@ var soldier = {
   cost: 2000,
   level: 1,
   power: 5,
-  sps: 2
-  
+  sps: 2  
 };
 
 var turret = {
@@ -39,8 +38,8 @@ var turret = {
 };
 
 var units = {
-  soldier: soldier;
-  turret: turret;
+  soldier: soldier,
+  turret: turret
 }
 
 function plopUnit(unit){
