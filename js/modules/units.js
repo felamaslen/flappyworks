@@ -39,7 +39,7 @@ var turret = {
 };
 
 var units = {
-  soldier: soldier;
+  soldier: soldier,
   turret: turret;
 }
 
