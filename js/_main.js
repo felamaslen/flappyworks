@@ -19,6 +19,7 @@ require.config({
       admin: 'modules/admin',
       global: 'modules/global',
       mapstuff_fela: 'modules/mapstuff_fela'
+      units: 'modules/units'
     },
 
     shim: {
