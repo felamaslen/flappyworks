@@ -20,8 +20,8 @@ var soldier = {
   cost: 2000,
   level: 1,
   power: 5,
-  sps: 2
-  
+  sps: 2,
+  icon: "img/soldier.png"
 };
 
 var turret = {
@@ -34,8 +34,8 @@ var turret = {
   cost: 3000,
   level: 1,
   power: 7,
-  sps: 5
-  
+  sps: 5,
+  icon: "img/turret_128.png"
 };
 
 function plopUnit(unit){
@@ -45,21 +45,14 @@ function plopUnit(unit){
     global.debug('Unit invalid', 1);
     return false;
   }
-  if(unit.role == "turret"){
-    var unitPlopped = new google.maps.Marker({
-      position: new google.maps.LatLng(unit.lat, unit.lon),
-      map: global.G.map,
-      icon : 'img/turret.png'
-    });
-    
-    global.me.balance -= unit.cost;
-  } else {
-    var unitPlopped = new google.maps.Marker({
-      position: new google.maps.LatLng(unit.lat, unit.lon),
-      map: global.G.maps
-    });
-    global.me.balance -= unit.cost;
-  }
+
+  var unitPlopped = new google.maps.Marker({
+    position: new google.maps.LatLng(unit.lat, unit.lon),
+    map: global.G.map,
+    icon: typeof unit.icon == "undefined" ? null : unit.icon
+  });
+  
+  global.me.balance -= unit.cost;
 
   return true;
 }

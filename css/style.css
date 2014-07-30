@@ -63,6 +63,29 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+
+#unitsList {}
+
+#unitsList .unit {
+  list-style: none;
+  width: 48px;
+  height: 48px;
+  display: block;
+  text-indent: 56px;
+  border: 1px solid #666;
+  margin-bottom: 5px;
+  position: relative;
+  line-height: 48px;
+}
+
+#unitsList .unit .icon img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .assets {
   list-style: none;
   padding: 0;
