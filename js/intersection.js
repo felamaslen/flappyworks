@@ -102,7 +102,7 @@ game.prototype.init = function(options){
   this.units = []; // soldiers, turrets etc.
   this.unitDrag = false; // turns to true when dragging a unit
 
-  $.trigger("game_init");
+  $.trigger("game_init", [ this ]);
 
   return true;
 };
