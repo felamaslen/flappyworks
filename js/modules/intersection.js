@@ -161,7 +161,7 @@ define([
         // render map
         this.map_init();
 
-        $.trigger('game_init', [this]);
+        $(window).trigger('game_init', [this]);
 
         return true;
       };
@@ -181,7 +181,7 @@ define([
 
         this.map = new google.maps.Map(document.getElementById("map"), opt);
 
-        $.trigger('map_init', [this]);
+        $(window).trigger('map_init', [this]);
         
         return true;
       }
