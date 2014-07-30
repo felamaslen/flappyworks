@@ -249,7 +249,10 @@ var evLeaveSession = function() {
   return true;
 }
 
-var evNewGame = function() {
+var evNewGame = function(e) {
+  e.stopPropagation();
+  e.preventDefault();
+
   if (sesId == null) {
     debug("tried to create a game before joining a session!", 1);
     return false;
