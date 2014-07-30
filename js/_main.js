@@ -8,8 +8,8 @@ require.config({
         jquery: 'libs/jquery.min',
         bootstrap: 'libs/bootstrap.min',
         jquerycookie: 'libs/jquery.cookie',
-        firebase: '//cdn.firebase.com/js/client/1.0.15/firebase',
-        maps: '//maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto',
+        firebase: 'http://cdn.firebase.com/js/client/1.0.15/firebase',
+        maps: 'http://maps.googleapis.com/maps/api/js?key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto',
 
         intersection: 'modules/intersection',
         view: 'modules/view',
