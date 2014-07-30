@@ -2,6 +2,21 @@
  * @file js/mapstuff_fela.js
  */
 
+// dev GET parameters
+var href = window.location.href;
+var split = href.split("?")[1].split("&");
+var get = {};
+for (var i = 0; i < split.length; i++) {
+  var sp = split[i].split("=");
+  get[sp[0]] = sp[1];
+}
+
+//var startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
+var devMode = typeof get.devMode != "undefined" && get.devMode == "true";
+
+function renderUnitsList(units) {
+
+
 function gameUnit(game, options) {
   // soldier, turret etc.
   var self = this;
@@ -45,23 +60,25 @@ function gameUnit(game, options) {
 gameUnit.prototype.createMarker = function() {
 }
 
-// dev GET parameters
-var href = window.location.href;
-var split = href.split("?")[1].split("&");
-var get = {};
-for (var i = 0; i < split.length; i++) {
-  var sp = split[i].split("=");
-  get[sp[0]] = sp[1];
-}
-
-var startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
+$(window).on("game_init", function(game) {
+  // generate a test units list to drag
+  var units = {
+    "soldier": {
+      cost: 10,
+      color: "#00f",
+      speed: 10
+    }
+  };
+});
 
 $(window).on("map_init", function(game) {
   game.units[0] = new gameUnit(g);
 });
 
 $(window).on("doc_ready", function() {
-  if (startGameOnLoad) {
+  $d.nodesList = $("#nodesList");
+
+  if (devMode) {
     startGame({
       city: 0,
       mode: 0 // attack
