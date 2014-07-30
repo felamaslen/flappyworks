@@ -158,10 +158,12 @@ define([
         // change to the appropriate view
         view.change("viewGame");
 
+        $(window).trigger('game_init_start', [this]);
+
         // render map
         this.map_init();
 
-        $(window).trigger('game_init', [this]);
+        $(window).trigger('game_init_end', [this]);
 
         return true;
       };
