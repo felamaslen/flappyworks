@@ -14,7 +14,7 @@ define([
         'jquery',
         'firebase',
         'jquerycookie',
-        'maps',
+        //'temp-global',
 
         'admin',
         'global',
@@ -25,7 +25,7 @@ define([
         $,
         firebase,
         jquerycookie,
-        gmaps,
+        //global,
 
         Admin,
         global,
@@ -131,9 +131,10 @@ define([
 
       game.prototype.init = function(options){
         // change to the appropriate view
-        View.change("viewGame");
         
-        $(window).trigger("game_init_start", [ this ]);
+        view.change("viewGame");
+
+        $(window).trigger('game_init_start', [this]);
 
         // render map
         this.map_init();
@@ -164,7 +165,7 @@ define([
       }
 
       function startGame(options) {
-        G = new game(options);
+        global.G = G = new game(options);
         
         return true;
       }
@@ -304,7 +305,9 @@ define([
         return true;
       }
 
-      var evNewGame = function() {
+      var evNewGame = function(e) {
+        e.preventDefault();
+
         if (sesId == null) {
           debug("tried to create a game before joining a session!", 1);
           return false;

@@ -1,0 +1,401 @@
+{
+  "Cambridgeshire Constabulary": {
+    "budget_million": 116.0, 
+    "budget": 116000000.0, 
+    "areas": [
+      "Cambridgeshire", 
+      "Peterborough"
+    ]
+  }, 
+  "Cheshire Constabulary": {
+    "budget_million": 157.4, 
+    "budget": 157400000.0, 
+    "areas": [
+      "Cheshire East", 
+      "Cheshire West and Chester", 
+      "Halton", 
+      "Warrington"
+    ]
+  }, 
+  "Dyfed-Powys Police": {
+    "budget_million": 83.6, 
+    "budget": 83600000.0, 
+    "areas": [
+      "Ceredigion", 
+      "Carmarthenshire", 
+      "Pembrokeshire", 
+      "Powys"
+    ]
+  }, 
+  "Gwent Police": {
+    "budget_million": 110.7, 
+    "budget": 110700000.0, 
+    "areas": [
+      "Blaenau Gwent", 
+      "Caerphilly", 
+      "Monmouthshire", 
+      "Newport", 
+      "Torfaen"
+    ]
+  }, 
+  "Thames Valley Police": {
+    "budget_million": 344.4, 
+    "budget": 344400000.0, 
+    "areas": [
+      "Buckinghamshire", 
+      "Oxfordshire", 
+      "Bracknell Forest", 
+      "Milton Keynes", 
+      "Reading", 
+      "Slough", 
+      "Wokingham", 
+      "West Berkshire", 
+      "Windsor and Maidenhead"
+    ]
+  }, 
+  "Gloucestershire Constabulary": {
+    "budget_million": 95.7, 
+    "budget": 95700000.0, 
+    "areas": [
+      "Gloucestershire"
+    ]
+  }, 
+  "Bedfordshire Police": {
+    "budget_million": 91.2, 
+    "budget": 91200000.0, 
+    "areas": [
+      "Bedford", 
+      "Central Bedfordshire", 
+      "Luton"
+    ]
+  }, 
+  "South Yorkshire Police": {
+    "budget_million": 239.6, 
+    "budget": 239600000.0, 
+    "areas": [
+      "South Yorkshire"
+    ]
+  }, 
+  "Dorset Police": {
+    "budget_million": 107.8, 
+    "budget": 107800000.0, 
+    "areas": [
+      "Dorset", 
+      "Bournemouth", 
+      "Poole"
+    ]
+  }, 
+  "Lincolnshire Police": {
+    "budget_million": 90.4, 
+    "budget": 90400000.0, 
+    "areas": [
+      "Lincolnshire"
+    ]
+  }, 
+  "Sussex Police": {
+    "budget_million": 237.1, 
+    "budget": 237100000.0, 
+    "areas": [
+      "East Sussex", 
+      "West Sussex", 
+      "Brighton and Hove"
+    ]
+  }, 
+  "Merseyside Police": {
+    "budget_million": 307.3, 
+    "budget": 307300000.0, 
+    "areas": [
+      "Merseyside"
+    ]
+  }, 
+  "South Wales Police": {
+    "budget_million": 232.1, 
+    "budget": 232100000.0, 
+    "areas": [
+      "Bridgend", 
+      "Cardiff", 
+      "Merthyr Tydfil", 
+      "Neath Port Talbot", 
+      "Rhondda Cynon Taf", 
+      "Swansea", 
+      "Vale of Glamorgan"
+    ]
+  }, 
+  "Nottinghamshire Police": {
+    "budget_million": 177.6, 
+    "budget": 177600000.0, 
+    "areas": [
+      "Nottinghamshire", 
+      "Nottingham"
+    ]
+  }, 
+  "Essex Police": {
+    "budget_million": 242.2, 
+    "budget": 242200000.0, 
+    "areas": [
+      "Essex", 
+      "Southend-on-Sea", 
+      "Thurrock"
+    ]
+  }, 
+  "Surrey Police": {
+    "budget_million": 180.6, 
+    "budget": 180600000.0, 
+    "areas": [
+      "Surrey"
+    ]
+  }, 
+  "Greater Manchester Police": {
+    "budget_million": 524.1, 
+    "budget": 524100000.0, 
+    "areas": [
+      "Greater Manchester"
+    ]
+  }, 
+  "Cleveland Police": {
+    "budget_million": 119.7, 
+    "budget": 119700000.0, 
+    "areas": [
+      "Hartlepool", 
+      "Middlesbrough", 
+      "Stockton-on-Tees", 
+      "Redcar and Cleveland"
+    ]
+  }, 
+  "Metropolitan Police Service": {
+    "budget_million": 2532.7, 
+    "budget": 2532700000.0, 
+    "areas": [
+      "Metropolitan Police District", 
+      "London region"
+    ]
+  }, 
+  "Durham Constabulary": {
+    "budget_million": 112.3, 
+    "budget": 112300000.0, 
+    "areas": [
+      "County Durham", 
+      "Darlington"
+    ]
+  }, 
+  "Avon and Somerset Constabulary": {
+    "budget_million": 248.9, 
+    "budget": 248900000.0, 
+    "areas": [
+      "Somerset", 
+      "South Gloucestershire", 
+      "Bristol", 
+      "North Somerset", 
+      "Bath and North East Somerset"
+    ]
+  }, 
+  "Staffordshire Police": {
+    "budget_million": 170.9, 
+    "budget": 170900000.0, 
+    "areas": [
+      "Staffordshire", 
+      "Stoke-on-Trent"
+    ]
+  }, 
+  "Devon and Cornwall Police": {
+    "budget_million": 256.8, 
+    "budget": 256800000.0, 
+    "areas": [
+      "Devon", 
+      "Cornwall", 
+      "Plymouth", 
+      "Torbay", 
+      "Isles of Scilly"
+    ]
+  }, 
+  "Wiltshire Police": {
+    "budget_million": 108.0, 
+    "budget": 108000000.0, 
+    "areas": [
+      "Swindon", 
+      "Wiltshire"
+    ]
+  }, 
+  "Lancashire Constabulary": {
+    "budget_million": 252.6, 
+    "budget": 252600000.0, 
+    "areas": [
+      "Lancashire", 
+      "Blackpool", 
+      "Blackburn with Darwen"
+    ]
+  }, 
+  "Humberside Police": {
+    "budget_million": 164.9, 
+    "budget": 164900000.0, 
+    "areas": [
+      "East Riding of Yorkshire", 
+      "Kingston upon Hull", 
+      "North East Lincolnshire", 
+      "North Lincolnshire"
+    ]
+  }, 
+  "Police Scotland": {
+    "budget_million": 1200.0, 
+    "budget": 1200000000.0, 
+    "areas": [
+      "Scotland"
+    ]
+  }, 
+  "Hertfordshire Constabulary": {
+    "budget_million": 171.4, 
+    "budget": 171400000.0, 
+    "areas": [
+      "Hertfordshire"
+    ]
+  }, 
+  "Police Service of Northern Ireland": {
+    "budget_million": 962.7, 
+    "budget": 962700000.0, 
+    "areas": [
+      "Northern Ireland"
+    ]
+  }, 
+  "Hampshire Constabulary": {
+    "budget_million": 281.9, 
+    "budget": 281900000.0, 
+    "areas": [
+      "Hampshire", 
+      "Southampton", 
+      "Portsmouth", 
+      "Isle of Wight"
+    ]
+  }, 
+  "Northamptonshire Police": {
+    "budget_million": 110.3, 
+    "budget": 110300000.0, 
+    "areas": [
+      "Northamptonshire"
+    ]
+  }, 
+  "Kent Police": {
+    "budget_million": 257.9, 
+    "budget": 257899999.99999997, 
+    "areas": [
+      "Kent", 
+      "Medway"
+    ]
+  }, 
+  "West Midlands Police": {
+    "budget_million": 521.8, 
+    "budget": 521799999.99999994, 
+    "areas": [
+      "West Midlands"
+    ]
+  }, 
+  "City of London Police": {
+    "budget_million": 62.9, 
+    "budget": 62900000.0, 
+    "areas": [
+      "City of London"
+    ]
+  }, 
+  "Cumbria Constabulary": {
+    "budget_million": 94.0, 
+    "budget": 94000000.0, 
+    "areas": [
+      "Cumbria"
+    ]
+  }, 
+  "British Transport Police": {
+    "budget_million": 187.7, 
+    "budget": 187700000.0, 
+    "areas": [
+      "National Rail", 
+      "London Underground", 
+      "Docklands Light Railway", 
+      "Midland Metro", 
+      "Tramlink", 
+      "Glasgow Subway", 
+      "Tyne and Wear Metro"
+    ]
+  }, 
+  "Norfolk Constabulary": {
+    "budget_million": 131.3, 
+    "budget": 131300000.00000001, 
+    "areas": [
+      "Norfolk"
+    ]
+  }, 
+  "Leicestershire Police": {
+    "budget_million": 154.7, 
+    "budget": 154700000.0, 
+    "areas": [
+      "Leicestershire", 
+      "Leicester", 
+      "Rutland"
+    ]
+  }, 
+  "West Mercia Police": {
+    "budget_million": 184.3, 
+    "budget": 184300000.0, 
+    "areas": [
+      "Worcestershire", 
+      "Herefordshire", 
+      "Shropshire", 
+      "Telford and Wrekin"
+    ]
+  }, 
+  "Northumbria Police": {
+    "budget_million": 270.1, 
+    "budget": 270100000.0, 
+    "areas": [
+      "Tyne and Wear", 
+      "Northumberland"
+    ]
+  }, 
+  "West Yorkshire Police": {
+    "budget_million": 396.0, 
+    "budget": 396000000.0, 
+    "areas": [
+      "West Yorkshire"
+    ]
+  }, 
+  "North Wales Police": {
+    "budget_million": 124.8, 
+    "budget": 124800000.0, 
+    "areas": [
+      "Wrexham", 
+      "Conwy", 
+      "Flintshire", 
+      "Denbighshire", 
+      "Gwynedd", 
+      "Anglesey"
+    ]
+  }, 
+  "Derbyshire Constabulary": {
+    "budget_million": 151.6, 
+    "budget": 151600000.0, 
+    "areas": [
+      "Derbyshire", 
+      "Derby"
+    ]
+  }, 
+  "North Yorkshire Police": {
+    "budget_million": 127.6, 
+    "budget": 127600000.0, 
+    "areas": [
+      "North Yorkshire", 
+      "York"
+    ]
+  }, 
+  "Warwickshire Police": {
+    "budget_million": 80.1, 
+    "budget": 80100000.0, 
+    "areas": [
+      "Warwickshire"
+    ]
+  }, 
+  "Suffolk Constabulary": {
+    "budget_million": 101.9, 
+    "budget": 101900000.0, 
+    "areas": [
+      "Suffolk"
+    ]
+  }
+}
