@@ -124,6 +124,10 @@ define([
 
         if (typeof this.city.balance == "number" && this.mode == 1)
           global.me.balance = this.city.balance;
+          $(window).on('budgetUpdate', function (e) { 
+          $('#balanceDisplay').html(global.me.balance);
+          } );
+          $(window).trigger('budgetUpdate');     
 
         this.init();
 

@@ -1,5 +1,5 @@
 
-define([ 'global'], function ( global) { 
+define([   'global'], function ( global) { 
 
 function testUnit(unit){
   if(!unit.role || unit.role != "soldier" || unit.role != "turret"){
@@ -60,6 +60,10 @@ function plopUnit(unit){
   });
   
   global.me.balance -= unit.cost;
+  $(window).on('budgetUpdate', function (e) { 
+      $('#balanceDisplay').html(global.me.balance);
+    } );
+  $(window).trigger('budgetUpdate');     
 
   return true;
 }
