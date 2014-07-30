@@ -163,6 +163,8 @@ define([
         // render map
         this.map_init();
 
+        $.trigger('game_init', [this]);
+
         return true;
       };
 
@@ -173,6 +175,8 @@ define([
         };
 
         this.map = new google.maps.Map(document.getElementById("map"), opt);
+
+        $.trigger('map_init', [this]);
         
         return true;
       }
@@ -659,6 +663,8 @@ define([
         $("#btnSetSessName").on("click", evNewSession);
         $d.sessionList.on("click", evJoinSession);
         $d.setupForm.begin.on("click", evNewGame);
+
+        $(window).trigger('doc_ready');
       });
 
 });
