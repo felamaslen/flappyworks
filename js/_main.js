@@ -18,7 +18,7 @@ require.config({
       view: 'modules/view',
       admin: 'modules/admin',
       global: 'modules/global',
-      mapstuff_fela: 'modules/mapstuff_fela'
+      mapstuff_fela: 'modules/mapstuff_fela',
       units: 'modules/units'
 
     },
