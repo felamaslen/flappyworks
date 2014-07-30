@@ -11,19 +11,15 @@ $(document).ready(function(){
       break;
   }*/
 
-	 /*me = {
-    nickname: "player-" + makeid(),
-    balance: 2000 // bank balance
-  	};
-    */
-  /*
+	 
+  
     if(formParams.citySelect == "London"){
       me.balance = 2515202;
     }
     if(formParams.citySelect == "Plymouth"){
       me.balance = 2568000;
     }
-  */
+  
 
 	$('#js-budget').append(me.balance);
 

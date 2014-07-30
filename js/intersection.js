@@ -589,7 +589,13 @@ $(document).ready(function(){
   $("#btnSetNick").on("click", evSetNick);
   $("#btnSetSessName").on("click", evNewSession);
   $d.sessionList.on("click", evJoinSession);
-  $d.setupForm.form.on("submit", function() { return false; });
+  $d.setupForm.form.on("submit", function() {
+   if(formParams.citySelect == "London"){
+      me.balance = 2515202;
+    }
+    if(formParams.citySelect == "Plymouth"){
+      me.balance = 2568000;
+    } });
   $d.setupForm.begin.on("click", evNewGame);
 });
 
