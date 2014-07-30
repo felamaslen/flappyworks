@@ -159,11 +159,13 @@ define([
       game.prototype.init = function(options){
         // change to the appropriate view
         View.change("viewGame");
+        
+        $(window).trigger("game_init_start", [ this ]);
 
         // render map
         this.map_init();
 
-        $.trigger('game_init', [this]);
+        $(window).trigger('game_init_end', [this]);
 
         return true;
       };
@@ -183,7 +185,7 @@ define([
 
         this.map = new google.maps.Map(document.getElementById("map"), opt);
 
-        $.trigger('map_init', [this]);
+        $(window).trigger('map_init', [this]);
         
         return true;
       }
