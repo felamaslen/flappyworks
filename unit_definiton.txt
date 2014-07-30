@@ -1,0 +1,12 @@
+unit = {
+  role: String;
+  health: int;
+  lat: float;
+  lon: float;
+  mvSpeed: int;
+  range: float;
+  cost: float;
+  level: int;
+  power: int;
+  sps: float;
+}
