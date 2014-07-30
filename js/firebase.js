@@ -1,4 +1,4 @@
-﻿var fb = new Firebase("https://interception.firebaseio.com/");
+﻿var fb = new Firebase("https://interception.firebaseio.com/sessions");
 
 fb.on('value', function (snapshot) {
 
@@ -14,7 +14,7 @@ fb.on('value', function (snapshot) {
 
 function killLobby( event ){
 	var ref = $(event.target).data('ref');
-	toDie = new Firebase('https://interception.firebaseio.com/'+ref)
+	toDie = new Firebase('https://interception.firebaseio.com/sessions/'+ref)
 	toDie.set( null, function( data ){
 		console.log( data );
 	} );
