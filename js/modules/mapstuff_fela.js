@@ -99,8 +99,8 @@ define([
         gameUnit.prototype.createMarker = function() {
         }
 
-        $(window).on("game_init", function(game) {
-          debug("triggered game_init()", 2);
+        $(window).on("game_init_start", function(game) {
+          global.debug("triggered game_init_start()", 2);
           // generate a test units list to drag
 
           console.log(units);
