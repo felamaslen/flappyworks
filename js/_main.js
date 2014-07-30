@@ -35,7 +35,8 @@ require.config({
 require([
         'jquery',
         'intersection',
-        'unitPopulation'
+        'unitPopulation',
+        'units'
     ],
     function(
         $,
