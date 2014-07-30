@@ -39,8 +39,8 @@ var turret = {
 };
 
 var units = {
-  soldier: soldier;
-  turret: turret;
+  soldier: soldier,
+  turret: turret
 }
 
 function plopUnit(unit){
