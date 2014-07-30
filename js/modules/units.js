@@ -10,7 +10,7 @@ function testUnit(unit){
   
 }
 
-soldier = {
+var soldier = {
   role : "soldier",
   health : 50,
   lat : 0 ,
@@ -22,8 +22,9 @@ soldier = {
   power: 5,
   sps: 2
   
-}
-turret = {
+};
+
+var turret = {
   role : "turret",
   health : 10,
   lat : 0 ,
@@ -35,33 +36,33 @@ turret = {
   power: 7,
   sps: 5
   
-}
-
-
+};
 
 function plopUnit(unit){
+  if (global.G == null) return false;
+
   if(!testUnit(unit)){
-    console.log('Unit invalid');
+    global.debug('Unit invalid', 1);
     return false;
   }
   if(unit.role == "turret"){
-   var unitPlopped = new google.maps.Marker{
-    position: new google.maps.LatLng(unit.lat, unit.lon),
-    map: global.G.maps,
-    icon : 'img/turret.png'
+    var unitPlopped = new google.maps.Marker({
+      position: new google.maps.LatLng(unit.lat, unit.lon),
+      map: global.G.map,
+      icon : 'img/turret.png'
+    });
+    
+    global.me.balance -= unit.cost;
+  } else {
+    var unitPlopped = new google.maps.Marker({
+      position: new google.maps.LatLng(unit.lat, unit.lon),
+      map: global.G.maps
+    });
+    global.me.balance -= unit.cost;
+  }
 
-    }
-    me.balance -= unit.cost;
-  }
-  else{
-    var unitPlopped = new google.maps.Marker{
-    position: new google.maps.LatLng(unit.lat, unit.lon),
-    map: global.G.maps
-  }
-  me.balance -= unit.cost;
-  }
+  return true;
 }
-
 
 return {
   plopUnit: plopUnit,
