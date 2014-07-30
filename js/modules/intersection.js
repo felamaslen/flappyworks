@@ -439,7 +439,7 @@ define([
 
         // reload lobby list on lobby view
         global.$d.sessionList.empty();
-
+        
         if (!sizeof(lobby)) {
           global.$d.sessionList.append($("<li></li>")
               .addClass("list-group-item")
