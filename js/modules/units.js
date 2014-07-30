@@ -1,3 +1,4 @@
+
 define([ 'global'], function ( global) { 
 
 function testUnit(unit){
@@ -43,12 +44,13 @@ var units = {
 }
 
 function plopUnit(unit){
-  if (global.G == null) return false;
+  //if (global.G == null) return false;
 
-  if(!testUnit(unit)){
-    global.debug('Unit invalid', 1);
+ /* if(!testUnit(unit)){
+    //global.debug('Unit invalid', 1);
+    console.log("OOPS");
     return false;
-  }
+  }*/
   if(unit.role == "turret"){
     var unitPlopped = new google.maps.Marker({
       position: new google.maps.LatLng(unit.lat, unit.lon),
@@ -67,7 +69,7 @@ function plopUnit(unit){
 
   return true;
 }
-
+plopUnit(soldier);
 return {
   plopUnit: plopUnit,
   units: units,
