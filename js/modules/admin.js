@@ -1,68 +1,68 @@
 ﻿define([
-        'jquery',
-        'firebase'
-    ],
-    function(
-        $,
-        firebase
-    ) {
+  'jquery',
+  'firebase'
+],
+function(
+  $,
+  firebase
+) {
 
-        var Admin = function( window ){
+  var Admin = function( window ){
 
-            this.window = window;
-            this.init( window );
+      this.window = window;
+      this.init( window );
 
-        };
+  };
 
-        Admin.prototype = {
+  Admin.prototype = {
 
-            constructor: Admin,
+      constructor: Admin,
 
-            init: function( window ){
+      init: function( window ){
 
-                this.fb = new Firebase("https://interception.firebaseio.com/sessions");
-                this.eventHandlers();
+          this.fb = new Firebase("https://interception.firebaseio.com/sessions");
+          this.eventHandlers();
 
-            },
+      },
 
-            eventHandlers: function(){
+      eventHandlers: function(){
 
-                this.fb.on('value', $.proxy( this.firebaseCallback, this ) );
+          this.fb.on('value', $.proxy( this.firebaseCallback, this ) );
 
-                $('body').on( 'click', '.removeItem', $.proxy( this.killLobby, this ) );
+          $('body').on( 'click', '.removeItem', $.proxy( this.killLobby, this ) );
 
-            },
+      },
 
-            firebaseCallback: function( snapshot ){
+      firebaseCallback: function( snapshot ){
 
-                var dataObj = snapshot.val();
+          var dataObj = snapshot.val();
 
-                $('.data').html('');
+          $('.data').html('');
 
-                if ( dataObj === null ) { return false; }
+          if ( dataObj === null ) { return false; }
 
-                $.each( dataObj, function( data, index ){
+          $.each( dataObj, function( data, index ){
 
-                    $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
+              $('.data').append( '<li>' + index.name + ' - <button class="removeItem" data-ref="'+ data +'" >Remove Me!</button> </li>' );
 
-                });
+          });
 
-            },
+      },
 
-            killLobby: function( event ){
+      killLobby: function( event ){
 
-                var ref = $(event.target).data('ref');
+          var ref = $(event.target).data('ref');
 
-                toDie = new Firebase('https://interception.firebaseio.com/sessions'+ref)
-                
-                toDie.set( null, function( data ){
-                        console.log( data );
-                } );
+          toDie = new Firebase('https://interception.firebaseio.com/sessions'+ref)
 
-            }
+          toDie.set( null, function( data ){
+                  console.log( data );
+          } );
 
-        };
+      }
 
-        return Admin;
+  };
+
+  return Admin;
 
 });
