@@ -38,12 +38,20 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     power: 7,
     sps: 5,
     icon: "img/icon/turret_128.png",
+    attack: false,
     defence: true 
   };
 
   var units = {
     soldier: soldier,
     turret: turret
+  }
+
+  for (var i in units) {
+    if (typeof units[i].attack == "undefined")
+      units[i].attack = true;
+    if (typeof units[i].defence == "undefined")
+      units[i].defence = true;
   }
 
   function plopUnit(unit) {
@@ -115,14 +123,14 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
   };
 
   function addUnits() {
-    console.log('UNITS::addUnits');
+    global.debug("UNITS:addUnits", 2);
     var formResults = formMethods.getFormParams('#sessionParamForm');
 
     var attack = global.G.mode == 0, defend = !attack;
 
     for (var name in units) {
       if ((attack && !units[name].attack) ||
-        (defend && !units[name].defend)) continue;
+        (defend && !units[name].defence)) continue;
 
         global.$d.unitsList.append($("<li></li>")
           .addClass("list-item")
