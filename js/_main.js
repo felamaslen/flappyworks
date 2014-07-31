@@ -2,34 +2,29 @@ require.config({
     appDir: '.',
     waitSeconds : 5,
     urlArgs: "bust="+Math.floor(Math.random()*999999),
-    
+
     paths : {
-      
+
       jquery:       'libs/jquery.min',
-  //jqueryUI:     'libs/jquery-ui.min',
       bootstrap:    'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
       firebase:     'libs/firebase',
-    //firebase:     'https://cdn.firebase.com/js/client/1.0.15/firebase',
-    //maps:         'libs/googlemaps', // this is loaded asynchronously via the footer in index.html
       intersection: 'modules/intersection',
-
       view:         'modules/view',
       admin:        'modules/admin',
       global:       'modules/global',
       mapMethods:   'modules/mapMethods',
-      mapstuff_fela:  'modules/mapstuff_fela',
+      mapstuff_fela:'modules/mapstuff_fela',
       sync:         'modules/sync',
       units:        'modules/units',
-      formMethods: 'modules/formMethods',
-      uiMessages:     'modules/uiMessages',
-      pdr: 'modules/police_data_renderer'
-      
+      formMethods:  'modules/formMethods',
+      uiMessages:   'modules/uiMessages',
+      pdr:          'modules/police_data_renderer'
+
       },
 
     shim: {
       'jquery': {exports: '$'},
-    //'jqueryUI': { deps: ['jquery'] /*, exports: '$'*/ },
       'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
       'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
       'firebase' : {deps:[], exports: 'Firebase'},
@@ -53,8 +48,8 @@ require([
 
         $('document').ready(function(){
 
-          window.console && console.log('REQUIRE::Loaded');        
-           
+          window.console && console.log('REQUIRE::Loaded');
+
         });
 
 });
