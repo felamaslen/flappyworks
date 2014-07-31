@@ -67,18 +67,25 @@ body {
   margin: 0 5%;
 }
 
-#unitsList {}
+#unitsList {
+  white-space: nowrap;
+  overflow-y: none;
+  overflow-x: scroll;
+  height: 96px;
+  margin-bottom: 0;
+}
 
 #unitsList .unit {
+  text-align: center;
+  padding-top: 48px;
   list-style: none;
-  height: 48px;
-  width: 192px;
+  height: 72px;
+  width: 128px;
   display: block;
-  text-indent: 56px;
   border: 1px solid #666;
   margin-bottom: 5px;
   position: relative;
-  line-height: 48px;
+  line-height: 16px;
   cursor: pointer;
   background: rgba(255, 255, 255, .5);
   display: inline-block;
@@ -88,7 +95,7 @@ body {
   width: 48px;
   height: 48px;
   position: absolute;
-  left: 0;
+  left: 40px;
   top: 0;
 }
 #unitsList .unit .icon img {
