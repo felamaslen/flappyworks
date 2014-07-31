@@ -91,6 +91,18 @@ body {
   height: 100%;
   display: block;
 }
+#unitsList .cost {
+  color: #777;
+}
+#unitsList .cost::before {
+  content: " (\a3";
+}
+#unitsList .cost::after {
+  content: ")";
+}
+#balanceDisplay::before {
+  content: " \a3";
+}
 
 .assets {
   list-style: none;
