@@ -22,11 +22,7 @@ require.config({
       sync:         'modules/sync',
       units:        'modules/units',
       formMethods: 'modules/formMethods',
-      uiMessages:     'modules/uiMessages'
-
-
-
-    },
+      uiMessages:     'modules/uiMessages' },
 
     shim: {
       'jquery': {exports: '$'},

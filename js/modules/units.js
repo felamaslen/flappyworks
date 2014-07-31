@@ -1,5 +1,5 @@
 
-define(['intersection', 'global', 'formMethods'], function (intersection, global, formMethods) { 
+define(['intersection', 'global', 'formMethods', 'jquery'], function (intersection, global, formMethods, $) { 
 
   console.log( global );
 
@@ -98,40 +98,52 @@ function plopUnit(unit){
             );
           }*/
 
-var formResults = formMethods.getFormParams( '#sessionParamForm' );
+function bindEvents() {
+
+  $('window').on('game_init_start', $.proxy( addUnits, this ) );
+  console.log('UNITS::bindEvents');
+
+};
 
 
-if(formResults.mode == 0){
-  global.$d.unitsList.empty();
-  name = "soldier";
-  global.$d.unitsList.append($("<li></li>")
-              .addClass("list-item")
-              .addClass("unit")
-              .addClass("unit-" + name)
-              .text(name)
-              .append($("<div></div>")
-              .addClass("icon")
-              .append(
-                $("<img></img>").attr("src", "img/soldier.png")
-              ))); 
-}
-if (formResults.mode == 1){
-  global.$d.unitsList.empty();
-  name = "turret";
-  global.$d.unitsList.append($("<li></li>")
-              .addClass("list-item")
-              .addClass("unit")
-              .addClass("unit-" + name)
-              .text(name)
-              .append($("<div></div>")
-  .addClass("icon")
-  .append($("<img></img>").attr("src", "img/turret.png"))));
-  }
+function addUnits(){
+  console.log( 'UNITS::addUnits' );
+  var formResults = formMethods.getFormParams( '#sessionParamForm' );
+
+  if(formResults.mode == 0){
+    global.$d.unitsList.empty();
+    name = "soldier";
+    global.$d.unitsList.append($("<li></li>")
+               .addClass("list-item")
+               .addClass("unit")
+               .addClass("unit-" + name)
+               .text(name)
+               .append($("<div></div>")
+               .addClass("icon")
+               .append(
+                 $("<img></img>").attr("src", "img/icon/soldier.png")
+               ))); 
+    }
+    if (formResults.mode == 1){
+    global.$d.unitsList.empty();
+    name = "turret";
+    global.$d.unitsList.append($("<li></li>")
+               .addClass("list-item")
+               .addClass("unit")
+               .addClass("unit-" + name)
+               .text(name)
+               .append($("<div></div>")
+    .addClass("icon")
+    .append($("<img></img>").attr("src", "img/icon/turret.png"))));
+    }
+};
 
 return {
   plopUnit: plopUnit,
   units: units,
-  testUnit: testUnit
+  testUnit: testUnit,
+  bindEvents: bindEvents,
+  addUnits: addUnits
 }
 
 });
