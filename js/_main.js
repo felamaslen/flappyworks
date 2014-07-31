@@ -21,7 +21,7 @@ require.config({
       mapstuff_fela:  'modules/mapstuff_fela',
       sync:         'modules/sync',
       units:        'modules/units',
-      formMethods: 'modules/formMethods'
+      formMethods: 'modules/formMethods',
       uiMessages:     'modules/uiMessages',
 
 
