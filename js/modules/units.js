@@ -118,6 +118,8 @@ function addUnits(){
                .addClass("unit")
                .addClass("unit-" + name)
                .text(name)
+
+               .text(" - range of "+ soldier.range)
                .append($("<div></div>")
                .addClass("icon")
                .append(
@@ -132,6 +134,7 @@ function addUnits(){
                .addClass("unit")
                .addClass("unit-" + name)
                .text(name)
+               .text(" - range of "+ turret.range)
                .append($("<div></div>")
     .addClass("icon")
     .append($("<img></img>").attr("src", "img/icon/turret.png"))));
