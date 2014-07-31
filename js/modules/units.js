@@ -182,35 +182,51 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
 
         return true;
       };
-
+     
       function addUnits() {
         console.log('UNITS::addUnits');
         var formResults = formMethods.getFormParams('#sessionParamForm');
 
-        console.log(global);
         var attack = global.G.mode == 0, defend = !attack;
-        
-        global.$d.unitsList.empty();
-        var name;
-
-        for (var name in this.units) {
-          if ((attack && !this.units[name].attack) ||
-              (defend && !this.units[name].defend)) continue;
+     
+        for (var name in units) {
+          if ((attack && !units[name].attack) ||
+              (defend && !units[name].defend)) continue;
 
           global.$d.unitsList.append($("<li></li>")
             .addClass("list-item")
             .addClass("unit")
             .addClass("unit-" + name)
             .text(name)
+            .append($("<span></span>")
+              .addClass("cost")
+              .text(units[name].cost)
+            )
+            .css({
+              color: units[name].color
+            })
+            .data({
+              unit: units[name],
+              type: name
+            })
             .append($("<div></div>")
               .addClass("icon")
-              .append($("<img></img>").attr("src", "img/icon/soldier.png"))
+              .append($("<img></img>").attr("src", units[name].icon))
             )
           );
         }
+
+        global.$d.unitsList.children()
+          .prop("draggable", true)
+          .on("mousedown", global.evDragStart)
+          .on("dragend", global.evDragCancel)
         
         return true;
       };
+
+      //$(window).on("game_init_start", addUnits);
+
+      $(window).on('define_game', addUnits);
 
       return {
         plopUnit: plopUnit,

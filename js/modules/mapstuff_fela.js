@@ -20,7 +20,7 @@ define([
       init: function() {
         global.debug("mapstuff_fela loaded", 2);
 
-        mm = new mapMethods();
+        global.mm = new mapMethods();
 
         // dev GET parameters
         var href = window.location.href || "";
@@ -42,7 +42,7 @@ define([
           return true;
         }
 
-        function renderUnitsList(units) {
+/*        function renderUnitsList(units) {
           global.$d.unitsList.empty();
 
           for (var name in units) {
@@ -72,17 +72,18 @@ define([
 
           return true;
         }
+        */
 
 
-        var evDragCancel = function(e) {
+        global.evDragCancel = function(e) {
           if (global.G == null || global.G.dragData == null) return false;
           global.G.dragData = null;
           global.debug("cancelled dragging a unit", 2);
-          mm.removeCityLimit();
+          global.mm.removeCityLimit();
           return true;
         }
 
-        var evDragStart = function(e) {
+        global.evDragStart = function(e) {
           if (global.G == null) return false;
           var $target = $(e.target);
           
@@ -107,7 +108,7 @@ define([
           }
          
           console.log("adding city limit");
-          mm.addCityLimit();
+          global.mm.addCityLimit();
 
           global.G.dragData = unit;
           
@@ -115,7 +116,7 @@ define([
           return true;
         }
         
-        var evMapDrop = function(e) {
+        global.evMapDrop = function(e) {
           // handles dropping units onto the map
           if (global.G == null || global.G.dragData == null) {
             global.debug("tried to drop unit with no active game in progress", 1);
@@ -143,9 +144,9 @@ define([
           unit.lat = lat;
           unit.lon = lon;
 
-          mm.removeCityLimit();
+          global.mm.removeCityLimit();
           
-          if (!mm.withinCityLimit(position)) {
+          if (!global.mm.withinCityLimit(position)) {
             global.debug("You can't place a unit there - try further " + (global.G.mode == 0 ? "out" : "in") + "!", 3);
             return false;
           }
@@ -238,7 +239,7 @@ define([
           return new google.maps.LatLng(lat2.toDeg(), lon2.toDeg());
         }
 
-        $(window).on("mouseup", evDragCancel);
+        $(window).on("mouseup", global.evDragCancel);
 
         $(window).on("game_init_start", function(e, game) {
           global.debug("triggered game_init_start()", 2);
@@ -248,15 +249,10 @@ define([
           global.me.balance = this.mode == 1 ? cityBalance : .2 * cityBalance;
           updateBalance();
 
-          renderUnitsList(units.units); // malachy assigned to this
+          //renderUnitsList(units.units); // malachy assigned to this
 
           // draggable stuff
           game.dragData = null;
-
-          global.$d.unitsList.children()
-            .prop("draggable", true)
-            .on("mousedown", evDragStart)
-            .on("dragend", evDragCancel)
         });
 
         $(window).on("map_init", function(e, game) {
@@ -311,7 +307,7 @@ define([
           }
 
           global.$d.map_outer
-            .on("drop", evMapDrop)
+            .on("drop", global.evMapDrop)
             .on("dragover", function(e){ e.preventDefault(); });
         });
       }

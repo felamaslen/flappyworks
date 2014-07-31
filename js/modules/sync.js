@@ -89,11 +89,14 @@ define([
 
         var val = snapshot.val();
 
+        if (val == null) return false;
+
         var otherPlayer = global.me.player == 1 ? 2 : 1;
 
         var otherPlayerString = "player" + otherPlayer.toString();
 
-        if (typeof val[otherPlayerString].units != "undefined") {
+        if (typeof val[otherPlayerString] != "undefined" &&
+            typeof val[otherPlayerString].units != "undefined") {
           global.G.theirUnits = val[otherPlayerString].units;
         }
 
@@ -265,9 +268,10 @@ define([
               else if (global.me.player == 2) {
                 if (global.listenLast.state > global.lobby[i].state) {
                   // player 1 left (or timed out)!
-                  global.sync.deleteSession(global.sesId);
+//                  global.sync.deleteSession(global.sesId); // this is done by player 1's onDisconnect() event
                   global.view.change("viewLobby");
-                 global.debug("We lost player 1!", 0);
+                  global.fbSes.onDisconnect().cancel();
+                  global.debug("We lost player 1!", 0);
                   global.sesId = null;
                   global.me.player = null;
                 }
@@ -285,11 +289,13 @@ define([
           }
         }
         
-        if (global.me.player == 2 && global.sesId != null && typeof global.lobby[global.sesId] == "undefined") {
+        if (global.me.player == 2 && global.sesId != null &&
+            typeof global.lobby[global.sesId] == "undefined") {
           global.view.change("viewLobby");
           global.sesId = null;
           global.me.player = null;
-         global.debug("player 1 left!", 0);
+          global.fbSes.onDisconnect().cancel();
+          global.debug("player 1 left!", 0);
         }
 
         global.listenLast = {
