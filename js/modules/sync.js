@@ -33,8 +33,6 @@ define([
       drawTheirUnits: function() {
         global.debug("drawTheirUnits() called", 2);
         for (var i = 0; i < global.G.theirUnits.length; i++) {
-          console.log(global.G.theirUnits, global.G.theirUnitsRaw);
-
           if (typeof global.G.theirUnitsRaw[i] == "undefined") {
             // create the gameUnit
             var unit = units.units[global.G.theirUnits[i].type];
@@ -43,6 +41,8 @@ define([
             unit.health = global.G.theirUnits[i].health;
             unit.lat = global.G.theirUnits[i].lat;
             unit.lon = global.G.theirUnits[i].lon;
+
+            unit.mine = false;
              
             // new gameUnit
             global.G.theirUnitsRaw[i] = new units.gameUnit(global.G, unit);

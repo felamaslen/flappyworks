@@ -123,6 +123,8 @@ define([
           // by this point, the drop is confirmed, so update balance
           global.me.balance -= unit.cost;
           updateBalance();
+
+          unit.mine = true;
           
           global.G.units[global.G.units.length] = new units.gameUnit(global.G, unit);
 
@@ -177,13 +179,15 @@ define([
                 
                 seg.poly1 = new google.maps.Polyline({
                   path: [],
-                  strokeColor: "#ff0000",
-                  strokeWeight: 3
+                  strokeColor: global.mapStrokeColor,
+                  strokeOpacity: global.mapStrokeOpacity,
+                  strokeWeight: global.mapStrokeWeight
                 });
                 seg.poly2 = new google.maps.Polyline({
                   path: [],
-                  strokeColor: "#ff0000",
-                  strokeWeight: 3
+                  strokeColor: global.mapStrokeColor,
+                  strokeOpacity: global.mapStrokeOpacity,
+                  strokeWeight: global.mapStrokeWeight
                 });
 
                 seg.route = result.routes[0];

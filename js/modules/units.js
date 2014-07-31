@@ -89,12 +89,13 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     this.poly = new google.maps.Polyline({
       path: this.path,
       geodesic: true,
-      strokeColor: "#ff0000",
-      strokeOpacity: 1.0,//0.00001
-      strokeWeight: 2//0
+      strokeColor: global.mapStrokeColor,
+      strokeOpacity: global.mapStrokeOpacity,
+      strokeWeight: global.mapStrokeWeight
     });
 
     this.speed = options.speed;
+    this.mine = options.mine;
 
     // this controls whether or not the animation interval will ignore this unit
     this.animate = options.speed > 0;
@@ -124,7 +125,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     var self = this;
 
     google.maps.event.addListener(this.marker, "click", function() {
-      global.G.selectedUnit = self;
+      global.G.selectedUnit = self.mine ? self : null;
     });
 
     return true;

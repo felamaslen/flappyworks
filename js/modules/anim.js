@@ -53,6 +53,23 @@ define([
           var p = seg.poly1.GetPointAtDistance(d);
           unit.marker.setPosition(p);
           global.anim.updatePoly(seg.step, i);
+
+          global.G.myUnits[i].lat = p.lat();
+          global.G.myUnits[i].lon = p.lng();
+        }
+
+        if ((global.animCounter + 2) % 50 === 0) {
+          // every X frames, update the session with the current positions,
+          // and fetch updates of the opponent's units from the server
+          
+          // this triggers a check for updates on the next session change
+          //global.sessionUpdatePositions = true;
+       
+          //global.debug("updating playerChild units");
+          global.playerChild.update({
+            units: global.G.myUnits,
+            triggerUpdate: global.makeid(10), // this forces a change
+          });
         }
 
         return true;

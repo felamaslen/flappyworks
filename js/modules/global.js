@@ -79,6 +79,13 @@ define([
       // animation stuff
       animTime: 25,
       animCounter: 0,
+
+      mapStrokeColor: "#ff0000",
+      mapStrokeOpacity: 0.00001,
+      mapStrokeWeight: 0,
+      
+      // session update triggers
+      sessionUpdatePositions: false,
       
       sesId: null,
       fbSessionListen: function(on) {
