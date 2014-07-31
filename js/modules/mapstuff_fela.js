@@ -93,6 +93,9 @@ define([
 
           this.poly.setMap(game.map);
 
+          // add gameUnit to session
+          
+
           return true;
         }
 
@@ -322,12 +325,6 @@ define([
           // event listener for map click
           google.maps.event.addListener(game.map, "click", evMapClick);
         });
-
-        /*
-        $(window).on("define_game", function(e) {
-          global.G.units[0] = new gameUnit(global.G, units.units.soldier);
-        });
-        // */
 
         $(window).on("doc_ready", function() {
           global.$d.unitsList = $("#unitsList");
