@@ -6,7 +6,7 @@ require.config({
     paths : {
       
       jquery:       'libs/jquery.min',
-      jqueryUI:     'libs/jquery-ui.min',
+  //jqueryUI:     'libs/jquery-ui.min',
       bootstrap:    'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
       firebase:     'libs/firebase',
@@ -21,7 +21,7 @@ require.config({
       mapstuff_fela:  'modules/mapstuff_fela',
       sync:         'modules/sync',
       units:        'modules/units',
-      formMethods: 'modules/formMethods'
+      formMethods: 'modules/formMethods',
       uiMessages:     'modules/uiMessages',
 
 
@@ -29,7 +29,7 @@ require.config({
 
     shim: {
       'jquery': {exports: '$'},
-      'jqueryUI': { deps: ['jquery'] /*, exports: '$'*/ },
+    //'jqueryUI': { deps: ['jquery'] /*, exports: '$'*/ },
       'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
       'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
       'firebase' : {deps:[], exports: 'Firebase'},
@@ -40,25 +40,21 @@ require([
         'jquery',
         'global',
         'intersection',
-        'units',
-        'uiMessages'
+        'units'
     ],
     function(
         $,
         global,
         intersection,
-        units,
-        uiMessages
+        units
     ) {
 
         $('document').ready(function(){
 
           window.console && console.log('REQUIRE::Loaded');        
-         
-          uiMessages.modalDialog("hi.");
-         
-          global.debug("test",1)
-          global.debug("test",3)
+                  
+          global.debug("test",1);
+          global.debug("test",3);
           
           
            
