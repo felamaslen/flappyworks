@@ -105,7 +105,8 @@ define([
             global.debug("You can't afford this item.", 3);
             return false;
           }
-          
+         
+          console.log("adding city limit");
           mm.addCityLimit();
 
           global.G.dragData = unit;

@@ -1,7 +1,5 @@
 define(['intersection', 'global', 'formMethods', 'jquery'], function(intersection, global, formMethods, $) {
 
-      console.log(global);
-
       function testUnit(unit) {
         if (!unit.role || unit.role != "soldier" || unit.role != "turret") {
           return false;
@@ -98,11 +96,11 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
                 }*/
 
       function bindEvents() {
-
         $('window').on('game_init_start', $.proxy(addUnits, this));
         console.log('UNITS::bindEvents');
 
-        if (formResults.mode == 0) {
+        if (global.G.mode == 0 && global.me.player == 1) {
+//        if (formResults.mode == 0) {
           global.$d.unitsList.empty();
           name = "soldier";
           global.$d.unitsList.append($("<li></li>")
@@ -116,6 +114,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
                 $("<img></img>").attr("src", "img/soldier.png")
               )));
         }
+        
         if (formResults.mode == 1) {
           global.$d.unitsList.empty();
           name = "turret";
