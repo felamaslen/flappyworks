@@ -21,6 +21,8 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
         level: 1,
         power: 5,
         sps: 2,
+        attack: true,
+        defend: true,
         icon: "img/icon/soldier.png"
       };
 
@@ -35,6 +37,8 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
         level: 1,
         power: 7,
         sps: 5,
+        attack: false,
+        defend: true,
         icon: "img/icon/turret_128.png"
       };
 
@@ -95,6 +99,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
                   );
                 }*/
 
+      /*
       function bindEvents() {
         $('window').on('game_init_start', $.proxy(addUnits, this));
         console.log('UNITS::bindEvents');
@@ -129,12 +134,12 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
         }
 
       }
+      */
 
       var gameUnit = function(game, options) {
         // soldier, turret etc.
         var self = this;
 
-        console.log("this is a test");
         this.position = new google.maps.LatLng(options.lat, options.lon);
 
         this.createMarker(options);
@@ -182,9 +187,16 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
         console.log('UNITS::addUnits');
         var formResults = formMethods.getFormParams('#sessionParamForm');
 
-        if (formResults.mode == 0) {
-          global.$d.unitsList.empty();
-          name = "soldier";
+        console.log(global);
+        var attack = global.G.mode == 0, defend = !attack;
+        
+        global.$d.unitsList.empty();
+        var name;
+
+        for (var name in this.units) {
+          if ((attack && !this.units[name].attack) ||
+              (defend && !this.units[name].defend)) continue;
+
           global.$d.unitsList.append($("<li></li>")
             .addClass("list-item")
             .addClass("unit")
@@ -192,22 +204,12 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
             .text(name)
             .append($("<div></div>")
               .addClass("icon")
-              .append(
-                $("<img></img>").attr("src", "img/icon/soldier.png")
-              )));
+              .append($("<img></img>").attr("src", "img/icon/soldier.png"))
+            )
+          );
         }
-        if (formResults.mode == 1) {
-          global.$d.unitsList.empty();
-          name = "turret";
-          global.$d.unitsList.append($("<li></li>")
-            .addClass("list-item")
-            .addClass("unit")
-            .addClass("unit-" + name)
-            .text(name)
-            .append($("<div></div>")
-              .addClass("icon")
-              .append($("<img></img>").attr("src", "img/icon/turret.png"))));
-        }
+        
+        return true;
       };
 
       return {
@@ -215,7 +217,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
         units: units,
         testUnit: testUnit,
         gameUnit: gameUnit,
-        bindEvents: bindEvents,
+        //bindEvents: bindEvents,
         addUnits: addUnits
       };
 

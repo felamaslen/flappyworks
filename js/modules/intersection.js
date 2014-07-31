@@ -359,7 +359,7 @@ define([
 
       // DOM READY EVENT HANDLERS
       $(window).trigger('doc_ready');
-      $(window).on( 'game_init_start', units.addUnits );
+      $(window).on( 'game_define', units.addUnits );
     });
 
 return{
