@@ -4,20 +4,22 @@ require.config({
     urlArgs: "bust="+Math.floor(Math.random()*999999),
     
     paths : {
-        
-      jquery:         'libs/jquery.min',
-      jqueryUI:       'libs/jquery-ui.min',
-      bootstrap:      'libs/bootstrap.min',
-      jquerycookie:   'libs/jquery.cookie',
-      firebase:       'libs/firebase',
-//    firebase:       'https://cdn.firebase.com/js/client/1.0.15/firebase',
-//    maps:           'libs/googlemaps', // this is loaded asynchronously via the footer in index.html
-      intersection:   'modules/intersection',
-      view:           'modules/view',
-      admin:          'modules/admin',
-      global:         'modules/global',
+      
+      jquery:       'libs/jquery.min',
+      jqueryUI:     'libs/jquery-ui.min',
+      bootstrap:    'libs/bootstrap.min',
+      jquerycookie: 'libs/jquery.cookie',
+      firebase:     'libs/firebase',
+    //firebase:     'https://cdn.firebase.com/js/client/1.0.15/firebase',
+    //maps:         'libs/googlemaps', // this is loaded asynchronously via the footer in index.html
+      intersection: 'modules/intersection',
+      view:         'modules/view',
+      admin:        'modules/admin',
+      global:       'modules/global',
+      mapMethods:   'modules/mapMethods',
       mapstuff_fela:  'modules/mapstuff_fela',
-      units:          'modules/units',
+      sync:         'modules/sync',
+      units:        'modules/units',
       uiMessages:     'modules/uiMessages',
 
     },
