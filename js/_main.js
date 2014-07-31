@@ -6,7 +6,6 @@ require.config({
     paths : {
         
       jquery:     'libs/jquery.min',
-      //jqueryUI:   'libs/jquery-ui.min',
       bootstrap:  'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
       
@@ -20,7 +19,9 @@ require.config({
       view:       'modules/view',
       admin:      'modules/admin',
       global:     'modules/global',
+      mapMethods: 'modules/mapMethods',
       mapstuff_fela: 'modules/mapstuff_fela',
+      sync:       'modules/sync',
       units: 'modules/units',
       //unitPopulation: 'modules/unitPopulation'
 
@@ -28,7 +29,6 @@ require.config({
 
     shim: {
       'jquery': {exports: '$'},
-      //'jqueryUI': { deps: ['jquery'] },
       'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
       'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
       'firebase' : {deps:[], exports: 'Firebase'},
@@ -39,7 +39,7 @@ require([
         'jquery',
         'intersection',
         //'unitPopulation',
-        'units'
+        'units',
     ],
     function(
         $,
