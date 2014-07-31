@@ -42,39 +42,6 @@ define([
           return true;
         }
 
-/*        function renderUnitsList(units) {
-          global.$d.unitsList.empty();
-
-          for (var name in units) {
-            global.$d.unitsList.append($("<li></li>")
-              .addClass("list-item")
-              .addClass("unit")
-              .addClass("unit-" + name)
-              .text(name)
-              .append($("<span></span>")
-                .addClass("cost")
-                .text(units[name].cost)
-              )
-              .css({
-                color: units[name].color
-              })
-              .data({
-                unit: units[name],
-                type: name
-              })
-              .append($("<div></div>")
-                .addClass("icon")
-                .append($("<img></img>").attr("src", typeof units[name].icon == "undefined"
-                    ? "about:blank" : units[name].icon))
-              )
-            );
-          }
-
-          return true;
-        }
-        */
-
-
         global.evDragCancel = function(e) {
           if (global.G == null || global.G.dragData == null) return false;
           global.G.dragData = null;

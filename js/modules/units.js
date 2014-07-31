@@ -38,12 +38,20 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     power: 7,
     sps: 5,
     icon: "img/icon/turret_128.png",
+    attack: false,
     defence: true 
   };
 
   var units = {
     soldier: soldier,
     turret: turret
+  }
+
+  for (var i in units) {
+    if (typeof units[i].attack == "undefined")
+      units[i].attack = true;
+    if (typeof units[i].defence == "undefined")
+      units[i].defence = true;
   }
 
   function plopUnit(unit) {
@@ -91,17 +99,18 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   }
 
-gameUnit.prototype.createMarker = function(options) {
-  this.marker = new google.maps.Marker({
-    position: this.position,
-    map: global.G.map,
-    title: options.role,
-    icon: {
-      url: options.icon,
-      scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
-    }});
+  gameUnit.prototype.createMarker = function(options) {
+    this.marker = new google.maps.Marker({
+      position: this.position,
+      map: global.G.map,
+      title: options.role,
+      icon: {
+        url: options.icon,
+        scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
+      }
+    });
 
     var self = this;
 
@@ -114,14 +123,26 @@ gameUnit.prototype.createMarker = function(options) {
   };
 
   function addUnits() {
-    console.log('UNITS::addUnits');
+    console.trace();
+    global.debug("UNITS:addUnits", 2);
     var formResults = formMethods.getFormParams('#sessionParamForm');
 
     var attack = global.G.mode == 0, defend = !attack;
 
+    // game mode indicator
+    if (typeof global.gameModeInd != "undefined")
+      global.gameModeInd.remove();
+    global.gameModeInd = $("<div></div>")
+      .addClass("gameMode")
+      .addClass(attack ? "attack" : "defend");
+
+    global.$d.ctrl.append(global.gameModeInd);
+
+    global.$d.unitsList.empty();
+
     for (var name in units) {
       if ((attack && !units[name].attack) ||
-        (defend && !units[name].defend)) continue;
+        (defend && !units[name].defence)) continue;
 
         global.$d.unitsList.append($("<li></li>")
           .addClass("list-item")

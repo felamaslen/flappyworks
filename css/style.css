@@ -32,12 +32,9 @@ body {
 #map_outer {
   position: fixed;
   left: 0;
+  right: 0;
   top: 0;
-  right: 300px;
-  width: 100%;
-  height: 100%;
   bottom: 0;
-  background: #fff;
 }
 #map_inner {
   width: 100%;
@@ -53,10 +50,11 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #fff;
-  box-shadow: -3px 0 12px rgba(40, 40, 40, .6);
+  background-color: rgba(255, 255, 255, .5);
+  box-shadow: 0 -3px 12px 2px rgba(40, 40, 40, .6);
 }
 #ctrl .inside {
+  position: relative;
   padding: 5px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -66,11 +64,26 @@ body {
   user-select: none;
   margin: 0 5%;
 }
+.gameMode {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  font-size: 1.25em;
+}
+.gameMode::before {
+  content: "You are a";
+}
+.gameMode.attack::after {
+  content: "n attacker!";
+}
+.gameMode.defend::after {
+  content: " defender!";
+}
 
 #unitsList {
   white-space: nowrap;
-  overflow-y: none;
-  overflow-x: scroll;
+  overflow-y: hidden;
+  overflow-x: auto;
   height: 96px;
   margin-bottom: 0;
 }
@@ -201,7 +214,9 @@ body {
   width: 64px;
   height: 64px;
   border: 1px solid #000;
-  box-shadow: 0 0 12px rgba(100, 100, 100, .5);
+  box-shadow: 0 -4px 12px 2px rgba(40, 40, 40, .6);
+  -moz-box-shadow: 0 -4px 12px 2px rgba(40, 40, 40, .6);
+  -webkit-box-shadow: 0 -4px 12px 2px rgba(40, 40, 40, .6);
   margin: 5px;
   cursor: pointer;
 }
