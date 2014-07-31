@@ -126,12 +126,61 @@ if (formResults.mode == 1){
               .append($("<div></div>")
   .addClass("icon")
   .append($("<img></img>").attr("src", "img/turret.png"))));
-  }
+}
+       
+var gameUnit = function(game, options) {
+  // soldier, turret etc.
+  var self = this;
+  
+  console.log("this is a test");
+  this.position = new google.maps.LatLng(options.lat, options.lon);
+
+  this.createMarker(options);
+
+  // create path
+  this.path = new google.maps.MVCArray();
+  //this.path = [this.position];
+  this.poly = new google.maps.Polyline({
+    path: this.path,
+    geodesic: true,
+    strokeColor: "#ff0000",
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+  this.poly.setMap(game.map);
+
+  return true;
+}
+
+gameUnit.prototype.createMarker = function(options) {
+  this.marker = new google.maps.Marker({
+    position: this.position,
+    map: global.G.map,
+    title: options.role,
+    icon: {
+      url: options.icon,
+      scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
+    }
+  });
+
+  var self = this;
+
+  google.maps.event.addListener(this.marker, "click", function() {
+    global.debug("selecting marker", 2);
+    global.G.selectedUnit = self;
+  });
+
+  return true;
+}
 
 return {
   plopUnit: plopUnit,
   units: units,
-  testUnit: testUnit
+  testUnit: testUnit,
+  gameUnit: gameUnit
 }
 
 });

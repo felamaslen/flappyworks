@@ -64,15 +64,6 @@ define([
       $d: {},
       G: null,
       sesId: null,
-      fbLobbyListen: function(on) {
-        if (on) {
-          global.fb.on("value", global.sync.fbLobbyListen, global.sync.fbListenError);
-        }
-        else {
-          global.fb.off("value");
-        }
-        return true;
-      },
       fbSessionListen: function(on) {
         if (global.fbSes == null) {
           debug("tried to call fbSessionListen() with an empty session!");

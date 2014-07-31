@@ -22,8 +22,43 @@ define([
           // add game to session
           global.debug("adding game to session...", 2);
           self.addToSession(global.G);
+
+          // session listener
+          global.fbSessionListen(true);
         });
 
+        return true;
+      },
+
+      drawTheirUnits: function() {
+        global.debug("drawTheirUnits() called", 2);
+        for (var i = 0; i < global.G.theirUnits.length; i++) {
+          console.log(global.G.theirUnits, global.G.theirUnitsRaw);
+
+          if (typeof global.G.theirUnitsRaw[i] == "undefined") {
+            // create the gameUnit
+            var unit = units.units[global.G.theirUnits[i].type];
+
+            unit.level = global.G.theirUnits[i].level;
+            unit.health = global.G.theirUnits[i].health;
+            unit.lat = global.G.theirUnits[i].lat;
+            unit.lon = global.G.theirUnits[i].lon;
+             
+            // new gameUnit
+            global.G.theirUnitsRaw[i] = new units.gameUnit(global.G, unit);
+          }
+          else {
+            // update the gameUnit's position
+            var gu = global.G.theirUnitsRaw[i];
+
+            gu.lat = global.G.theirUnits[i].lat;
+            gu.lon = global.G.theirUnits[i].lon;
+
+            gu.position = new google.maps.LatLng(gu.lat, gu.lon);
+
+            gu.marker.setPosition(gu.position);
+          }
+        }
         return true;
       },
 
@@ -35,22 +70,37 @@ define([
 
         global.playerChild = global.fb.child(global.sesId).child("player" + global.me.player);
 
+        /*
         global.playerChild.update({
           units: []
         });
+        */
 
         return true;
       },
 
-    // this happens when data updates within the current session (if one is joined)
-    fbSessionListen: function(snapshot) {
-      var val = snapshot.val();
+      // this happens when data updates within the current session (if one is joined)
+      fbSessionListen: function(snapshot) {
+        global.debug("fbSessionListen() called", 2);
+        if (global.G == null) {
+          global.debug("tried to call fbSessionListen with no game in progress", 1);
+          return false;
+        }
 
-      global.debug("fbSessionListen() called", 2);
-      console.log(val);
+        var val = snapshot.val();
 
-      return true;
-    },
+        var otherPlayer = global.me.player == 1 ? 2 : 1;
+
+        var otherPlayerString = "player" + otherPlayer.toString();
+
+        if (typeof val[otherPlayerString].units != "undefined") {
+          global.G.theirUnits = val[otherPlayerString].units;
+        }
+
+        global.sync.drawTheirUnits();
+
+        return true;
+      },
 
       // this happens whenever the data updates while on the lobby list
       fbLobbyListen: function(snapshot) {
@@ -58,15 +108,15 @@ define([
 
         if (typeof val != "object" || val == null) val = {};
 
-        lobby = val;
+        global.lobby = val;
 
         // see if we are a member of any of the existing sessions
         if (global.sesId == null) {
-          for (var key in lobby) {
-            var iAmPlayer1 = typeof lobby[key].player1 != "undefined" &&
-              lobby[key].player1.name == global.me.name,
-                iAmPlayer2 = typeof lobby[key].player2 != "undefined" &&
-              lobby[key].player2.name == global.me.name;
+          for (var key in global.lobby) {
+            var iAmPlayer1 = typeof global.lobby[key].player1 != "undefined" &&
+              global.lobby[key].player1.name == global.me.name,
+                iAmPlayer2 = typeof global.lobby[key].player2 != "undefined" &&
+              global.lobby[key].player2.name == global.me.name;
 
             if (iAmPlayer1 && iAmPlayer2) {
               // bad session - remove
@@ -78,10 +128,10 @@ define([
             else {
               var stale = false;
 
-              switch (lobby[key].state) {
+              switch (global.lobby[key].state) {
                 case 0: // waiting for players
-                  if ((iAmPlayer1 && typeof lobby[key].player2 != "undefined") ||
-                      (iAmPlayer2 && typeof lobby[key].player1 != "undefined")) {
+                  if ((iAmPlayer1 && typeof global.lobby[key].player2 != "undefined") ||
+                      (iAmPlayer2 && typeof global.lobby[key].player1 != "undefined")) {
                     stale = true;
                     global.debug("stale - zero state with extraneous player data", 2);
                   }
@@ -98,14 +148,14 @@ define([
                 case 1: // waiting for config
                   if (iAmPlayer1) {
                     // go to config page, since we are player 1
-                    if (typeof lobby[key].player2 == "undefined")
+                    if (typeof global.lobby[key].player2 == "undefined")
                       stale = true;
                     else
                       global.view.change("viewSetup");
                   }
                   else {
                     // we are player 2, so go to the "wait for config" page
-                    if (typeof lobby[key].player1 == "undefined")
+                    if (typeof global.lobby[key].player1 == "undefined")
                       stale = true;
                     else
                       global.view.change("viewWaitP1");                
@@ -118,7 +168,7 @@ define([
                   }
                   break;
                 case 2: // in play
-                  if (typeof lobby[key].player1 == "undefined" || typeof lobby[key].player2 == "undefined") {
+                  if (typeof global.lobby[key].player1 == "undefined" || typeof global.lobby[key].player2 == "undefined") {
                     stale = true;
                     global.debug("stale - less than two players defined for an in-play session", 2);
                   }
@@ -128,8 +178,8 @@ define([
                     global.me.player = iAmPlayer1 ? 1 : 2;
                     
                     global.startGame({
-                      city: lobby[key].city,
-                      mode: lobby[key].mode // 0: p1 is attacker, 1: p1 is defender
+                      city: global.lobby[key].city,
+                      mode: global.lobby[key].mode // 0: p1 is attacker, 1: p1 is defender
                     });
                   }
 
@@ -147,27 +197,27 @@ define([
         // reload lobby list on lobby view
         global.$d.sessionList.empty();
 
-        if (!global.sizeof(lobby)) {
+        if (!global.sizeof(global.lobby)) {
           global.$d.sessionList.append($("<li></li>")
               .addClass("list-group-item")
               .text(global.noSessionsMsg));
         }
         else {
-          for (var i in lobby) {
-            if (typeof lobby[i].player1 == "undefined") {
+          for (var i in global.lobby) {
+            if (typeof global.lobby[i].player1 == "undefined") {
               global.sync.deleteSession(i);
               break;
             }
 
             var players = [];
             
-            players[players.length] = lobby[i].player1.name;
-            if (typeof lobby[i].player2 != "undefined")
-              players[players.length] = lobby[i].player2.name;
+            players[players.length] = global.lobby[i].player1.name;
+            if (typeof global.lobby[i].player2 != "undefined")
+              players[players.length] = global.lobby[i].player2.name;
 
             players = players.join(", ");
 
-            var open = lobby[i].state == 0;
+            var open = global.lobby[i].state == 0;
 
             // add session to the session list in the lobby
             global.$d.sessionList.append($("<li></li>")
@@ -176,7 +226,7 @@ define([
               .toggleClass("accepting", open)
               .append($("<span></span>")
                 .addClass("name")
-                .text(lobby[i].name)
+                .text(global.lobby[i].name)
               )
               .attr("data-ind", i.toString())
               .append($("<span></span>")
@@ -196,14 +246,14 @@ define([
             if (global.sesId == i) {
               // scan for changes
               if (global.me.player == 1) {
-                if (global.listenLast.state == 0 && lobby[i].state == 1) {
+                if (global.listenLast.state == 0 && global.lobby[i].state == 1) {
                   // someone joined!
                   global.$d.setupForm.begin.prop("disabled", false);
                 }
-                else if (global.listenLast.state == 1 && lobby[i].state == 0) {
+                else if (global.listenLast.state == 1 && global.lobby[i].state == 0) {
                   global.$d.setupForm.begin.prop("disabled", true);
                 }
-                else if (global.listenLast.state == 2 && lobby[i].state < 2) {
+                else if (global.listenLast.state == 2 && global.lobby[i].state < 2) {
                   // player 2 left (or timed out)!
                   global.sync.deleteSession(global.sesId);
                   global.view.change("viewLobby");
@@ -213,7 +263,7 @@ define([
                 }
               }
               else if (global.me.player == 2) {
-                if (global.listenLast.state > lobby[i].state) {
+                if (global.listenLast.state > global.lobby[i].state) {
                   // player 1 left (or timed out)!
                   global.sync.deleteSession(global.sesId);
                   global.view.change("viewLobby");
@@ -221,13 +271,13 @@ define([
                   global.sesId = null;
                   global.me.player = null;
                 }
-                else if (global.listenLast.state < 2 && lobby[i].state == 2) {
+                else if (global.listenLast.state < 2 && global.lobby[i].state == 2) {
                   // game started by player 1
-                 global.debug("game started by player 1 - joining", 2);
+                  global.debug("game started by player 1 - joining", 2);
 
                   global.startGame({
-                    city: lobby[i].city,
-                    mode: lobby[i].mode // 0: p1 is attacker, 1: p1 is defender
+                    city: global.lobby[i].city,
+                    mode: global.lobby[i].mode // 0: p1 is attacker, 1: p1 is defender
                   });
                 }
               }
@@ -235,7 +285,7 @@ define([
           }
         }
         
-        if (global.me.player == 2 && global.sesId != null && typeof lobby[global.sesId] == "undefined") {
+        if (global.me.player == 2 && global.sesId != null && typeof global.lobby[global.sesId] == "undefined") {
           global.view.change("viewLobby");
           global.sesId = null;
           global.me.player = null;
@@ -244,7 +294,7 @@ define([
 
         global.listenLast = {
           sesId: global.sesId,
-          state: typeof lobby[global.sesId] == "undefined" ? null : lobby[global.sesId].state
+          state: typeof global.lobby[global.sesId] == "undefined" ? null : global.lobby[global.sesId].state
         };
 
         return true;
@@ -263,8 +313,8 @@ define([
         }
         //this.init(options);
         global.fbSes.remove(function(error) {
-          global.debug(error ? "failure while removing session (" + key + ") from FireBase"
-            : "successfully removed session (" + key + ") from FireBase", 1);
+          global.debug(error ? "failure while removing session (" + global.sesId + ") from FireBase"
+            : "successfully removed session (" + global.sesId + ") from FireBase", 1);
         });
 
         global.fbSes = null;
