@@ -20,10 +20,10 @@ function(
   }
   
   this.slideUpDialog = function(msg) {
-    $("#slideup-message").show("slide",{direction: 'up'})
+    $("#slideup-message").slideDown();
     $("#slideup-message-text").html(msg + " ");
-    okButton = $('<a href="#">ok</a>').on('click', function() { $("#slideup-message").hide("slide",{direction: 'down'}) });
-    $("#slideup-message-text").append(okButton);
+    okLink = $('<a href="#">ok</a>').on('click', function() { $("#slideup-message").slideUp(); });
+    $("#slideup-message-text").append(okLink);
   }
   
 return this;
