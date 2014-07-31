@@ -20,10 +20,17 @@ function(
   }
   
   this.slideUpDialog = function(msg) {
+  
+    window.timeoutKill = setTimeout(function(){ $("#slideup-message").slideUp(); }, 10000);
+    
+    
     $("#slideup-message").slideDown();
     $("#slideup-message-text").html(msg + " ");
-    okLink = $('<a href="#">ok</a>').on('click', function() { $("#slideup-message").slideUp(); });
+    okLink = $('<a href="#">ok</a>').on('click', function() { $("#slideup-message").slideUp(); clearTimeout(window.timeoutKill) });
     $("#slideup-message-text").append(okLink);
+    
+    
+    
   }
   
 return this;
