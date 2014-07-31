@@ -1,5 +1,7 @@
 
-define(['intersection',   'global'], function (intersection, global) { 
+define(['intersection', 'global', 'formMethods'], function (intersection, global, formMethods) { 
+
+  console.log( global );
 
 function testUnit(unit){
   if(!unit.role || unit.role != "soldier" || unit.role != "turret"){
@@ -95,7 +97,10 @@ function plopUnit(unit){
               )
             );
           }*/
-var formResults = intersection.getFormParams();
+
+var formResults = formMethods.getFormParams( '#sessionParamForm' );
+
+var formResults={ mode: 2 };
 if(formResults.mode == 0){
   global.$d.unitsList.empty();
   name = "soldier";
@@ -104,9 +109,12 @@ if(formResults.mode == 0){
               .addClass("unit")
               .addClass("unit-" + name)
               .text(name)
-  .append($("<div></div>")
-  .addClass("icon")
-  .append($("<img></img>").attr("src", "img/soldier.png")};
+              .append($("<div></div>")
+              .addClass("icon")
+              .append(
+                $("<img></img>").attr("src", "img/soldier.png")
+              ))); 
+}
 if (formResults.mode == 1){
   global.$d.unitsList.empty();
   name = "turret";
@@ -117,7 +125,7 @@ if (formResults.mode == 1){
               .text(name)
               .append($("<div></div>")
   .addClass("icon")
-  .append($("<img></img>").attr("src", "img/turret.png");
+  .append($("<img></img>").attr("src", "img/turret.png"))));
   }
 
 return {

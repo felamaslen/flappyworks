@@ -3,9 +3,14 @@
  */
 
 define([
-    'firebase', 'units'
+    'firebase',
+    // 'units'
 ],
-  function(Firebase) {
+  function(
+    Firebase
+    // Units,
+    ) {
+
     var global = {
       debug: function(msg, level) {
         level = typeof level == "undefined" ? 2 : level;
@@ -73,7 +78,6 @@ define([
     };
 
     global.me.name += global.makeid();
-
     return global;
   }
 );
