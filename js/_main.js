@@ -5,30 +5,26 @@ require.config({
     
     paths : {
         
-      jquery:     'libs/jquery.min',
-      //jqueryUI:   'libs/jquery-ui.min',
-      bootstrap:  'libs/bootstrap.min',
-      jquerycookie: 'libs/jquery.cookie',
-      
-      firebase:   'libs/firebase',
-//      firebase: 'https://cdn.firebase.com/js/client/1.0.15/firebase',
-
-//      maps:       'libs/googlemaps', // this is loaded asynchronously via the footer in index.html
-    
-
-      intersection: 'modules/intersection',
-      view:       'modules/view',
-      admin:      'modules/admin',
-      global:     'modules/global',
-      mapstuff_fela: 'modules/mapstuff_fela',
-      units: 'modules/units',
-      //unitPopulation: 'modules/unitPopulation'
+      jquery:         'libs/jquery.min',
+      jqueryUI:       'libs/jquery-ui.min',
+      bootstrap:      'libs/bootstrap.min',
+      jquerycookie:   'libs/jquery.cookie',
+      firebase:       'libs/firebase',
+//    firebase:       'https://cdn.firebase.com/js/client/1.0.15/firebase',
+//    maps:           'libs/googlemaps', // this is loaded asynchronously via the footer in index.html
+      intersection:   'modules/intersection',
+      view:           'modules/view',
+      admin:          'modules/admin',
+      global:         'modules/global',
+      mapstuff_fela:  'modules/mapstuff_fela',
+      units:          'modules/units',
+      uiMessages:     'modules/uiMessages',
 
     },
 
     shim: {
       'jquery': {exports: '$'},
-      //'jqueryUI': { deps: ['jquery'] },
+      'jqueryUI': { deps: ['jquery'] /*, exports: '$'*/ },
       'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
       'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
       'firebase' : {deps:[], exports: 'Firebase'},
@@ -37,19 +33,30 @@ require.config({
 
 require([
         'jquery',
+        'global',
         'intersection',
-        //'unitPopulation',
-        'units'
+        'units',
+        'uiMessages'
     ],
     function(
         $,
-        intersection
+        global,
+        intersection,
+        units,
+        uiMessages
     ) {
 
         $('document').ready(function(){
 
-            window.console && console.log('REQUIRE::Loaded');
-
+          window.console && console.log('REQUIRE::Loaded');        
+         
+          uiMessages.modalDialog("hi.");
+         
+          global.debug("test",1)
+          global.debug("test",3)
+          
+          
+           
         });
 
 });

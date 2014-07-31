@@ -3,9 +3,11 @@
  */
 
 define([
-    'firebase'
+    'firebase',
+    'uiMessages'
 ],
-  function(Firebase) {
+  function(Firebase, uiM) {
+    
     var global = {
       debug: function(msg, level) {
         level = typeof level == "undefined" ? 2 : level;
@@ -19,6 +21,11 @@ define([
             break;
           case 2: // debug
             window.console && console.log("[DEBUG]", msg);
+            break;
+          case 3: // non-modal user info (e.g. attempt to place unit in invalid position)
+            uiM.modalDialog(msg);
+            console.log(uiM);
+            window.console && console.log("[INFO]", msg);
             break;
         }
       },
