@@ -282,7 +282,7 @@ define([
       if (isNaN(mode))  errors[errors.length] = "you must select a mode";
 
       if (errors.length > 0) {
-       global.debug(errors.join("; "), 0);
+       global.debug(errors.join("; "), 3);
         return false;
       }
       
