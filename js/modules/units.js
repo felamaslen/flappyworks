@@ -22,7 +22,7 @@ var soldier = {
   level: 1,
   power: 5,
   sps: 2,
-  icon: "img/soldier.png"
+  icon: "img/icon/soldier.png"
 };
 
 var turret = {
@@ -36,7 +36,7 @@ var turret = {
   level: 1,
   power: 7,
   sps: 5,
-  icon: "img/turret_128.png"
+  icon: "img/icon/turret_128.png"
 };
 
 var units = {
@@ -119,6 +119,7 @@ if (formResults.mode == 1){
   .addClass("icon")
   .append($("<img></img>").attr("src", "img/turret.png");
   }
+
 return {
   plopUnit: plopUnit,
   units: units,

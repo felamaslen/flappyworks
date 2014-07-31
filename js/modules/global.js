@@ -53,16 +53,22 @@ define([
         {
           name: "London",
           coords: [51.514756, -0.125631],
-          zoom: 10,
-          balance: 2515202
+          zoom: 11,
+          balance: 2515202,
+          radius: [3500, 14000]
         },
         {
           name: "Plymouth",
           coords: [50.375935, -4.143126],
-          zoom: 12,
-          balance: 2568000
+          zoom: 13,
+          balance: 2568000,
+          radius: [1200, 6000]
         }
       ],
+      markerSizeX: 32,
+      markerSizeY: 32,
+      defenceRadiusColor: "#006",
+      attackRadiusColor: "#600",
       noSessionsMsg: "There are no open sessions - why not create one?"
     };
 
