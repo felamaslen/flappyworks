@@ -13,6 +13,7 @@ require.config({
     //firebase:     'https://cdn.firebase.com/js/client/1.0.15/firebase',
     //maps:         'libs/googlemaps', // this is loaded asynchronously via the footer in index.html
       intersection: 'modules/intersection',
+
       view:         'modules/view',
       admin:        'modules/admin',
       global:       'modules/global',
@@ -20,7 +21,9 @@ require.config({
       mapstuff_fela:  'modules/mapstuff_fela',
       sync:         'modules/sync',
       units:        'modules/units',
+      formMethods: 'modules/formMethods'
       uiMessages:     'modules/uiMessages',
+
 
     },
 
