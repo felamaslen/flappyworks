@@ -19,7 +19,8 @@ define([
         'view',
 
         'sync',
-        'mapstuff_fela'
+        'mapstuff_fela',
+        'units'
       ],
       function(
         $,
@@ -32,7 +33,8 @@ define([
         view,
 
         sync,
-        mapstuff_fela
+        mapstuff_fela,
+        units
       ) {
 
     // Basic page module loading - refactor
@@ -41,7 +43,7 @@ define([
       var admin = new Admin( window );
 
     };
-    
+
     global.sync = new sync(window);
 
     global.view = new view();
@@ -348,7 +350,9 @@ define([
       global.$d.setupForm.begin.on("click", evNewGame);
       global.$d.setupForm.force.on("click", function (e) { evNewGame(e, true); });
 
+      // DOM READY EVENT HANDLERS
       $(window).trigger('doc_ready');
+      $(window).on( 'game_init_start', units.addUnits );
     });
 
 return{

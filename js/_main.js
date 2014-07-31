@@ -23,10 +23,7 @@ require.config({
       units:        'modules/units',
       formMethods: 'modules/formMethods',
       uiMessages:     'modules/uiMessages'
-
-
-
-    },
+       },
 
     shim: {
       'jquery': {exports: '$'},
