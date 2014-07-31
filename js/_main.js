@@ -22,7 +22,10 @@ require.config({
       sync:         'modules/sync',
       units:        'modules/units',
       formMethods: 'modules/formMethods',
-      uiMessages:     'modules/uiMessages' },
+      uiMessages:     'modules/uiMessages',
+      pdr: 'modules/police_data_renderer'
+      
+      },
 
     shim: {
       'jquery': {exports: '$'},
@@ -37,13 +40,15 @@ require([
         'jquery',
         'global',
         'intersection',
-        'units'
+        'units',
+        'pdr'
     ],
     function(
         $,
         global,
         intersection,
-        units
+        units,
+        pdr
     ) {
 
         $('document').ready(function(){
