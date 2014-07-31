@@ -24,7 +24,6 @@ define([
             break;
           case 3: // non-modal user info (e.g. attempt to place unit in invalid position)
             uiM.modalDialog(msg);
-            console.log(uiM);
             window.console && console.log("[INFO]", msg);
             break;
         }

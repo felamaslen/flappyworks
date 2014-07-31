@@ -99,9 +99,18 @@
     
     <!--- UI elements --->
     
-    <div id="dialog-message" title="Can't continue!">
-        <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-        <p id="modal-dialog-message"></p>
+    
+    
+    <div id="dialog-modal-background">
+      <div id="dialog-message">
+        <span class="dialog-message-title">Can't continue!</span>
+        <span class="dialog-message-icon" style="float:left; margin:0 7px 50px 0;"></span>
+        <div id="dialog-message-text"></div>
+      </div>
+    </div>
+    
+    <div id="slideup-message">
+    
     </div>
         
     <script src="http://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=geometry&key=AIzaSyByQNXD_ayeApNf_LSuZDYWcoSSA8gQWto"></script>
