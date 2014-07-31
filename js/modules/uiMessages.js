@@ -12,7 +12,7 @@ function(
           ){
           
   this.modalDialog = function(msg) {
-    
+    $("#dialog-message-text").replaceWith(msg);
   }
 return this;
 });
