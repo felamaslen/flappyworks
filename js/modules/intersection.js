@@ -10,10 +10,8 @@
 
 define([
         'jquery',
-        //'jqueryUI',
         'firebase',
         'jquerycookie',
-        //'temp-global',
 
         'admin',
         'global',
@@ -25,10 +23,8 @@ define([
       ],
       function(
         $,
-        //jqui,
         firebase,
         jquerycookie,
-        //global,
 
         Admin,
         global,
@@ -364,4 +360,7 @@ define([
       $(window).trigger('doc_ready');
     });
 
+return{
+  getFormParams:getFormParams
+}
 });

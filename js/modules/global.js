@@ -3,9 +3,14 @@
  */
 
 define([
-    'firebase'
+    'firebase',
+    // 'units'
 ],
-  function(Firebase) {
+  function(
+    Firebase
+    // Units,
+    ) {
+
     var global = {
       debug: function(msg, level) {
         level = typeof level == "undefined" ? 2 : level;
@@ -47,7 +52,8 @@ define([
       me: {
         name: "player-",
         balance: 2000,
-        player: null // becomes 1 or 2 when joining / creating session
+        player: null, // becomes 1 or 2 when joining / creating session
+        mode: null // Becomes either attacker or defender. (0/1)
       },
       $d: {},
       G: null,
@@ -106,7 +112,6 @@ define([
     };
 
     global.me.name += global.makeid();
-
     return global;
   }
 );
