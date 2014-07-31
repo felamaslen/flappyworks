@@ -20,7 +20,7 @@ function(
   }
   
   this.slideUpDialog = function(msg) {
-    $("#slideup-message").slideUp(); 
+    $("#slideup-message").effect('slide', { direction: 'up', mode: 'show' }, 500);
     $("#slideup-message-text").html(msg);    
   }
   
