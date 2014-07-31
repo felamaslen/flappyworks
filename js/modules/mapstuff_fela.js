@@ -59,7 +59,8 @@ define([
                 color: units[name].color
               })
               .data({
-                unit: units[name]
+                unit: units[name],
+                type: name
               })
               .append($("<div></div>")
                 .addClass("icon")
@@ -72,55 +73,6 @@ define([
           return true;
         }
 
-        function gameUnit(game, options) {
-          // soldier, turret etc.
-          var self = this;
-          
-          this.position = new google.maps.LatLng(options.lat, options.lon);
-
-          this.createMarker(options);
-
-          // create path
-          this.path = new google.maps.MVCArray();
-          //this.path = [this.position];
-          this.poly = new google.maps.Polyline({
-            path: this.path,
-            geodesic: true,
-            strokeColor: "#ff0000",
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-
-          this.poly.setMap(game.map);
-
-          // add gameUnit to session
-          
-
-          return true;
-        }
-
-        gameUnit.prototype.createMarker = function(options) {
-          this.marker = new google.maps.Marker({
-            position: this.position,
-            map: global.G.map,
-            title: options.role,
-            icon: {
-              url: options.icon,
-              scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
-            }
-          });
-
-          var self = this;
-
-          google.maps.event.addListener(this.marker, "click", function() {
-            global.debug("selecting marker", 2);
-            global.G.selectedUnit = self;
-          });
-
-          return true;
-        }
 
         var evDragCancel = function(e) {
           if (global.G == null || global.G.dragData == null) return false;
@@ -141,7 +93,10 @@ define([
             $target = $target.parent();
           }
 
-          var unit = $target.data().unit;
+          var data = $target.data(),
+              unit = data.unit;
+
+          unit.type = data.type;
 
           var left = global.me.balance - unit.cost;
 
@@ -198,7 +153,20 @@ define([
           global.me.balance -= unit.cost;
           updateBalance();
           
-          global.G.units[global.G.units.length] = new gameUnit(global.G, unit);
+          global.G.units[global.G.units.length] = new units.gameUnit(global.G, unit);
+
+          // add unit's dynamic properties to session
+          global.G.myUnits.push({
+            type: unit.type,
+            lat: lat,
+            lon: lon,
+            health: unit.health,
+            level: unit.level
+          });
+
+          global.playerChild.update({
+            units: global.G.myUnits
+          });
           
           global.G.dragData = null;
 
