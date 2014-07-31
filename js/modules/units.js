@@ -21,7 +21,9 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     level: 1,
     power: 5,
     sps: 2,
-    icon: "img/icon/soldier.png"
+    icon: "img/icon/soldier.png",
+    attack: true,
+    defence: true
   };
 
   var turret = {
@@ -35,7 +37,8 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     level: 1,
     power: 7,
     sps: 5,
-    icon: "img/icon/turret_128.png"
+    icon: "img/icon/turret_128.png",
+    defence: true 
   };
 
   var units = {
@@ -98,7 +101,7 @@ gameUnit.prototype.createMarker = function(options) {
       scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
-    }
+    }});
 
     var self = this;
 
