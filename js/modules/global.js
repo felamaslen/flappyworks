@@ -18,7 +18,7 @@ define([
         level = typeof level == "undefined" ? 2 : level;
         switch (level) {
           case 0: // error
-            alert("Fatal error: " + msg);
+            UIMessages.modalDialog(msg);
             window.console && console.log("[FATAL]", msg);
             break;
           case 1: // warning
@@ -28,7 +28,7 @@ define([
             window.console && console.log("[DEBUG]", msg);
             break;
           case 3: // non-modal user info (e.g. attempt to place unit in invalid position)
-            //uiM.modalDialog(msg);
+            UIMessages.slideUpDialog(msg);
             window.console && console.log("[INFO]", msg);
             break;
         }
