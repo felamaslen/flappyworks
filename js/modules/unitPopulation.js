@@ -16,7 +16,7 @@ function($, global, units){
     for (var i in units.units) {
       $('#unitsList').append('<li>' + units.units[i].role);
       
-      button = $('<button>Buy</button>').on('click', function() { alert('clicked'); buyUnit(units.units[i].role); });
+      button = $('<button id="dialog-message-button" class="btn btn-default">OK</button>').on('click', function() { alert('clicked'); buyUnit(units.units[i].role); });
         
       $('#unitsList').append(button);
       $('#unitsList').append("</li>");

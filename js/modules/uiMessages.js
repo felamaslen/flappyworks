@@ -12,7 +12,16 @@ function(
           ){
           
   this.modalDialog = function(msg) {
-    $("#dialog-message-text").replaceWith(msg);
+    $("#dialog-modal-background").show();    
+    $("#dialog-message-text").html(msg);    
+    okButton = $('<button id="dialog-message-button" class="btn btn-default">OK</button>').on('click', function() { $("#dialog-modal-background").hide() });
+    $("#dialog-message-button-container").replaceWith(okButton);
+    
   }
+  
+  this.slideUpDialog = function(msg) {
+  
+  }
+  
 return this;
 });

@@ -53,11 +53,6 @@ require([
         $('document').ready(function(){
 
           window.console && console.log('REQUIRE::Loaded');        
-                  
-          global.debug("test",1);
-          global.debug("test",3);
-          
-          
            
         });
 
