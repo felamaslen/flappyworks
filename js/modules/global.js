@@ -4,11 +4,13 @@
 
 define([
     'firebase',
+    'uiMessages'
     // 'units'
 ],
   function(
-    Firebase
+    Firebase,
     // Units,
+    UIMessages
     ) {
 
     var global = {
@@ -24,6 +26,10 @@ define([
             break;
           case 2: // debug
             window.console && console.log("[DEBUG]", msg);
+            break;
+          case 3: // non-modal user info (e.g. attempt to place unit in invalid position)
+            //uiM.modalDialog(msg);
+            window.console && console.log("[INFO]", msg);
             break;
         }
       },
