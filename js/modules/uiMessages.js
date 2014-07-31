@@ -20,7 +20,8 @@ function(
   }
   
   this.slideUpDialog = function(msg) {
-  
+    $("#slideup-message").slideUp(); 
+    $("#slideup-message-text").html(msg);    
   }
   
 return this;

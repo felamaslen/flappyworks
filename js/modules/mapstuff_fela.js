@@ -147,7 +147,7 @@ define([
 
           if (left < 0) {
             // we can't afford this unit
-            global.debug("You can't afford this item.", 0);
+            global.debug("You can't afford this item.", 3);
             return false;
           }
           
@@ -190,7 +190,7 @@ define([
           mm.removeCityLimit();
           
           if (!mm.withinCityLimit(position)) {
-            global.debug("You can't place a unit there - try further " + (global.G.mode == 0 ? "out" : "in") + "!", 0);
+            global.debug("You can't place a unit there - try further " + (global.G.mode == 0 ? "out" : "in") + "!", 3);
             return false;
           }
 
@@ -210,7 +210,7 @@ define([
 
           // draw a path from the selected unit
           if (global.G.selectedUnit.speed == 0) {
-            global.debug("That unit can't move!", 0);
+            global.debug("That unit can't move!", 3);
             return false;
           }
 
@@ -234,7 +234,7 @@ define([
               }
             }
             else {
-              global.debug("Something happened and the click wasn't registered.", 0);
+              global.debug("Something happened and the click wasn't registered.", 3);
               return false;
             }
           });
