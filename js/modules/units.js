@@ -1,5 +1,5 @@
 
-define([   'global'], function ( global) { 
+define(['intersection',   'global'], function (intersection, global) { 
 
 function testUnit(unit){
   if(!unit.role || unit.role != "soldier" || unit.role != "turret"){
@@ -67,7 +67,58 @@ function plopUnit(unit){
 
   return true;
 }
-plopUnit(soldier);
+
+/*function renderUnitsList(units) {
+          global.$d.unitsList.empty();
+          var formResults = intersection.getFormParams();
+              
+                
+              
+          for (var name in units) {
+            global.$d.unitsList.append($("<li></li>")
+              .addClass("list-item")
+              .addClass("unit")
+              .addClass("unit-" + name)
+              .text(name)
+              .css({
+                color: units[name].color
+              })
+              .data({
+                unit: units[name]
+              })
+
+
+              .append($("<div></div>")
+                .addClass("icon")
+                .append($("<img></img>").attr("src", typeof units[name].icon == "undefined"
+                    ? "about:blank" : units[name].icon))
+              )
+            );
+          }*/
+var formResults = intersection.getFormParams();
+if(formResults.mode == 0){
+  global.$d.unitsList.empty();
+  name = "soldier";
+  global.$d.unitsList.append($("<li></li>")
+              .addClass("list-item")
+              .addClass("unit")
+              .addClass("unit-" + name)
+              .text(name)
+  .append($("<div></div>")
+  .addClass("icon")
+  .append($("<img></img>").attr("src", "img/soldier.png")};
+if (formResults.mode == 1){
+  global.$d.unitsList.empty();
+  name = "turret";
+  global.$d.unitsList.append($("<li></li>")
+              .addClass("list-item")
+              .addClass("unit")
+              .addClass("unit-" + name)
+              .text(name)
+              .append($("<div></div>")
+  .addClass("icon")
+  .append($("<img></img>").attr("src", "img/turret.png");
+  }
 return {
   plopUnit: plopUnit,
   units: units,

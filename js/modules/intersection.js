@@ -607,5 +607,7 @@ define([
 
         $(window).trigger('doc_ready');
       });
-
+return{
+  getFormParams:getFormParams
+}
 });

@@ -3,7 +3,7 @@
  */
 
 define([
-    'firebase'
+    'firebase', 'units'
 ],
   function(Firebase) {
     var global = {
@@ -37,7 +37,8 @@ define([
       me: {
         name: "player-",
         balance: 2000,
-        player: null // becomes 1 or 2 when joining / creating session
+        player: null, // becomes 1 or 2 when joining / creating session
+        mode: null // Becomes either attacker or defender. (0/1)
       },
       $d: {},
       G: null,
