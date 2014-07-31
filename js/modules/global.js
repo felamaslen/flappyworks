@@ -64,8 +64,23 @@ define([
       $d: {},
       G: null,
       sesId: null,
+      fbSessionListen: function(on) {
+        if (global.fbSes == null) {
+          global.debug("tried to call fbSessionListen() with an empty session!");
+          return false;
+        }
+
+        if (on) {
+          global.fbSes.on("value", global.sync.fbSessionListen, global.sync.fbListenError);
+        }
+        else {
+          global.fbSes.off("value");
+        }
+        return true;
+      },
       lobby: [],
       fb: new Firebase("https://interception.firebaseio.com/sessions"),
+      fbSes: null,
       listenLast: {
         sesId: null,
         state: null
