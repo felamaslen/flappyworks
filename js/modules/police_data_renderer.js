@@ -558,7 +558,7 @@
   "50.95x-3.3": 4, 
   "51.2x-4.05": 11, 
   "50.4x-4.75": 7
-}
+};
     
     console.log('[DEBUG][JMA] PDR Module Loaded');
     $(window).on("define_game", function(){
@@ -566,7 +566,9 @@
       var max = 5000;
       var pre = 0.05;
       for (var index in crime_data){
-        var [lat, lon] = index.split('x');
+        var ll = index.split('x');
+        var lat = ll[0];
+        var lon = ll[1];
         var coords = [
           new google.maps.LatLng(parseFloat(lat+pre), parseFloat(lon+pre)),
           new google.maps.LatLng(parseFloat(lat-pre), parseFloat(lon+pre)),
