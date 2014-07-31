@@ -33,20 +33,28 @@ define([
           return false;
         }
 
-        global.me.playerChild = global.fb.child(global.sesId).child("player" + global.me.player);
+        global.playerChild = global.fb.child(global.sesId).child("player" + global.me.player);
 
-        global.me.playerChild.update({
+        global.playerChild.update({
           units: []
         });
 
         return true;
       },
 
-      // main FireBase listener events
-      fbListenSuccess: function(snapshot) {
-        var val = snapshot.val();
+    // this happens when data updates within the current session (if one is joined)
+    fbSessionListen: function(snapshot) {
+      var val = snapshot.val();
 
-//        console.log(snapshot, val);
+      global.debug("fbSessionListen() called", 2);
+      console.log(val);
+
+      return true;
+    },
+
+      // this happens whenever the data updates while on the lobby list
+      fbLobbyListen: function(snapshot) {
+        var val = snapshot.val();
 
         if (typeof val != "object" || val == null) val = {};
 
@@ -138,7 +146,7 @@ define([
 
         // reload lobby list on lobby view
         global.$d.sessionList.empty();
-       
+
         if (!global.sizeof(lobby)) {
           global.$d.sessionList.append($("<li></li>")
               .addClass("list-group-item")
@@ -198,7 +206,7 @@ define([
                 else if (global.listenLast.state == 2 && lobby[i].state < 2) {
                   // player 2 left (or timed out)!
                   global.sync.deleteSession(global.sesId);
-                  view.change("viewLobby");
+                  global.view.change("viewLobby");
                   global.debug("We lost player 2!", 0);
                   global.sesId = null;
                   global.me.player = null;
@@ -208,7 +216,7 @@ define([
                 if (global.listenLast.state > lobby[i].state) {
                   // player 1 left (or timed out)!
                   global.sync.deleteSession(global.sesId);
-                  view.change("viewLobby");
+                  global.view.change("viewLobby");
                  global.debug("We lost player 1!", 0);
                   global.sesId = null;
                   global.me.player = null;
@@ -228,7 +236,7 @@ define([
         }
         
         if (global.me.player == 2 && global.sesId != null && typeof lobby[global.sesId] == "undefined") {
-          view.change("viewLobby");
+          global.view.change("viewLobby");
           global.sesId = null;
           global.me.player = null;
          global.debug("player 1 left!", 0);
@@ -248,12 +256,18 @@ define([
         return true;
       },
 
-      deleteSession: function(key) {
+      deleteSession: function() {
+        if (global.fbSes == null) {
+          global.debug("tried to call deleteSession() with an empty session!", 1);
+          return false;
+        }
         //this.init(options);
-        global.fb.child(key).remove(function(error) {
-         global.debug(error ? "failure while removing session (" + key + ") from FireBase"
+        global.fbSes.remove(function(error) {
+          global.debug(error ? "failure while removing session (" + key + ") from FireBase"
             : "successfully removed session (" + key + ") from FireBase", 1);
         });
+
+        global.fbSes = null;
         return true;
       }
     };

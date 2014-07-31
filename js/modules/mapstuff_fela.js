@@ -59,7 +59,8 @@ define([
                 color: units[name].color
               })
               .data({
-                unit: units[name]
+                unit: units[name],
+                type: name
               })
               .append($("<div></div>")
                 .addClass("icon")
@@ -92,9 +93,6 @@ define([
           });
 
           this.poly.setMap(game.map);
-
-          // add gameUnit to session
-          
 
           return true;
         }
@@ -141,7 +139,10 @@ define([
             $target = $target.parent();
           }
 
-          var unit = $target.data().unit;
+          var data = $target.data(),
+              unit = data.unit;
+
+          unit.type = data.type;
 
           var left = global.me.balance - unit.cost;
 
@@ -199,6 +200,18 @@ define([
           updateBalance();
           
           global.G.units[global.G.units.length] = new gameUnit(global.G, unit);
+
+          // add unit's dynamic properties to session
+          global.G.myUnits[global.G.myUnits.length] = {
+            type: unit.type,
+            position: position,
+            health: unit.health,
+            level: unit.level
+          };
+
+          global.playerChild.update({
+            units: global.G.myUnits
+          });
           
           global.G.dragData = null;
 

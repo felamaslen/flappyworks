@@ -88,6 +88,7 @@ define([
       $(window).trigger('game_init_start', [this]);
       
       this.units = [];
+      this.myUnits = []; // holds dynamic properties of each unit for session communication
 
       // render map
       this.map_init();
@@ -149,8 +150,7 @@ define([
 
       $(".nick-display").text(global.me.name);
 
-      // main listener for FireBase
-      global.fb.on("value", global.sync.fbListenSuccess, global.sync.fbListenError);
+      global.fbLobbyListen(true);
 
       global.view.change("viewLobby");
     };
@@ -190,6 +190,9 @@ define([
       global.$d.setupForm.begin.prop("disabled", true); // can't start without another player
       global.view.change("viewSetup");
 
+      global.fbSes = global.fb.child(global.sesId);
+      global.fbLobbyListen(false);
+
       return true;
     }
 
@@ -209,25 +212,29 @@ define([
         case 0: // awaiting players
           if (typeof lobby[key].player1 == "undefined" || typeof lobby[key].player2 != "undefined") {
             // stale session
-           global.debug("tried to join a broken session - deleting", 1);
-            deleteSession(key);
+            global.debug("tried to join a broken session - deleting", 1);
+            global.sync.deleteSession();
             return false;
           }
 
           // we are the second player
           global.me.player = 2;
+          
+          global.sesId = key;
+          global.fbSes = global.fb.child(key);
 
-          var con = global.fb.child(key);
-
-          con.update({
+          global.fbSes.update({
             state: 1,
             player2: global.me
           })
         
-          con.onDisconnect().update({
+          global.fbSes.onDisconnect().update({
             state: 0,
             player2: null
           });
+
+          global.fbLobbyListen(false);
+          global.fbSessionListen(true);
 
           global.debug("joining session with key " + key, 2);
 
@@ -248,7 +255,7 @@ define([
       }
 
       if (global.me.player == 1) {
-        deleteSession(global.sesId);
+        global.sync.deleteSession();
       }
       else {
         global.fb.child(global.sesId).update({
@@ -258,6 +265,8 @@ define([
       }
       global.sesId = null;
       global.me.player = null;
+
+      global.fbLobbyListen(true);
 
       return true;
     }
@@ -289,7 +298,7 @@ define([
       }
       
       // start the game!
-      global.fb.child(global.sesId).update({
+      global.fbSes.update({
         city: city,
         mode: mode,
         state: 2

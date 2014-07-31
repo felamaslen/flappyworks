@@ -52,8 +52,32 @@ define([
       $d: {},
       G: null,
       sesId: null,
+      fbLobbyListen: function(on) {
+        if (on) {
+          global.fb.on("value", global.sync.fbLobbyListen, global.sync.fbListenError);
+        }
+        else {
+          global.fb.off("value");
+        }
+        return true;
+      },
+      fbSessionListen: function(on) {
+        if (global.fbSes == null) {
+          debug("tried to call fbSessionListen() with an empty session!");
+          return false;
+        }
+
+        if (on) {
+          global.fbSes.on("value", global.sync.fbSessionListen, global.sync.fbListenError);
+        }
+        else {
+          global.fbSes.off("value");
+        }
+        return true;
+      },
       lobby: [],
       fb: new Firebase("https://interception.firebaseio.com/sessions"),
+      fbSes: null,
       listenLast: {
         sesId: null,
         state: null
