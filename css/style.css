@@ -54,6 +54,7 @@ body {
   box-shadow: 0 -3px 12px 2px rgba(40, 40, 40, .6);
 }
 #ctrl .inside {
+  position: relative;
   padding: 5px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -62,6 +63,21 @@ body {
   -ms-user-select: none;
   user-select: none;
   margin: 0 5%;
+}
+.gameMode {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  font-size: 1.25em;
+}
+.gameMode::before {
+  content: "You are a";
+}
+.gameMode.attack::after {
+  content: "n attacker!";
+}
+.gameMode.defend::after {
+  content: " defender!";
 }
 
 #unitsList {

@@ -123,10 +123,22 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
   };
 
   function addUnits() {
+    console.trace();
     global.debug("UNITS:addUnits", 2);
     var formResults = formMethods.getFormParams('#sessionParamForm');
 
     var attack = global.G.mode == 0, defend = !attack;
+
+    // game mode indicator
+    if (typeof global.gameModeInd != "undefined")
+      global.gameModeInd.remove();
+    global.gameModeInd = $("<div></div>")
+      .addClass("gameMode")
+      .addClass(attack ? "attack" : "defend");
+
+    global.$d.ctrl.append(global.gameModeInd);
+
+    global.$d.unitsList.empty();
 
     for (var name in units) {
       if ((attack && !units[name].attack) ||
