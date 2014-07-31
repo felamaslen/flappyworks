@@ -63,6 +63,11 @@ define([
       },
       $d: {},
       G: null,
+      
+      // animation stuff
+      animTime: 25,
+      animCounter: 0,
+      
       sesId: null,
       fbSessionListen: function(on) {
         if (global.fbSes == null) {

@@ -90,9 +90,18 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
       path: this.path,
       geodesic: true,
       strokeColor: "#ff0000",
-      strokeOpacity: 1.0,
-      strokeWeight: 2
+      strokeOpacity: 1.0,//0.00001
+      strokeWeight: 2//0
     });
+
+    this.speed = options.speed;
+
+    // this controls whether or not the animation interval will ignore this unit
+    this.animate = options.speed > 0;
+      
+    // each time a point is clicked on the map, a route is calculated from the last end position to that point.
+    // this part-route is added to animSegments for processing by the animation loop
+    this.animSegments = [];
 
     this.poly.setMap(game.map);
 
@@ -115,15 +124,30 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     var self = this;
 
     google.maps.event.addListener(this.marker, "click", function() {
-      global.debug("selecting marker", 2);
       global.G.selectedUnit = self;
     });
 
     return true;
   };
 
+  gameUnit.prototype.updateAnim = function() {
+    if (this.speed == 0) return false;
+
+    this.eol = this.poly.Distance();
+
+    this.animPoly = new google.maps.Polyline({
+      path: [this.poly.getPath().getAt(0)],
+      strokeColor: "#0000ff",
+      strokeWeight: 10
+    });
+
+    this.animate = true;
+
+    return true;
+  }
+
   function addUnits() {
-    console.trace();
+    //console.trace();
     global.debug("UNITS:addUnits", 2);
     var formResults = formMethods.getFormParams('#sessionParamForm');
 
@@ -171,7 +195,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     .prop("draggable", true)
     .on("mousedown", global.evDragStart)
     .on("dragend", global.evDragCancel)
-
+   
     return true;
   };
 

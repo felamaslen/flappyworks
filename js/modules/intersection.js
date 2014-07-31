@@ -18,6 +18,8 @@ define([
 
         'view',
 
+        'anim',
+
         'sync',
         'mapstuff_fela',
         'units'
@@ -32,6 +34,8 @@ define([
 
         view,
 
+        anim,
+
         sync,
         mapstuff_fela,
         units
@@ -45,6 +49,9 @@ define([
     };
 
     global.sync = new sync(window);
+
+    // main animation wrapper
+    global.anim = new anim(window);
 
     global.view = new view();
 

@@ -37,6 +37,8 @@ define([
         //var global.startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
         var devMode = typeof get.devMode != "undefined" && get.devMode == "true";
 
+        if (devMode) global.sesId = 1;
+
         function updateBalance() {
           global.$d.balanceDisplay.text(global.me.balance.toFixed(2));
           return true;
@@ -142,7 +144,7 @@ define([
           return true;
         }
 
-        var evMapClick = function(e) {
+        global.evMapClick = function(e) {
           if (global.G == null || global.G.selectedUnit == null) return false;
 
           // draw a path from the selected unit
@@ -168,6 +170,62 @@ define([
             if (status == google.maps.DirectionsStatus.OK) {
               for (var i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
                 self.path.push(result.routes[0].overview_path[i]);
+              }
+              
+              if (self.animate) {
+                var seg = {};
+                
+                seg.poly1 = new google.maps.Polyline({
+                  path: [],
+                  strokeColor: "#ff0000",
+                  strokeWeight: 3
+                });
+                seg.poly2 = new google.maps.Polyline({
+                  path: [],
+                  strokeColor: "#ff0000",
+                  strokeWeight: 3
+                });
+
+                seg.route = result.routes[0];
+
+                seg.startLoc = {};
+                seg.endLoc = {};
+
+                var path = seg.route.overview_path;
+                var legs = seg.route.legs;
+                for (var i = 0; i < legs.length; i++) {
+                  if (i == 0) {
+                    seg.startLoc.latlng = legs[i].start_location;
+                  }
+                  seg.endLoc.latlng = legs[i].end_location;
+
+                  seg.steps = legs[i].steps;
+
+                  for (var j = 0; j < seg.steps.length; j++) {
+                    var nextSegment = seg.steps[j].path;
+
+                    for (var k = 0; k < nextSegment.length; k++) {
+                      seg.poly1.getPath().push(nextSegment[k]);
+                    }
+                  }
+
+                  seg.poly1.setMap(global.G.map);
+
+                  seg.eol = seg.poly1.Distance();
+                  seg.poly2 = new google.maps.Polyline({
+                    path: [seg.poly1.getPath().getAt(0)],
+                    strokeColor: "#0000ff",
+                    strokeWeight: 10
+                  });
+
+                  // animation properties are controlled here
+                  seg.step = .5 * self.speed;
+                  seg.steps = 0;
+
+                  self.animSegments.push(seg);
+                }
+
+                //self.updateAnim();
               }
             }
             else {
@@ -253,9 +311,12 @@ define([
           game.overlay.setMap(game.map);
 
           game.selectedUnit = null;
+          
+          // animation interval for guns and movement
+          game.anim = window.setInterval(global.anim.gameAnimWrapper, global.animTime);
 
           // event listener for map click
-          google.maps.event.addListener(game.map, "click", evMapClick);
+          google.maps.event.addListener(game.map, "click", global.evMapClick);
         });
 
         $(window).on("doc_ready", function() {
