@@ -51,7 +51,9 @@ body {
 #ctrl {
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
+  background-color: #fff;
   box-shadow: -3px 0 12px rgba(40, 40, 40, .6);
 }
 #ctrl .inside {
@@ -62,6 +64,7 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  margin: 0 5%;
 }
 
 #unitsList {}
@@ -69,7 +72,7 @@ body {
 #unitsList .unit {
   list-style: none;
   height: 48px;
-  width: 90%;
+  width: 192px;
   display: block;
   text-indent: 56px;
   border: 1px solid #666;
@@ -78,6 +81,8 @@ body {
   line-height: 48px;
   cursor: pointer;
   background: rgba(255, 255, 255, .5);
+  display: inline-block;
+  margin-right: 5px;
 }
 #unitsList .unit .icon {
   width: 48px;
