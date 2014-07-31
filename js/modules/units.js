@@ -46,29 +46,28 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
   function plopUnit(unit) {
     if (global.G == null) {
       return false;
-    } 
+    }
 
-     var unitPlopped = new google.maps.Marker({
+    var unitPlopped = new google.maps.Marker({
       position: new google.maps.LatLng(unit.lat, unit.lon),
       map: global.G.map,
       icon: typeof unit.icon == "undefined" ? null : unit.icon
     });
 
-     global.me.balance -= unit.cost;
-     $(window).on('budgetUpdate', function(e) {
+    global.me.balance -= unit.cost;
+    $(window).on('budgetUpdate', function(e) {
       $('#balanceDisplay').html(global.me.balance);
     });
-     $(window).trigger('budgetUpdate');
+    $(window).trigger('budgetUpdate');
 
-     return true;
-   }
+    return true;
+  }
 
 
-   var gameUnit = function(game, options) {
+  var gameUnit = function(game, options) {
     // soldier, turret etc.
     var self = this;
 
-    console.log("this is a test");
     this.position = new google.maps.LatLng(options.lat, options.lon);
 
     this.createMarker(options);
@@ -89,18 +88,17 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   }
 
-  gameUnit.prototype.createMarker = function(options) {
-    this.marker = new google.maps.Marker({
-      position: this.position,
-      map: global.G.map,
-      title: options.role,
-      icon: {
-        url: options.icon,
-        scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
-      }
-    });
+gameUnit.prototype.createMarker = function(options) {
+  this.marker = new google.maps.Marker({
+    position: this.position,
+    map: global.G.map,
+    title: options.role,
+    icon: {
+      url: options.icon,
+      scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
+    }
 
     var self = this;
 
@@ -112,40 +110,48 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   };
 
-  function addUnits(){
-    console.log( 'UNITS::addUnits' );
-    var formResults = formMethods.getFormParams( '#sessionParamForm' );
+  function addUnits() {
+    console.log('UNITS::addUnits');
+    var formResults = formMethods.getFormParams('#sessionParamForm');
 
-    if(formResults.mode == 0){
-      global.$d.unitsList.empty();
-      name = "soldier";
-      global.$d.unitsList.append($("<li></li>")
-       .addClass("list-item")
-       .addClass("unit")
-       .addClass("unit-" + name)
-       .text(name)
+    var attack = global.G.mode == 0, defend = !attack;
 
-       .text(" - range of "+ soldier.range)
-       .append($("<div></div>")
-         .addClass("icon")
-         .append(
-           $("<img></img>").attr("src", "img/icon/soldier.png")
-           ))); 
+    for (var name in units) {
+      if ((attack && !units[name].attack) ||
+        (defend && !units[name].defend)) continue;
+
+        global.$d.unitsList.append($("<li></li>")
+          .addClass("list-item")
+          .addClass("unit")
+          .addClass("unit-" + name)
+          .text(name)
+          .append($("<span></span>")
+            .addClass("cost")
+            .text(units[name].cost)
+            )
+          .css({
+            color: units[name].color
+          })
+          .data({
+            unit: units[name],
+            type: name
+          })
+          .append($("<div></div>")
+            .addClass("icon")
+            .append($("<img></img>").attr("src", units[name].icon))
+            )
+          );
     }
-    if (formResults.mode == 1){
-      global.$d.unitsList.empty();
-      name = "turret";
-      global.$d.unitsList.append($("<li></li>")
-       .addClass("list-item")
-       .addClass("unit")
-       .addClass("unit-" + name)
-       .text(name)
-       .text(" - range of "+ turret.range)
-       .append($("<div></div>")
-        .addClass("icon")
-        .append($("<img></img>").attr("src", "img/icon/turret.png"))));
-    }
+
+    global.$d.unitsList.children()
+    .prop("draggable", true)
+    .on("mousedown", global.evDragStart)
+    .on("dragend", global.evDragCancel)
+
+    return true;
   };
+
+  $(window).on('define_game', addUnits);
 
   return {
     plopUnit: plopUnit,
@@ -153,5 +159,6 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     testUnit: testUnit,
     gameUnit: gameUnit,
     addUnits: addUnits
-  }
+  };
+
 });
