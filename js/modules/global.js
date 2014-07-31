@@ -27,6 +27,16 @@ define([
             break;
         }
       },
+      sizeof: function(obj) {
+        if (typeof Object.keys == "function")
+          return Object.keys(obj).length;
+
+        var size = 0, key;
+        for (key in obj) {
+          if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+      },
       makeid: function(length) {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
