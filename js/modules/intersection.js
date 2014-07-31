@@ -97,6 +97,8 @@ define([
       this.theirUnits = []; // opponent's myUnits
       this.theirUnitsRaw = []; // opponent's units
 
+      this.anim = null;
+
       // render map
       this.map_init();
 

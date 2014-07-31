@@ -257,6 +257,7 @@ define([
                   global.debug("We lost player 2!", 0);
                   global.sesId = null;
                   global.me.player = null;
+                  global.endGame();
                 }
               }
               else if (global.me.player == 2) {
@@ -268,6 +269,7 @@ define([
                   global.debug("We lost player 1!", 0);
                   global.sesId = null;
                   global.me.player = null;
+                  global.endGame();
                 }
                 else if (global.listenLast.state < 2 && global.lobby[i].state == 2) {
                   // game started by player 1
@@ -290,6 +292,7 @@ define([
           global.me.player = null;
           global.fbSes.onDisconnect().cancel();
           global.debug("player 1 left!", 0);
+          global.endGame();
         }
 
         global.listenLast = {

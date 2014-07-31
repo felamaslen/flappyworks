@@ -62,7 +62,19 @@ define([
         mode: null // Becomes either attacker or defender. (0/1)
       },
       $d: {},
+
+      // game methods
       G: null,
+      endGame: function() {
+        if (global.G != null) {
+          if (global.G.anim != null) {
+            window.clearInterval(global.G.anim);
+            $("#map").replaceWith($("<div></div>").attr("id", "map"));
+          }
+          global.G = null;
+        }
+        return true;
+      },
       
       // animation stuff
       animTime: 25,
