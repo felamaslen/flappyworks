@@ -15,7 +15,8 @@ define(['jquery', 'global'], function ($, global) {
 
         constructor: FormMethods,
 
-       	getFormParams: function( formTarget ) {
+       	getFormParams: function( formTarget ) {	
+       		console.log('Init of f');
 			// get parameters
 			var formParams = {};
 			var theForm = $( formTarget );
