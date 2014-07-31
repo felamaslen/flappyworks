@@ -70,12 +70,6 @@ define([
 
         global.playerChild = global.fb.child(global.sesId).child("player" + global.me.player);
 
-        /*
-        global.playerChild.update({
-          units: []
-        });
-        */
-
         return true;
       },
 
