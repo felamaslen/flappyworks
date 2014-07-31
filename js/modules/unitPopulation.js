@@ -1,6 +1,8 @@
 /**
- * @file js/mapstuff_fela.js
+ * @file js/modules/unitPopulation.js
  */
+ 
+// DEPRECATED AND NOT USED
 
 define([
   'jquery',

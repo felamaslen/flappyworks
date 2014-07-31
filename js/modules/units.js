@@ -100,7 +100,7 @@ function plopUnit(unit){
 
 var formResults = formMethods.getFormParams( '#sessionParamForm' );
 
-var formResults={ mode: 2 };
+
 if(formResults.mode == 0){
   global.$d.unitsList.empty();
   name = "soldier";
