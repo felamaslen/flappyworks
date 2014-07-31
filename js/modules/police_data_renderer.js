@@ -559,6 +559,8 @@
   "51.2x-4.05": 11, 
   "50.4x-4.75": 7
 };
+
+glob.crimeData = crime_data;
     
     console.log('[DEBUG][JMA] PDR Module Loaded');
     $(window).on("define_game", function(){
