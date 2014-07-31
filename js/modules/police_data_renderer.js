@@ -582,7 +582,8 @@ glob.crimeData = crime_data;
           paths: coords,
           strokeOpacity: 0,
           fillColor: '#FF0000',
-          fillOpacity: ((parseFloat(crime_data[index])/parseFloat(max))*0.35)
+          fillOpacity: ((parseFloat(crime_data[index])/parseFloat(max))*0.35),
+          clickable: false
         });
         square.setMap(glob.G.map);
       }
