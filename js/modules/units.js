@@ -91,17 +91,18 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   }
 
-gameUnit.prototype.createMarker = function(options) {
-  this.marker = new google.maps.Marker({
-    position: this.position,
-    map: global.G.map,
-    title: options.role,
-    icon: {
-      url: options.icon,
-      scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
-    }});
+  gameUnit.prototype.createMarker = function(options) {
+    this.marker = new google.maps.Marker({
+      position: this.position,
+      map: global.G.map,
+      title: options.role,
+      icon: {
+        url: options.icon,
+        scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
+      }
+    });
 
     var self = this;
 
