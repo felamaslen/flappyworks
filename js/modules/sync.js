@@ -47,6 +47,9 @@ define([
             // new gameUnit
             global.G.theirUnitsRaw[i] = new units.gameUnit(global.G, unit);
           }
+          else if (global.G.theirUnitsRaw[i] == null) {
+            continue;
+          }
           else {
             // update the gameUnit's position
             var gu = global.G.theirUnitsRaw[i];
@@ -96,14 +99,18 @@ define([
 
         // check if my units have been updated (i.e. attacked / destroyed)
         var newMyUnits = val["player" + global.me.player];
+        if (typeof newMyUnits != "object") {
+          global.debug("Error on session listen", 1);
+          return false;
+        }
         for (var i = 0; i < newMyUnits.length; i++) {
           if (newMyUnits[i].health !== global.G.myUnits[i].health) {
             // health updated
             if (newMyUnits[i].health == 0) {
               // my unit was destroyed!
-              global.G.myUnits.splice(i, 1);
+              global.G.myUnits[i] = null;
               global.G.units[i].marker.remove();
-              global.G.units.splice(i, 1);
+              global.G.units = null;
             }
             else {
               global.G.myUnits[i].health = newMyUnits[i].health;

@@ -14,8 +14,10 @@ define([
     ) {
 
     var global = {
+      debugLevel: 1,
       debug: function(msg, level) {
         level = typeof level == "undefined" ? 2 : level;
+        if (level > global.debugLevel) return false;
         switch (level) {
           case 0: // error
             UIMessages.modalDialog(msg);
@@ -53,8 +55,8 @@ define([
       },
       healthColor: function(health, maxHealth) {
         return global.rgbToHex(
-          255 * (maxHealth - health) / maxHealth,
-          255 * health / maxHealth,
+          Math.round(255 * (maxHealth - health) / maxHealth),
+          Math.round(255 * health / maxHealth),
           60
         );
       },
@@ -104,7 +106,7 @@ define([
       sesId: null,
       fbSessionListen: function(on) {
         if (global.fbSes == null) {
-          global.debug("tried to call fbSessionListen() with an empty session!");
+          global.debug("tried to call fbSessionListen() with an empty session!", 1);
           return false;
         }
 
@@ -129,7 +131,7 @@ define([
           coords: [51.514756, -0.125631],
           zoom: 11,
           balance: 2515202,
-          radius: [3500, 14000]
+          radius: [3500, 4000]//14000
         },
         {
           name: "Plymouth",
