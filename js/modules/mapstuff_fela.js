@@ -105,6 +105,8 @@ define([
               pos = global.$d.map_outer.position(),
               pX = cX - pos.left,
               pY = cY - pos.top;
+          
+          console.log(e);
 
           var position = global.G.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(pX, pY)),
               lat = position.lat(),
@@ -340,7 +342,6 @@ define([
 
           global.$d.map_outer
             .on("drop", global.evMapDrop)
-            .on("touchend", global.evMapDrop)
             .on("dragover", function(e){ e.preventDefault(); });
         });
       }
