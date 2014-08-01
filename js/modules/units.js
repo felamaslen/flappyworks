@@ -152,6 +152,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
 
   gameUnit.prototype.checkEnemies = function(sessUpdate) {
     for (var i = 0; i < global.G.theirUnitsRaw.length; i++) {
+      if (global.G.theirUnitsRaw[i] == null) continue;
       var distance = google.maps.geometry.spherical.computeDistanceBetween(global.G.theirUnitsRaw[i].position, this.position);
 
       if (distance < this.range) {
