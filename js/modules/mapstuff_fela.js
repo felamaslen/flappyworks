@@ -53,6 +53,11 @@ define([
         }
 
         global.evDragStart = function(e) {
+          if (e.originalEvent.changedTouches) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          
           if (global.G == null) return false;
           var $target = $(e.target);
           
@@ -97,12 +102,15 @@ define([
           e.stopPropagation();
         
           var unit = global.G.dragData;
-
+          if (e.originalEvent.clientX && e.originalEvent.clientY){
+              var cX = e.originalEvent.clientX,
+              cY = e.originalEvent.clientY;
+          }else{
+              var cX = e.originalEvent.changedTouches[0].clientX,
+              cY = e.originalEvent.changedTouches[0].clientY;
+          }
           // find the coordinates of the click
-          var cX = e.originalEvent.clientX,
-              cY = e.originalEvent.clientY,
-
-              pos = global.$d.map_outer.position(),
+          var pos = global.$d.map_outer.position(),
               pX = cX - pos.left,
               pY = cY - pos.top;
 
