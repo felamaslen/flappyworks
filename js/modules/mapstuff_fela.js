@@ -35,9 +35,9 @@ define([
         }
 
         //var global.startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
-        var devMode = typeof get.devMode != "undefined" && get.devMode == "true";
+        global.devMode = typeof get.devMode != "undefined" && get.devMode == "true";
 
-        if (devMode) global.sesId = 1;
+        if (global.devMode) global.sesId = "devmode";
 
         function updateBalance() {
           global.$d.balanceDisplay.text(global.me.balance.toFixed(2));
@@ -137,9 +137,11 @@ define([
             level: unit.level
           });
 
-          global.playerChild.update({
-            units: global.G.myUnits
-          });
+          if (!global.devMode) {
+            global.playerChild.update({
+              units: global.G.myUnits
+            });
+          }
           
           global.G.dragData = null;
 
@@ -330,7 +332,7 @@ define([
 
           updateBalance();
 
-          if (devMode) {
+          if (global.devMode) {
             global.me.player = 1;
             global.startGame({
               city: 0,

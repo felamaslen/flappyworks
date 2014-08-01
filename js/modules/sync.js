@@ -94,6 +94,24 @@ define([
           global.G.theirUnits = val[otherPlayerString].units;
         }
 
+        // check if my units have been updated (i.e. attacked / destroyed)
+        var newMyUnits = val["player" + global.me.player];
+        for (var i = 0; i < newMyUnits.length; i++) {
+          if (newMyUnits[i].health !== global.G.myUnits[i].health) {
+            // health updated
+            if (newMyUnits[i].health == 0) {
+              // my unit was destroyed!
+              global.G.myUnits.splice(i, 1);
+              global.G.units[i].marker.remove();
+              global.G.units.splice(i, 1);
+            }
+            else {
+              global.G.myUnits[i].health = newMyUnits[i].health;
+              glboal.G.units[i].updateMarker();
+            }
+          }
+        }
+
         global.sync.drawTheirUnits();
 
         return true;
