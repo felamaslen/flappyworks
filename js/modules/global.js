@@ -43,6 +43,21 @@ define([
         }
         return size;
       },
+      rgbToHex: function(r, g, b) {
+        function componentToHex(c) {
+          var hex = c.toString(16);
+          return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+      },
+      healthColor: function(health, maxHealth) {
+        return global.rgbToHex(
+          255 * (maxHealth - health) / maxHealth,
+          255 * health / maxHealth,
+          60
+        );
+      },
       makeid: function(length) {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -86,7 +101,6 @@ define([
       
       // session update triggers
       sessionUpdatePositions: false,
-      
       sesId: null,
       fbSessionListen: function(on) {
         if (global.fbSes == null) {

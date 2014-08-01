@@ -74,12 +74,14 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   }
 
-
   var gameUnit = function(game, options) {
     // soldier, turret etc.
     var self = this;
 
     this.position = new google.maps.LatLng(options.lat, options.lon);
+    
+    this.health = options.health;
+    this.maxHealth = options.health;
 
     this.createMarker(options);
 
@@ -95,7 +97,10 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     });
 
     this.speed = options.speed;
+    this.moving = true;
     this.mine = options.mine;
+
+    this.power = options.power;
 
     // this controls whether or not the animation interval will ignore this unit
     this.animate = options.speed > 0;
@@ -109,16 +114,74 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   }
 
+  gameUnit.prototype.checkEnemies = function() {
+    for (var i = 0; i < global.G.theirUnitsRaw.length; i++) {
+      var distance = google.maps.geometry.spherical.computeDistanceBetween(global.G.theirUnitsRaw[i].position, this.position);
+
+      if (distance < range) {
+        // stop the unit and start firing!
+        this.moving = false;
+
+        // cancel any routes
+        this.animSegments = [];
+
+        // attack the enemy
+        this.attack(i);
+      }
+    }
+
+    return true;
+  };
+
+  gameUnit.prototype.attack = function(ind) {
+    // attacks the enemy's unit ind
+    var currentHealth = global.G.theirUnitsRaw[ind].health,
+        newHealth = Math.min(0, currentHealth - this.power);
+
+    if (newHealth == 0) {
+      // unit destroyed!
+      global.G.theirUnitsRaw.splice(ind, 1);
+      global.G.theirUnits[ind] = null;
+    }
+    else {
+      global.G.theirUnitsRaw[ind].health = newHealth;
+      global.G.theirUnits[ind].health = newHealth;
+    }
+
+    var otherPlayer = global.me.player == 1 ? 2 : 1;
+
+    var otherPlayerString = "player" + otherPlayer.toString();
+
+    global.playerChild.update({
+      otherPlayerString: {
+        units: global.G.theirUnits
+      }
+    });
+
+    return true;
+  };
+
   gameUnit.prototype.createMarker = function(options) {
-    this.marker = new google.maps.Marker({
+    this.marker = new MarkerWithLabel({
       position: this.position,
       map: global.G.map,
+      animation: google.maps.Animation.DROP,
       title: options.role,
       icon: {
         url: options.icon,
         scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
+      },
+      labelContent: this.health.toString(),
+      labelAnchor: new google.maps.Point(8, -16),
+      labelClass: "healthLabel",
+      labelStyle: {
+        opacity: .6,
+        color: "#000",
+        width: 22,
+        height: 8,
+        background: global.healthColor(this.health, this.maxHealth),
       }
     });
 
@@ -146,6 +209,23 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
 
     return true;
   }
+
+  gameUnit.prototype.updateMarker = function() {
+    // called when health updates
+    this.marker.setOptions({
+      labelStyle: {
+        opacity: .6,
+        color: "#000",
+        width: 22,
+        height: 8,
+        background: global.healthColor(this.health, this.maxHealth),
+      },
+      labelContent: this.health.toString()
+    });
+
+    return true;
+    // */
+  };
 
   function addUnits() {
     //console.trace();
