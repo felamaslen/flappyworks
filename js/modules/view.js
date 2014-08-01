@@ -42,6 +42,7 @@ define([
           $(".view").addClass("viewHidden");
           $('#'+newView).removeClass("viewHidden");
           self.event.change.trigger(newView);
+          $(window).trigger('viewChange', newView);
         }
 
         return true;

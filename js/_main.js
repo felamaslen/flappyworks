@@ -19,8 +19,8 @@ require.config({
       units:        'modules/units',
       formMethods:  'modules/formMethods',
       uiMessages:   'modules/uiMessages',
-      pdr:          'modules/police_data_renderer'
-
+      pdr:          'modules/police_data_renderer',
+      mapPreview:   'modules/mapPreview'
       },
 
     shim: {
