@@ -6,7 +6,7 @@
     $,
     glob
   ) {
-    crime_data = {
+    var crime_data = {
   "50.5x-4.75": 8, 
   "51.1x-3.95": 1, 
   "51.25x-3.85": 4, 
@@ -582,7 +582,8 @@ glob.crimeData = crime_data;
           paths: coords,
           strokeOpacity: 0,
           fillColor: '#FF0000',
-          fillOpacity: ((parseFloat(crime_data[index])/parseFloat(max))*0.35)
+          fillOpacity: ((parseFloat(crime_data[index])/parseFloat(max))*0.35),
+          clickable: false
         });
         square.setMap(glob.G.map);
       }

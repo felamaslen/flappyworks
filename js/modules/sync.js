@@ -33,8 +33,6 @@ define([
       drawTheirUnits: function() {
         global.debug("drawTheirUnits() called", 2);
         for (var i = 0; i < global.G.theirUnits.length; i++) {
-          console.log(global.G.theirUnits, global.G.theirUnitsRaw);
-
           if (typeof global.G.theirUnitsRaw[i] == "undefined") {
             // create the gameUnit
             var unit = units.units[global.G.theirUnits[i].type];
@@ -43,6 +41,8 @@ define([
             unit.health = global.G.theirUnits[i].health;
             unit.lat = global.G.theirUnits[i].lat;
             unit.lon = global.G.theirUnits[i].lon;
+
+            unit.mine = false;
              
             // new gameUnit
             global.G.theirUnitsRaw[i] = new units.gameUnit(global.G, unit);
@@ -83,11 +83,14 @@ define([
 
         var val = snapshot.val();
 
+        if (val == null) return false;
+
         var otherPlayer = global.me.player == 1 ? 2 : 1;
 
         var otherPlayerString = "player" + otherPlayer.toString();
 
-        if (typeof val[otherPlayerString].units != "undefined") {
+        if (typeof val[otherPlayerString] != "undefined" &&
+            typeof val[otherPlayerString].units != "undefined") {
           global.G.theirUnits = val[otherPlayerString].units;
         }
 
@@ -254,16 +257,19 @@ define([
                   global.debug("We lost player 2!", 0);
                   global.sesId = null;
                   global.me.player = null;
+                  global.endGame();
                 }
               }
               else if (global.me.player == 2) {
                 if (global.listenLast.state > global.lobby[i].state) {
                   // player 1 left (or timed out)!
-                  global.sync.deleteSession(global.sesId);
+//                  global.sync.deleteSession(global.sesId); // this is done by player 1's onDisconnect() event
                   global.view.change("viewLobby");
-                 global.debug("We lost player 1!", 0);
+                  global.fbSes.onDisconnect().cancel();
+                  global.debug("We lost player 1!", 0);
                   global.sesId = null;
                   global.me.player = null;
+                  global.endGame();
                 }
                 else if (global.listenLast.state < 2 && global.lobby[i].state == 2) {
                   // game started by player 1
@@ -279,11 +285,14 @@ define([
           }
         }
         
-        if (global.me.player == 2 && global.sesId != null && typeof global.lobby[global.sesId] == "undefined") {
+        if (global.me.player == 2 && global.sesId != null &&
+            typeof global.lobby[global.sesId] == "undefined") {
           global.view.change("viewLobby");
           global.sesId = null;
           global.me.player = null;
-         global.debug("player 1 left!", 0);
+          global.fbSes.onDisconnect().cancel();
+          global.debug("player 1 left!", 0);
+          global.endGame();
         }
 
         global.listenLast = {
