@@ -340,6 +340,7 @@ define([
 
           global.$d.map_outer
             .on("drop", global.evMapDrop)
+            .on("touchend", global.evMapDrop)
             .on("dragover", function(e){ e.preventDefault(); });
         });
       }
