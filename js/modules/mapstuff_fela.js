@@ -20,7 +20,7 @@ define([
       init: function() {
         global.debug("mapstuff_fela loaded", 2);
 
-        mm = new mapMethods();
+        global.mm = new mapMethods();
 
         // dev GET parameters
         var href = window.location.href || "";
@@ -37,52 +37,22 @@ define([
         //var global.startGameOnLoad = typeof get.startgameonload != "undefined" && get.startgameonload == "true";
         var devMode = typeof get.devMode != "undefined" && get.devMode == "true";
 
+        if (devMode) global.sesId = 1;
+
         function updateBalance() {
           global.$d.balanceDisplay.text(global.me.balance.toFixed(2));
           return true;
         }
 
-        function renderUnitsList(units) {
-          global.$d.unitsList.empty();
-
-          for (var name in units) {
-            global.$d.unitsList.append($("<li></li>")
-              .addClass("list-item")
-              .addClass("unit")
-              .addClass("unit-" + name)
-              .text(name)
-              .append($("<span></span>")
-                .addClass("cost")
-                .text(units[name].cost)
-              )
-              .css({
-                color: units[name].color
-              })
-              .data({
-                unit: units[name],
-                type: name
-              })
-              .append($("<div></div>")
-                .addClass("icon")
-                .append($("<img></img>").attr("src", typeof units[name].icon == "undefined"
-                    ? "about:blank" : units[name].icon))
-              )
-            );
-          }
-
-          return true;
-        }
-
-
-        var evDragCancel = function(e) {
+        global.evDragCancel = function(e) {
           if (global.G == null || global.G.dragData == null) return false;
           global.G.dragData = null;
           global.debug("cancelled dragging a unit", 2);
-          mm.removeCityLimit();
+          global.mm.removeCityLimit();
           return true;
         }
 
-        var evDragStart = function(e) {
+        global.evDragStart = function(e) {
           if (global.G == null) return false;
           var $target = $(e.target);
           
@@ -107,7 +77,7 @@ define([
           }
          
           console.log("adding city limit");
-          mm.addCityLimit();
+          global.mm.addCityLimit();
 
           global.G.dragData = unit;
           
@@ -115,7 +85,7 @@ define([
           return true;
         }
         
-        var evMapDrop = function(e) {
+        global.evMapDrop = function(e) {
           // handles dropping units onto the map
           if (global.G == null || global.G.dragData == null) {
             global.debug("tried to drop unit with no active game in progress", 1);
@@ -143,9 +113,9 @@ define([
           unit.lat = lat;
           unit.lon = lon;
 
-          mm.removeCityLimit();
+          global.mm.removeCityLimit();
           
-          if (!mm.withinCityLimit(position)) {
+          if (!global.mm.withinCityLimit(position)) {
             global.debug("You can't place a unit there - try further " + (global.G.mode == 0 ? "out" : "in") + "!", 3);
             return false;
           }
@@ -153,6 +123,8 @@ define([
           // by this point, the drop is confirmed, so update balance
           global.me.balance -= unit.cost;
           updateBalance();
+
+          unit.mine = true;
           
           global.G.units[global.G.units.length] = new units.gameUnit(global.G, unit);
 
@@ -174,7 +146,7 @@ define([
           return true;
         }
 
-        var evMapClick = function(e) {
+        global.evMapClick = function(e) {
           if (global.G == null || global.G.selectedUnit == null) return false;
 
           // draw a path from the selected unit
@@ -200,6 +172,64 @@ define([
             if (status == google.maps.DirectionsStatus.OK) {
               for (var i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
                 self.path.push(result.routes[0].overview_path[i]);
+              }
+              
+              if (self.animate) {
+                var seg = {};
+                
+                seg.poly1 = new google.maps.Polyline({
+                  path: [],
+                  strokeColor: global.mapStrokeColor,
+                  strokeOpacity: global.mapStrokeOpacity,
+                  strokeWeight: global.mapStrokeWeight
+                });
+                seg.poly2 = new google.maps.Polyline({
+                  path: [],
+                  strokeColor: global.mapStrokeColor,
+                  strokeOpacity: global.mapStrokeOpacity,
+                  strokeWeight: global.mapStrokeWeight
+                });
+
+                seg.route = result.routes[0];
+
+                seg.startLoc = {};
+                seg.endLoc = {};
+
+                var path = seg.route.overview_path;
+                var legs = seg.route.legs;
+                for (var i = 0; i < legs.length; i++) {
+                  if (i == 0) {
+                    seg.startLoc.latlng = legs[i].start_location;
+                  }
+                  seg.endLoc.latlng = legs[i].end_location;
+
+                  seg.steps = legs[i].steps;
+
+                  for (var j = 0; j < seg.steps.length; j++) {
+                    var nextSegment = seg.steps[j].path;
+
+                    for (var k = 0; k < nextSegment.length; k++) {
+                      seg.poly1.getPath().push(nextSegment[k]);
+                    }
+                  }
+
+                  seg.poly1.setMap(global.G.map);
+
+                  seg.eol = seg.poly1.Distance();
+                  seg.poly2 = new google.maps.Polyline({
+                    path: [seg.poly1.getPath().getAt(0)],
+                    strokeColor: "#0000ff",
+                    strokeWeight: 10
+                  });
+
+                  // animation properties are controlled here
+                  seg.step = .5 * self.speed;
+                  seg.steps = 0;
+
+                  self.animSegments.push(seg);
+                }
+
+                //self.updateAnim();
               }
             }
             else {
@@ -238,7 +268,7 @@ define([
           return new google.maps.LatLng(lat2.toDeg(), lon2.toDeg());
         }
 
-        $(window).on("mouseup", evDragCancel);
+        $(window).on("mouseup", global.evDragCancel);
 
         $(window).on("game_init_start", function(e, game) {
           global.debug("triggered game_init_start()", 2);
@@ -248,15 +278,10 @@ define([
           global.me.balance = this.mode == 1 ? cityBalance : .2 * cityBalance;
           updateBalance();
 
-          renderUnitsList(units.units); // malachy assigned to this
+          //renderUnitsList(units.units); // malachy assigned to this
 
           // draggable stuff
           game.dragData = null;
-
-          global.$d.unitsList.children()
-            .prop("draggable", true)
-            .on("mousedown", evDragStart)
-            .on("dragend", evDragCancel)
         });
 
         $(window).on("map_init", function(e, game) {
@@ -290,9 +315,12 @@ define([
           game.overlay.setMap(game.map);
 
           game.selectedUnit = null;
+          
+          // animation interval for guns and movement
+          game.anim = window.setInterval(global.anim.gameAnimWrapper, global.animTime);
 
           // event listener for map click
-          google.maps.event.addListener(game.map, "click", evMapClick);
+          google.maps.event.addListener(game.map, "click", global.evMapClick);
         });
 
         $(window).on("doc_ready", function() {
@@ -311,7 +339,7 @@ define([
           }
 
           global.$d.map_outer
-            .on("drop", evMapDrop)
+            .on("drop", global.evMapDrop)
             .on("dragover", function(e){ e.preventDefault(); });
         });
       }

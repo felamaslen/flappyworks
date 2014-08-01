@@ -32,10 +32,14 @@ body {
 #map_outer {
   position: fixed;
   left: 0;
+  right: 0;
   top: 0;
-  right: 300px;
   bottom: 0;
-  background: #fff;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 #map_inner {
   width: 100%;
@@ -47,14 +51,20 @@ body {
   height: 100%;
 }
 #ctrl {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   position: fixed;
-  right: 0;
-  top: 0;
   bottom: 0;
-  width: 300px;
-  box-shadow: -3px 0 12px rgba(40, 40, 40, .6);
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, .5);
+  box-shadow: 0 -3px 12px 2px rgba(40, 40, 40, .6);
 }
 #ctrl .inside {
+  position: relative;
   padding: 5px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -62,28 +72,53 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  margin: 0 5%;
+}
+.gameMode {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  font-size: 1.25em;
+}
+.gameMode::before {
+  content: "You are a";
+}
+.gameMode.attack::after {
+  content: "n attacker!";
+}
+.gameMode.defend::after {
+  content: " defender!";
 }
 
-#unitsList {}
+#unitsList {
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: auto;
+  height: 96px;
+  margin-bottom: 0;
+}
 
 #unitsList .unit {
+  text-align: center;
+  padding-top: 48px;
   list-style: none;
-  height: 48px;
-  width: 90%;
+  height: 72px;
+  width: 128px;
   display: block;
-  text-indent: 56px;
   border: 1px solid #666;
   margin-bottom: 5px;
   position: relative;
-  line-height: 48px;
+  line-height: 16px;
   cursor: pointer;
   background: rgba(255, 255, 255, .5);
+  display: inline-block;
+  margin-right: 5px;
 }
 #unitsList .unit .icon {
   width: 48px;
   height: 48px;
   position: absolute;
-  left: 0;
+  left: 40px;
   top: 0;
 }
 #unitsList .unit .icon img {
@@ -161,6 +196,7 @@ body {
   width: 300px;
   height: 50px;
   border: 1px solid #000;
+  border-bottom: none;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px 10px 0 0;
@@ -188,7 +224,9 @@ body {
   width: 64px;
   height: 64px;
   border: 1px solid #000;
-  box-shadow: 0 0 12px rgba(100, 100, 100, .5);
+  box-shadow: 0 -4px 12px 2px rgba(40, 40, 40, .6);
+  -moz-box-shadow: 0 -4px 12px 2px rgba(40, 40, 40, .6);
+  -webkit-box-shadow: 0 -4px 12px 2px rgba(40, 40, 40, .6);
   margin: 5px;
   cursor: pointer;
 }
