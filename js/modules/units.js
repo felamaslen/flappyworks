@@ -69,15 +69,17 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     level: 1,
     power: 15,
     sps: 3,
-    icon: null,
+    icon: 'img/icon/tank.png',
     attack: true,
     defence: false
   }
-  }
+  
 
-  var units = {
+ var units = {
     soldier: soldier,
-    turret: turret
+    turret: turret,
+    tank: tank,
+    artillery: artillery
   }
 
   for (var i in units) {
