@@ -53,9 +53,11 @@ define([
         }
 
         global.evDragStart = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-        
+          if (e.originalEvent.changedTouches) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          
           if (global.G == null) return false;
           var $target = $(e.target);
           
@@ -111,9 +113,6 @@ define([
           var pos = global.$d.map_outer.position(),
               pX = cX - pos.left,
               pY = cY - pos.top;
-          
-          console.log(e.originalEvent.clientX);
-          console.log(e.originalEvent.changedTouches[0].clientX);
 
           var position = global.G.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(pX, pY)),
               lat = position.lat(),
