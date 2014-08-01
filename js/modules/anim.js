@@ -29,10 +29,18 @@ define([
          * position: google maps latLng
          */
 
+        var sessUpdate = (global.animCounter + 2) % 25 === 0 && !global.devMode;
+
         for (var i = 0; i < global.G.units.length; i++) {
-          if (global.G.units[i].animSegments.length == 0) continue;
+          if (global.G.units[i] == null) continue;
 
           var unit = global.G.units[i];
+
+          // checks if enemies are nearby
+          unit.checkEnemies(sessUpdate);
+
+          if (!global.G.units[i].moving ||
+              global.G.units[i].animSegments.length == 0) continue;
 
           unit.animSegments[0].steps++;
           
@@ -50,15 +58,15 @@ define([
             return;
           }
 
-          var p = seg.poly1.GetPointAtDistance(d);
-          unit.marker.setPosition(p);
+          unit.position = seg.poly1.GetPointAtDistance(d);
+          unit.marker.setPosition(unit.position);
           global.anim.updatePoly(seg.step, i);
 
-          global.G.myUnits[i].lat = p.lat();
-          global.G.myUnits[i].lon = p.lng();
+          global.G.myUnits[i].lat = unit.position.lat();
+          global.G.myUnits[i].lon = unit.position.lng();
         }
 
-        if ((global.animCounter + 2) % 50 === 0) {
+        if (sessUpdate) {
           // every X frames, update the session with the current positions,
           // and fetch updates of the opponent's units from the server
           

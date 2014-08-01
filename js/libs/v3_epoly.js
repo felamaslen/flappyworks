@@ -57,6 +57,24 @@
 *                                                                     *
 \*********************************************************************/
 
+google.maps.Rectangle.prototype.setCenter = function(latLng, width, height, oX, oY) {
+  lat = latLng.lat() - oY;
+  lng = latLng.lng() - oX;
+
+  // simplifies code but breaks around International Date Line
+  //
+  //sw = this.getBounds().getSouthWest();
+  //ne = this.getBounds().getNorthEast();
+  //width = ne.lng() - sw.lng();
+  //height = ne.lat() - sw.lat();
+  
+  var bounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(lat - height/2.0, lng - width/2.0),
+    new google.maps.LatLng(lat + height/2.0, lng + width/2.0)
+  );
+  this.setOptions({bounds: bounds});
+}
+
 // === first support methods that don't (yet) exist in v3
 google.maps.LatLng.prototype.distanceFrom = function(newLatLng) {
   var EarthRadiusMeters = 6378137.0; // meters
@@ -233,8 +251,12 @@ google.maps.Polygon.prototype.Bearing = function(v1,v2) {
   return parseFloat(angle.toFixed(1));
 }
 
-
-
+google.maps.LatLng.prototype.translate = function(x, y) {
+  return new google.maps.LatLng(
+    this.lat() - x,
+    this.lng() - y
+  );
+};
 
 // === Copy all the above functions to GPolyline ===
 google.maps.Polyline.prototype.Contains             = google.maps.Polygon.prototype.Contains;

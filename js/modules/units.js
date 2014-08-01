@@ -16,10 +16,10 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     lat: 0,
     lon: 0,
     speed: 1,
-    range: 10,
+    range: 250,
     cost: 20000,
     level: 1,
-    power: 5,
+    power: .05,
     sps: 2,
     icon: "img/icon/soldier.png",
     attack: true,
@@ -32,7 +32,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     lat: 0,
     lon: 0,
     speed: 0,
-    range: 20,
+    range: 250,
     cost: 30000,
     level: 1,
     power: 7,
@@ -109,12 +109,14 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   }
 
-
   var gameUnit = function(game, options) {
     // soldier, turret etc.
     var self = this;
 
     this.position = new google.maps.LatLng(options.lat, options.lon);
+    
+    this.health = options.health;
+    this.maxHealth = options.health;
 
     this.createMarker(options);
 
@@ -130,7 +132,11 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     });
 
     this.speed = options.speed;
+    this.moving = true;
     this.mine = options.mine;
+
+    this.power = options.power;
+    this.range = options.range;
 
     // this controls whether or not the animation interval will ignore this unit
     this.animate = options.speed > 0;
@@ -144,16 +150,84 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     return true;
   }
 
+  gameUnit.prototype.checkEnemies = function(sessUpdate) {
+    for (var i = 0; i < global.G.theirUnitsRaw.length; i++) {
+      var distance = google.maps.geometry.spherical.computeDistanceBetween(global.G.theirUnitsRaw[i].position, this.position);
+
+      if (distance < this.range) {
+        // stop the unit and start firing!
+        //this.moving = false;
+
+        // cancel any routes
+        //this.animSegments = [];
+
+        // attack the enemy
+        this.attack(i, sessUpdate);
+      }
+    }
+
+    return true;
+  };
+
+  gameUnit.prototype.attack = function(i, sessUpdate) {
+    // attacks the enemy's unit i
+    var currentHealth = global.G.theirUnitsRaw[i].health,
+        newHealth = Math.max(0, currentHealth - this.power);
+
+    if (newHealth == 0) {
+      // unit destroyed!
+
+      // remove marker
+      global.G.theirUnitsRaw[i].marker.setMap(null);
+
+      global.G.theirUnitsRaw[i] = null;
+    }
+    else {
+      global.G.theirUnitsRaw[i].health = newHealth;
+      global.G.theirUnitsRaw[i].updateMarker(global.G.mode == 0 ? 1 : 0);
+    }
+    
+    global.G.theirUnits[i].health = newHealth;
+
+    var otherPlayer = global.me.player == 1 ? 2 : 1;
+
+    var otherPlayerString = "player" + otherPlayer.toString();
+
+    if (sessUpdate || 1) {
+      global.fbSes.update({
+        otherPlayerString: {
+          units: global.G.theirUnits
+        }
+      });
+    }
+
+    return true;
+  };
+
   gameUnit.prototype.createMarker = function(options) {
-    this.marker = new google.maps.Marker({
+    var mode = (options.mine ? global.G.mode : (global.G.mode == 0 ? 1 : 0));
+
+    this.marker = new MarkerWithLabel({
       position: this.position,
       map: global.G.map,
+      animation: google.maps.Animation.DROP,
       title: options.role,
       icon: {
         url: options.icon,
         scaledSize: new google.maps.Size(global.markerSizeX, global.markerSizeY),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
+      },
+      labelContent: this.health.toString() + " (" +
+        (mode == 0 ? "attacking" : "defending") + ")",
+      labelAnchor: new google.maps.Point(8, -16),
+      labelClass: "healthLabel",
+      labelStyle: {
+        opacity: .6,
+        color: "#000",
+        width: 22,
+        height: 8,
+        background: global.healthColor(this.health, this.maxHealth),
       }
     });
 
@@ -181,6 +255,18 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
 
     return true;
   }
+
+  gameUnit.prototype.updateMarker = function(mode) {
+    // called when health updates
+    this.marker.labelStyle.background = global.healthColor(this.health, this.maxHealth);
+    this.marker.labelContent = Math.round(this.health.toString()) + " (" +
+      (mode == 0 ? "attacking" : "defending") + ")";
+    this.marker.label.setContent();
+    this.marker.label.setStyles();
+    //this.marker.label.draw();
+
+    return true;
+  };
 
   function addUnits() {
     //console.trace();
