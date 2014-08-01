@@ -196,8 +196,8 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     .prop("draggable", true)
     .on("mousedown", global.evDragStart)
     .on("dragend", global.evDragCancel)
-    .on("touchstart", global.evTouchStart)
-    .on("touchend", global.evTouchCancel);
+    .on("touchstart", global.evDragStart)
+    .on("touchend", global.evDragCancel);
    
     return true;
   };
