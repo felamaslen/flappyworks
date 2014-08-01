@@ -17,7 +17,7 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     lon: 0,
     speed: 1,
     range: 10,
-    cost: 2000,
+    cost: 20000,
     level: 1,
     power: 5,
     sps: 2,
@@ -28,12 +28,12 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
 
   var turret = {
     role: "turret",
-    health: 10,
+    health: 100,
     lat: 0,
     lon: 0,
     speed: 0,
     range: 20,
-    cost: 3000,
+    cost: 30000,
     level: 1,
     power: 7,
     sps: 5,
@@ -41,6 +41,39 @@ define(['intersection', 'global', 'formMethods', 'jquery'], function(intersectio
     attack: false,
     defence: true 
   };
+
+  var artillery = {
+    role: "artillery",
+    health: "30",
+    lat: 0,
+    lon: 0,
+    speed: 0.5,
+    range: 20,
+    cost: 40000,
+    level: 1,
+    power: 10,
+    sps: 1,
+    icon: 'img/icon/artillery.png',
+    attack: true,
+    defence: true
+  };
+
+  var tank = {
+    role: "tank",
+    health: 150,
+    lat: 0,
+    lon: 0,
+    speed: 0.5,
+    range: 50,
+    cost: 100000,
+    level: 1,
+    power: 15,
+    sps: 3,
+    icon: null,
+    attack: true,
+    defence: false
+  }
+  }
 
   var units = {
     soldier: soldier,
