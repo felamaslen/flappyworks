@@ -15,6 +15,7 @@ require.config({
       global:       'modules/global',
       mapMethods:   'modules/mapMethods',
       mapstuff_fela:'modules/mapstuff_fela',
+      anim:         'modules/anim',
       sync:         'modules/sync',
       units:        'modules/units',
       formMethods:  'modules/formMethods',
