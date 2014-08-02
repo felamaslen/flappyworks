@@ -12,6 +12,7 @@ define([
         'jquery',
         'firebase',
         'jquerycookie',
+        'microevents',
 
         'admin',
         'global',
@@ -22,12 +23,14 @@ define([
 
         'sync',
         'map',
-        'units'
+        'units',
+        'eventsModule'
       ],
       function(
         $,
         firebase,
         jquerycookie,
+        microevents,
 
         Admin,
         global,
@@ -38,7 +41,8 @@ define([
 
         sync,
         map,
-        units
+        units,
+        eventsModule
       ) {
 
     // Basic page module loading - refactor
