@@ -128,6 +128,7 @@ function(
 
     if (newHealth === 0) {
       // unit destroyed!
+      // TODO: JACOB: ADD THEIRUNIT DESTROY TRIGGER
 
       // remove marker
       global.G.theirUnitsRaw[i].marker.setMap(null);
