@@ -5,9 +5,10 @@
 define([
   'jquery',
   'global',
-  'units'
+  'units',
+  'eventsModule'
 ],
-  function($, global, units) {
+  function($, global, units, eventsModule) {
     var sync = function(window) {
       this.window = window;
 
@@ -119,7 +120,7 @@ define([
               // health updated
               if (newMyUnits[i].health === 0) {
                 // my unit was destroyed!
-                // TODO: JACOB: PUT THE TRIGGER HERE FOR MYUNIT DESTROY
+                eventsModule.trigger('unit_destroyed', {unit: global.G.myUnits[i], glob: global});
                 global.G.myUnits[i] = null;
                 global.G.units[i].marker.setMap(null);
                 global.G.units[i] = null;

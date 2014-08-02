@@ -128,7 +128,7 @@ function(
 
     if (newHealth === 0) {
       // unit destroyed!
-      // TODO: JACOB: ADD THEIRUNIT DESTROY TRIGGER
+      eventsModule.trigger('enemy_unit_destroyed', {unit: global.G.theirUnitsRaw[i], glob: global});
 
       // remove marker
       global.G.theirUnitsRaw[i].marker.setMap(null);

@@ -19,29 +19,47 @@ function(
       constructor: EventsModule,
 
       EVENTS: {
-        UNIT_HIT: 'UNIT::HIT'
+        enemyUnitDestroyed: 'enemy_unit_destroyed',
+        unitDestroyed: 'unit_destroyed'
       },
 
       init: function( window ){
 
           this.eventHandlers();
 
-          this.trigger( this.EVENTS.UNIT_HIT , { h: 'test' } );
-
       },
 
       eventHandlers: function(){
 
-        this.bind( this.EVENTS.UNIT_HIT, this.stuff );
+        this.bind( this.EVENTS.enemyUnitDestroyed, this.enemyUnitDestroyed );
+        this.bind( this.EVENTS.unitDestroyed, this.unitDestroyed );
 
       },
 
-      stuff: function( event ){
-
-        console.log( 'EventsModule::unit:event', event );
-
+      enemyUnitDestroyed: function(e){
+        var global = e.glob;
+        var unit = e.unit;
+        var smoke = new google.maps.Marker({
+          position: new google.maps.LatLng(unit.lat, unit.lon),
+          map: global.G.map,
+          icon: 'img/icon/smoke.png'
+        });
+        var tm = function(smoke){smoke.setMap(null)};
+        setTimeout(function(){tm(smoke)},2000);
+      },
+      
+      unitDestroyed: function(e){
+        var global = e.glob;
+        var unit = e.unit;
+        var smoke = new google.maps.Marker({
+          position: new google.maps.LatLng(unit.lat, unit.lon),
+          map: global.G.map,
+          icon: 'img/icon/smoke.png'
+        });
+        var tm = function(smoke){smoke.setMap(null)};
+        setTimeout(function(){tm(smoke)},2000);
       }
-
+      
   };
 
   MicroEvent.mixin( EventsModule );
