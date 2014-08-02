@@ -289,7 +289,7 @@ define([
       }
 
       if (!force && global.lobby[global.sesId].state == 0) {
-       global.debug("tried to create a game before player 2 arrived!", 1);
+        global.debug("tried to create a game before player 2 arrived!", 1);
         return false;
       }
 

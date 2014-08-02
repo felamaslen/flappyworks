@@ -31,7 +31,7 @@ define([
       },
 
       drawTheirUnits: function() {
-        global.debug("drawTheirUnits() called", 2);
+        //global.debug("drawTheirUnits() called", 2);
         for (var i = 0; i < global.G.theirUnits.length; i++) {
           if (typeof global.G.theirUnitsRaw[i] === "undefined") {
             // create the gameUnit
@@ -72,13 +72,15 @@ define([
         }
 
         global.playerChild = global.fb.child(global.sesId).child("player" + global.me.player);
+        global.theirChild = global.fb.child(global.sesId).child("player" +
+            (global.me.player === 1 ? "2" : "1"));
 
         return true;
       },
 
       // this happens when data updates within the current session (if one is joined)
       fbSessionListen: function(snapshot) {
-        global.debug("fbSessionListen() called", 2);
+        //global.debug("fbSessionListen() called", 2);
         if (global.G == null) {
           global.debug("tried to call fbSessionListen with no game in progress", 1);
           return false;
@@ -108,18 +110,24 @@ define([
               continue;
             }
 
-            console.log(i, global.G.myUnits);
+            if (global.isNull(global.G.myUnits[i]))
+              global.G.myUnits[i] = { health: 0 };
+
+            if (global.isNull(newMyUnits[i]))
+              newMyUnits[i] = { health: 0 };
+
             if (newMyUnits[i].health !== global.G.myUnits[i].health) {
               // health updated
               if (newMyUnits[i].health === 0) {
                 // my unit was destroyed!
                 global.G.myUnits[i] = null;
-                global.G.units[i].marker.remove();
-                global.G.units = null;
+                global.G.units[i].marker.setMap(null);
+                global.G.units[i] = null;
               }
               else {
                 global.G.myUnits[i].health = newMyUnits[i].health;
-                global.G.units[i].updateMarker();
+                global.G.units[i].health = newMyUnits[i].health;
+                global.G.units[i].updateMarker(global.G.mode);
               }
             }
           }
