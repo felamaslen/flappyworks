@@ -4,9 +4,10 @@
 
 define([
   'global',
-  'units'
+  'units',
+  'google'
 ],
-  function(global, units) {
+  function(global, units, google) {
     var anim = function(window) {
       this.window = window;
 

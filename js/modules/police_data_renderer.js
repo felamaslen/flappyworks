@@ -1,10 +1,12 @@
 ﻿require([
   'jquery',
-  'global'
+  'global',
+  'google'
   ],
   function(
     $,
-    glob
+    glob,
+    google
   ) {
     var crime_data = {
   "50.5x-4.75": 8, 

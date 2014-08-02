@@ -2,8 +2,9 @@ define([
   'jquery',
   'global',
   'units',
+  'google',
 ],
-  function($, global, units) {
+  function($, global, units, google) {
     var mapMethods = function( window ){
 
         this.window = window;

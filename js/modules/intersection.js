@@ -10,6 +10,9 @@
 
 define([
         'jquery',
+        
+        'google',
+        
         'firebase',
         'jquerycookie',
 
@@ -26,6 +29,9 @@ define([
       ],
       function(
         $,
+
+        google,
+        
         firebase,
         jquerycookie,
 
@@ -40,7 +46,6 @@ define([
         map,
         units
       ) {
-
     // Basic page module loading - refactor
     if (  window.location.pathname.indexOf( 'admin' ) === 1 ) {
 

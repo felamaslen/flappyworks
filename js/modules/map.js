@@ -7,8 +7,9 @@ define([
   'global',
   'units',
   'mapMethods',
+  'google'
 ],
-  function($, global, units, mapMethods) {
+  function($, global, units, mapMethods, google) {
     var map = function( window ){
 
         this.window = window;
