@@ -21,10 +21,12 @@ require.config({
       units:        'modules/units',
       formMethods:  'modules/formMethods',
       uiMessages:   'modules/uiMessages',
+      policeData:   'modules/police_data',
       pdr:          'modules/police_data_renderer',
       mapPreview:   'modules/mapPreview',
       unitObj:      'modules/unitObj',
-      eventsModule: 'modules/eventsModule'
+      eventsModule: 'modules/eventsModule',
+      unitAnim:     'modules/unitAnim'
       },
 
     shim: {
@@ -40,6 +42,7 @@ require([
         'global',
         'intersection',
         'units',
+        'unitAnim',
         'pdr'
     ],
     function(
@@ -47,6 +50,7 @@ require([
         global,
         intersection,
         units,
+        unitAnim,
         pdr
     ) {
 
