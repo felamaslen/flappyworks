@@ -120,6 +120,7 @@ define([
               // health updated
               if (newMyUnits[i].health === 0) {
                 // my unit was destroyed!
+                // JACOB: PUT THE TRIGGER HERE FOR MYUNIT DESTROY
                 global.G.myUnits[i] = null;
                 global.G.units[i].marker.setMap(null);
                 global.G.units[i] = null;
