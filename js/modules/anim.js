@@ -18,7 +18,9 @@ define([
         // this gets called very frequently (make it light in other words)
         global.animCounter++;
 
-        if (global.G == null || global.G.units.length === 0) return false;
+        if (global.G === null || global.G.units === null ||
+          typeof global.G.units !== "object" ||
+          global.G.units.length === 0) return false;
 
         /*
          * properties:
@@ -29,7 +31,8 @@ define([
          * position: google maps latLng
          */
 
-        var sessUpdate = (global.animCounter + 2) % 25 === 0 && !global.devMode;
+//        var sessUpdate = (global.animCounter + 2) % 25 === 0 && !global.devMode;
+        var sessUpdate = !global.devMode;
 
         for (var i = 0; i < global.G.units.length; i++) {
           if (global.G.units[i] == null) continue;
@@ -50,34 +53,35 @@ define([
 
           var d = seg.step * seg.steps * global.animTime;
 
+          var lat, lon;
+
           if (d > seg.eol) {
             // finished this segment
             unit.marker.setPosition(seg.endLoc.latlng);
             unit.animSegments.shift();
-            
-            return;
+
+            unit.position = seg.endLoc.latlng;
+            lat = seg.endLoc.latlng.lat();
+            lon = seg.endLoc.latlng.lng();
+          }
+          else {
+            unit.position = seg.poly1.GetPointAtDistance(d);
+            unit.marker.setPosition(unit.position);
+            global.anim.updatePoly(seg.step, i);
+
+            lat = unit.position.lat();
+            lon = unit.position.lng();
           }
 
-          unit.position = seg.poly1.GetPointAtDistance(d);
-          unit.marker.setPosition(unit.position);
-          global.anim.updatePoly(seg.step, i);
+          global.G.myUnits[i].lat = lat;
+          global.G.myUnits[i].lon = lon;
 
-          global.G.myUnits[i].lat = unit.position.lat();
-          global.G.myUnits[i].lon = unit.position.lng();
-        }
-
-        if (sessUpdate) {
-          // every X frames, update the session with the current positions,
-          // and fetch updates of the opponent's units from the server
-          
-          // this triggers a check for updates on the next session change
-          //global.sessionUpdatePositions = true;
-       
-          //global.debug("updating playerChild units");
-          global.playerChild.update({
-            units: global.G.myUnits,
-            triggerUpdate: global.makeid(10), // this forces a change
-          });
+          if (sessUpdate) {
+            global.playerChild.child("units").child(i).update({
+              lat: lat,
+              lon: lon
+            });
+          }
         }
 
         return true;

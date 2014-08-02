@@ -31,9 +31,8 @@ define([
       },
 
       drawTheirUnits: function() {
-        global.debug("drawTheirUnits() called", 2);
         for (var i = 0; i < global.G.theirUnits.length; i++) {
-          if (typeof global.G.theirUnitsRaw[i] == "undefined") {
+          if (typeof global.G.theirUnitsRaw[i] === "undefined") {
             // create the gameUnit
             var unit = units.units[global.G.theirUnits[i].type];
 
@@ -72,13 +71,15 @@ define([
         }
 
         global.playerChild = global.fb.child(global.sesId).child("player" + global.me.player);
+        global.theirChild = global.fb.child(global.sesId).child("player" +
+            (global.me.player === 1 ? "2" : "1"));
 
         return true;
       },
 
       // this happens when data updates within the current session (if one is joined)
       fbSessionListen: function(snapshot) {
-        global.debug("fbSessionListen() called", 2);
+        //global.debug("fbSessionListen() called", 2);
         if (global.G == null) {
           global.debug("tried to call fbSessionListen with no game in progress", 1);
           return false;
@@ -97,29 +98,40 @@ define([
           global.G.theirUnits = val[otherPlayerString].units;
         }
 
+        global.sync.drawTheirUnits();
+
         // check if my units have been updated (i.e. attacked / destroyed)
         var newMyUnits = val["player" + global.me.player];
-        if (typeof newMyUnits != "object") {
-          global.debug("Error on session listen", 1);
-          return false;
-        }
-        for (var i = 0; i < newMyUnits.length; i++) {
-          if (newMyUnits[i].health !== global.G.myUnits[i].health) {
-            // health updated
-            if (newMyUnits[i].health == 0) {
-              // my unit was destroyed!
-              global.G.myUnits[i] = null;
-              global.G.units[i].marker.remove();
-              global.G.units = null;
+        if (typeof newMyUnits === "object" && typeof newMyUnits.units === "object") {
+          newMyUnits = newMyUnits.units;
+          for (var i = 0; i < newMyUnits.length; i++) {
+            if (newMyUnits[i] === null) {
+              continue;
             }
-            else {
-              global.G.myUnits[i].health = newMyUnits[i].health;
-              glboal.G.units[i].updateMarker();
+
+            if (global.isNull(global.G.myUnits[i]))
+              global.G.myUnits[i] = { health: 0 };
+
+            if (global.isNull(newMyUnits[i]))
+              newMyUnits[i] = { health: 0 };
+
+            if (newMyUnits[i].health !== global.G.myUnits[i].health) {
+              // health updated
+              if (newMyUnits[i].health === 0) {
+                // my unit was destroyed!
+                // TODO: JACOB: PUT THE TRIGGER HERE FOR MYUNIT DESTROY
+                global.G.myUnits[i] = null;
+                global.G.units[i].marker.setMap(null);
+                global.G.units[i] = null;
+              }
+              else {
+                global.G.myUnits[i].health = newMyUnits[i].health;
+                global.G.units[i].health = newMyUnits[i].health;
+                global.G.units[i].updateMarker(global.G.mode);
+              }
             }
           }
         }
-
-        global.sync.drawTheirUnits();
 
         return true;
       },
