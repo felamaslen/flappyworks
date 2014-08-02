@@ -8,6 +8,8 @@ require.config({
       jquery:       'libs/jquery.min',
       bootstrap:    'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
+      microevents:  'libs/microevents',
+      
       firebase:     'libs/firebase',
       intersection: 'modules/intersection',
       view:         'modules/view',
@@ -20,9 +22,13 @@ require.config({
       units:        'modules/units',
       formMethods:  'modules/formMethods',
       uiMessages:   'modules/uiMessages',
+      policeData:   'modules/police_data',
       pdr:          'modules/police_data_renderer',
       mapPreview:   'modules/mapPreview',
-      unitObj:      'modules/unitObj'
+      unitObj:      'modules/unitObj',
+      eventsModule: 'modules/eventsModule',
+      unitAnim:     'modules/unitAnim'
+
       },
 
     shim: {
@@ -38,6 +44,7 @@ require([
         'global',
         'intersection',
         'units',
+        'unitAnim',
         'pdr'
     ],
     function(
@@ -45,6 +52,7 @@ require([
         global,
         intersection,
         units,
+        unitAnim,
         pdr
     ) {
 

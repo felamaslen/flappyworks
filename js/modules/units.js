@@ -3,14 +3,16 @@ define([
   'intersection',
   'global',
   'formMethods',
-  'unitObj'
+  'unitObj',
+  'eventsModule'
   ], 
 function(
   $,
   intersection,
   global,
   formMethods,
-  unitObj
+  unitObj,
+  eventsModule
   ){
 
   var soldier = unitObj.soldier;
@@ -99,6 +101,8 @@ function(
 
   gameUnit.prototype.checkEnemies = function(sessUpdate) {
     for (var i = 0; i < global.G.theirUnitsRaw.length; i++) {
+      $(window).trigger('unit_attack', this, global.G.theirUnitsRaw[i]);
+      
       if (global.G.theirUnitsRaw[i] === null) continue;
       var distance = google.maps.geometry.spherical.computeDistanceBetween(global.G.theirUnitsRaw[i].position, this.position);
 
