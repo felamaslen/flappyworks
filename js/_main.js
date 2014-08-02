@@ -23,7 +23,8 @@ require.config({
       policeData:   'modules/police_data',
       pdr:          'modules/police_data_renderer',
       mapPreview:   'modules/mapPreview',
-      unitObj:      'modules/unitObj'
+      unitObj:      'modules/unitObj',
+      unitAnim:     'modules/unitAnim'
       },
 
     shim: {
@@ -39,6 +40,7 @@ require([
         'global',
         'intersection',
         'units',
+        'unitAnim',
         'pdr'
     ],
     function(
@@ -46,6 +48,7 @@ require([
         global,
         intersection,
         units,
+        unitAnim,
         pdr
     ) {
 
