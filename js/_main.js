@@ -1,13 +1,19 @@
 require.config({
     appDir: '.',
-    waitSeconds : 5,
+    waitSeconds : 10,
     urlArgs: "bust="+Math.floor(Math.random()*999999),
 
     paths : {
 
+      async:        'libs/async',
+      google:   'libs/googleShim',
       jquery:       'libs/jquery.min',
       bootstrap:    'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
+
+      markerwithlabel: 'libs/markerwithlabel',
+      'v3_epoly':   'libs/v3_epoly',
+
       firebase:     'libs/firebase',
       intersection: 'modules/intersection',
       view:         'modules/view',
@@ -29,7 +35,7 @@ require.config({
       'jquery': {exports: '$'},
       'bootstrap': {deps:['jquery'], exports: 'bootstrap'},
       'jquerycookie' : {deps:['jquery'], exports: 'jquerycookie'},
-      'firebase' : {deps:[], exports: 'Firebase'},
+      'firebase' : {deps:[], exports: 'Firebase'}
     }
 });
 

@@ -3,14 +3,16 @@ define([
   'intersection',
   'global',
   'formMethods',
-  'unitObj'
+  'unitObj',
+  'google'
   ], 
 function(
   $,
   intersection,
   global,
   formMethods,
-  unitObj
+  unitObj,
+  google
   ){
 
   var soldier = unitObj.soldier;
@@ -171,7 +173,7 @@ function(
       labelAnchor: new google.maps.Point(8, -16),
       labelClass: "healthLabel",
       labelStyle: {
-        opacity: .6,
+        opacity: '.6',
         color: "#000",
         width: 22,
         height: 8,
