@@ -128,6 +128,7 @@ function(
 
     if (newHealth === 0) {
       // unit destroyed!
+      // TODO: JACOB: ADD THEIRUNIT DESTROY TRIGGER
 
       // remove marker
       global.G.theirUnitsRaw[i].marker.setMap(null);
@@ -138,18 +139,11 @@ function(
       global.G.theirUnitsRaw[i].health = newHealth;
       global.G.theirUnitsRaw[i].updateMarker(global.G.mode === 0 ? 1 : 0);
     }
-    
     global.G.theirUnits[i].health = newHealth;
 
-    var otherPlayer = global.me.player == 1 ? 2 : 1;
-
-    var otherPlayerString = "player" + otherPlayer.toString();
-
-    if (sessUpdate || 1) {
-      global.fbSes.update({
-        otherPlayerString: {
-          units: global.G.theirUnits
-        }
+    if (sessUpdate) {
+      global.theirChild.child("units").child(i).update({
+        health: newHealth
       });
     }
 

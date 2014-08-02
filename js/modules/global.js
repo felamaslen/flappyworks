@@ -92,9 +92,13 @@ define([
         }
         return true;
       },
+
+      isNull: function(obj) {
+        return obj === null || typeof obj !== "object";
+      },
       
       // animation stuff
-      animTime: 25,
+      animTime: 50,
       animCounter: 0,
 
       mapStrokeColor: "#ff0000",
