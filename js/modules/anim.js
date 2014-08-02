@@ -76,26 +76,12 @@ define([
           global.G.myUnits[i].lat = lat;
           global.G.myUnits[i].lon = lon;
 
-          // /*
-          global.playerChild.child("units").child(i).update({
-            lat: lat,
-            lon: lon
-          });
-          // */
-        }
-
-        if (sessUpdate) {
-          // every X frames, update the session with the current positions,
-          // and fetch updates of the opponent's units from the server
-          
-          // this triggers a check for updates on the next session change
-          //global.sessionUpdatePositions = true;
-       
-          //global.debug("updating playerChild units");
-          /*global.playerChild.update({
-            units: global.G.myUnits,
-            triggerUpdate: global.makeid(10), // this forces a change
-          });*/
+          if (sessUpdate) {
+            global.playerChild.child("units").child(i).update({
+              lat: lat,
+              lon: lon
+            });
+          }
         }
 
         return true;

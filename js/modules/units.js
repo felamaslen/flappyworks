@@ -140,20 +140,11 @@ function(
     }
     global.G.theirUnits[i].health = newHealth;
 
-//    var otherPlayer = global.me.player === 1 ? 2 : 1;
-
-    // /*
-    global.theirChild.child("units").child(i).update({
-      health: newHealth
-    });
-    // */
-
-    /*if (sessUpdate || 1) {
-      global.fbSes.child("player" + otherPlayer.toString()).update({
-        units: global.G.theirUnits,
-        triggerUpdate: global.makeid(10) // this forces a change
+    if (sessUpdate) {
+      global.theirChild.child("units").child(i).update({
+        health: newHealth
       });
-    }*/
+    }
 
     return true;
   };
