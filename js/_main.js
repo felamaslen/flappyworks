@@ -14,14 +14,15 @@ require.config({
       admin:        'modules/admin',
       global:       'modules/global',
       mapMethods:   'modules/mapMethods',
-      mapstuff_fela:'modules/mapstuff_fela',
+      map:          'modules/map',
       anim:         'modules/anim',
       sync:         'modules/sync',
       units:        'modules/units',
       formMethods:  'modules/formMethods',
       uiMessages:   'modules/uiMessages',
       pdr:          'modules/police_data_renderer',
-      mapPreview:   'modules/mapPreview'
+      mapPreview:   'modules/mapPreview',
+      unitObj:      'modules/unitObj'
       },
 
     shim: {

@@ -1,5 +1,5 @@
 /**
- * @file js/mapstuff_fela.js
+ * @file js/map.js
  */
 
 define([
@@ -9,16 +9,16 @@ define([
   'mapMethods',
 ],
   function($, global, units, mapMethods) {
-    var mapstuff_fela = function( window ){
+    var map = function( window ){
 
         this.window = window;
         this.init( window );
 
     };
 
-    mapstuff_fela.prototype = {
+    map.prototype = {
       init: function() {
-        global.debug("mapstuff_fela loaded", 2);
+        global.debug("map loaded", 2);
 
         global.mm = new mapMethods();
 
@@ -336,6 +336,6 @@ define([
       }
     };
 
-    return mapstuff_fela;
+    return map;
   }
 );
