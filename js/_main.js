@@ -8,6 +8,8 @@ require.config({
       jquery:       'libs/jquery.min',
       bootstrap:    'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
+      microevents:  'libs/microevents',
+      
       firebase:     'libs/firebase',
       intersection: 'modules/intersection',
       view:         'modules/view',
@@ -24,7 +26,9 @@ require.config({
       pdr:          'modules/police_data_renderer',
       mapPreview:   'modules/mapPreview',
       unitObj:      'modules/unitObj',
+      eventsModule: 'modules/eventsModule',
       unitAnim:     'modules/unitAnim'
+
       },
 
     shim: {

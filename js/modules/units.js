@@ -3,14 +3,16 @@ define([
   'intersection',
   'global',
   'formMethods',
-  'unitObj'
+  'unitObj',
+  'eventsModule'
   ], 
 function(
   $,
   intersection,
   global,
   formMethods,
-  unitObj
+  unitObj,
+  eventsModule
   ){
 
   var soldier = unitObj.soldier;
