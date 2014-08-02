@@ -18,23 +18,27 @@ function(
 
       constructor: EventsModule,
 
+      EVENTS: {
+        UNIT_HIT: 'UNIT::HIT'
+      },
+
       init: function( window ){
 
           this.eventHandlers();
 
-          this.trigger( 'test:event', { h: 'test' } );
+          this.trigger( this.EVENTS.UNIT_HIT , { h: 'test' } );
 
       },
 
       eventHandlers: function(){
 
-        this.bind( 'test:event', this.stuff );
+        this.bind( this.EVENTS.UNIT_HIT, this.stuff );
 
       },
 
       stuff: function( event ){
 
-        console.log( 'EventsModule::EventsModule', event );
+        console.log( 'EventsModule::unit:event', event );
 
       }
 
