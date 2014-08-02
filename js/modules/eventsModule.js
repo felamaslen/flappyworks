@@ -21,19 +21,20 @@ function(
       init: function( window ){
 
           this.eventHandlers();
-          this.trigger( 'hi', { h: 'test' } );
+
+          this.trigger( 'test:event', { h: 'test' } );
 
       },
 
       eventHandlers: function(){
 
-        this.bind( 'hi', this.stuff );
+        this.bind( 'test:event', this.stuff );
 
       },
 
-      stuff: function(){
+      stuff: function( event ){
 
-        console.log('hi');
+        console.log( 'EventsModule::EventsModule', event );
 
       }
 
