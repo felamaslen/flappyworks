@@ -20,6 +20,7 @@ require.config({
       units:        'modules/units',
       formMethods:  'modules/formMethods',
       uiMessages:   'modules/uiMessages',
+      policeData:   'modules/police_data',
       pdr:          'modules/police_data_renderer',
       mapPreview:   'modules/mapPreview',
       unitObj:      'modules/unitObj'
