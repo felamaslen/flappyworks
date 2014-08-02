@@ -2,6 +2,10 @@
  * @file css/style.css
  */
 
+#forceGame {
+  display: none;
+}
+
 body {
   font-family: "Montserrat", sans-serif;
 }
