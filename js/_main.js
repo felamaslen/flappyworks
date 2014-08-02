@@ -14,7 +14,7 @@ require.config({
       admin:        'modules/admin',
       global:       'modules/global',
       mapMethods:   'modules/mapMethods',
-      mapstuff_fela:'modules/mapstuff_fela',
+      map:          'modules/map',
       anim:         'modules/anim',
       sync:         'modules/sync',
       units:        'modules/units',

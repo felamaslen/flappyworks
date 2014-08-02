@@ -21,7 +21,7 @@ define([
         'anim',
 
         'sync',
-        'mapstuff_fela',
+        'map',
         'units'
       ],
       function(
@@ -37,7 +37,7 @@ define([
         anim,
 
         sync,
-        mapstuff_fela,
+        map,
         units
       ) {
 
@@ -55,7 +55,7 @@ define([
 
     global.view = new view();
 
-    var mapstuff = new mapstuff_fela( window );
+    var mapstuff = new map( window );
 
     function getFormParams() {
       // get parameters
