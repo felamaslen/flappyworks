@@ -134,18 +134,14 @@ function(
       global.G.theirUnitsRaw[i].health = newHealth;
       global.G.theirUnitsRaw[i].updateMarker(global.G.mode === 0 ? 1 : 0);
     }
-    
     global.G.theirUnits[i].health = newHealth;
 
-    var otherPlayer = global.me.player == 1 ? 2 : 1;
-
-    var otherPlayerString = "player" + otherPlayer.toString();
+    var otherPlayer = global.me.player === 1 ? 2 : 1;
 
     if (sessUpdate || 1) {
-      global.fbSes.update({
-        otherPlayerString: {
-          units: global.G.theirUnits
-        }
+      global.fbSes.child("player" + otherPlayer.toString()).update({
+        units: global.G.theirUnits,
+        triggerUpdate: global.makeid(10) // this forces a change
       });
     }
 
