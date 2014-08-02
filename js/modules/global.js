@@ -14,7 +14,7 @@ define([
     ) {
 
     var global = {
-      debugLevel: 1,
+      debugLevel: 5,
       debug: function(msg, level) {
         level = typeof level == "undefined" ? 2 : level;
         if (level > global.debugLevel) return false;
