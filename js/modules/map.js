@@ -81,12 +81,10 @@ define([
             return false;
           }
          
-          console.log("adding city limit");
           global.mm.addCityLimit();
 
           global.G.dragData = unit;
           
-          global.debug("dragging a unit...", 2);
           return true;
         }
         
