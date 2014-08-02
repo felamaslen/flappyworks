@@ -30,14 +30,14 @@ function(
   }
 
   for (var i in units) {
-    if (typeof units[i].attack == "undefined")
+    if (typeof units[i].attack === "undefined")
       units[i].attack = true;
-    if (typeof units[i].defence == "undefined")
+    if (typeof units[i].defence === "undefined")
       units[i].defence = true;
   }
 
   function plopUnit(unit) {
-    if (global.G == null) {
+    if (global.G === null) {
       return false;
     }
 
@@ -95,11 +95,11 @@ function(
     this.poly.setMap(game.map);
 
     return true;
-  }
+  };
 
   gameUnit.prototype.checkEnemies = function(sessUpdate) {
     for (var i = 0; i < global.G.theirUnitsRaw.length; i++) {
-      if (global.G.theirUnitsRaw[i] == null) continue;
+      if (global.G.theirUnitsRaw[i] === null) continue;
       var distance = google.maps.geometry.spherical.computeDistanceBetween(global.G.theirUnitsRaw[i].position, this.position);
 
       if (distance < this.range) {
@@ -122,7 +122,7 @@ function(
     var currentHealth = global.G.theirUnitsRaw[i].health,
         newHealth = Math.max(0, currentHealth - this.power);
 
-    if (newHealth == 0) {
+    if (newHealth === 0) {
       // unit destroyed!
 
       // remove marker
@@ -132,7 +132,7 @@ function(
     }
     else {
       global.G.theirUnitsRaw[i].health = newHealth;
-      global.G.theirUnitsRaw[i].updateMarker(global.G.mode == 0 ? 1 : 0);
+      global.G.theirUnitsRaw[i].updateMarker(global.G.mode === 0 ? 1 : 0);
     }
     
     global.G.theirUnits[i].health = newHealth;
@@ -153,7 +153,7 @@ function(
   };
 
   gameUnit.prototype.createMarker = function(options) {
-    var mode = (options.mine ? global.G.mode : (global.G.mode == 0 ? 1 : 0));
+    var mode = (options.mine ? global.G.mode : (global.G.mode === 0 ? 1 : 0));
 
     this.marker = new MarkerWithLabel({
       position: this.position,
@@ -167,7 +167,7 @@ function(
         anchor: new google.maps.Point(global.markerSizeX / 2, global.markerSizeY / 2)
       },
       labelContent: this.health.toString() + " (" +
-        (mode == 0 ? "attacking" : "defending") + ")",
+        (mode === 0 ? "attacking" : "defending") + ")",
       labelAnchor: new google.maps.Point(8, -16),
       labelClass: "healthLabel",
       labelStyle: {
@@ -189,7 +189,7 @@ function(
   };
 
   gameUnit.prototype.updateAnim = function() {
-    if (this.speed == 0) return false;
+    if (this.speed === 0) return false;
 
     this.eol = this.poly.Distance();
 
@@ -202,13 +202,13 @@ function(
     this.animate = true;
 
     return true;
-  }
+  };
 
   gameUnit.prototype.updateMarker = function(mode) {
     // called when health updates
     this.marker.labelStyle.background = global.healthColor(this.health, this.maxHealth);
     this.marker.labelContent = Math.round(this.health.toString()) + " (" +
-      (mode == 0 ? "attacking" : "defending") + ")";
+      (mode === 0 ? "attacking" : "defending") + ")";
     this.marker.label.setContent();
     this.marker.label.setStyles();
     //this.marker.label.draw();
@@ -221,7 +221,7 @@ function(
     global.debug("UNITS:addUnits", 2);
     var formResults = formMethods.getFormParams('#sessionParamForm');
 
-    var attack = global.G.mode == 0, defend = !attack;
+    var attack = global.G.mode === 0, defend = !attack;
 
     // game mode indicator
     if (typeof global.gameModeInd != "undefined")
@@ -270,7 +270,7 @@ function(
     .on("touchend", global.evMapDrop);
    
     return true;
-  };
+  }
 
   $(window).on('define_game', addUnits);
 
