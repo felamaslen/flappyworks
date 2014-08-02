@@ -9,6 +9,7 @@ require.config({
       bootstrap:    'libs/bootstrap.min',
       jquerycookie: 'libs/jquery.cookie',
       microevents:  'libs/microevents',
+      
       firebase:     'libs/firebase',
       intersection: 'modules/intersection',
       view:         'modules/view',
@@ -27,6 +28,7 @@ require.config({
       unitObj:      'modules/unitObj',
       eventsModule: 'modules/eventsModule',
       unitAnim:     'modules/unitAnim'
+
       },
 
     shim: {

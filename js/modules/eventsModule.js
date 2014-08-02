@@ -1,8 +1,10 @@
 define([
-  'jquery'  
+  'jquery',
+  'microevents'
 ],
 function(
-  $
+  $,
+  MicroEvent
 ) {
 
   var EventsModule = function( window ){
