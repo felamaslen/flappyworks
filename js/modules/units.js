@@ -107,12 +107,6 @@ function(
       var distance = google.maps.geometry.spherical.computeDistanceBetween(global.G.theirUnitsRaw[i].position, this.position);
 
       if (distance < this.range) {
-        // stop the unit and start firing!
-        //this.moving = false;
-
-        // cancel any routes
-        //this.animSegments = [];
-
         // attack the enemy
         this.attack(i, sessUpdate);
       }
