@@ -19,7 +19,8 @@ function(
       constructor: EventsModule,
 
       EVENTS: {
-        UNIT_HIT: 'UNIT::HIT'
+        UNIT_HIT: 'UNIT::HIT',
+        UNIT_ATTACK: 'UNIT::ATTACK'
       },
 
       init: function( window ){
