@@ -35,7 +35,7 @@ define([
         var sessUpdate = !global.devMode;
 
         for (var i = 0; i < global.G.units.length; i++) {
-          if (global.G.units[i] == null) continue;
+          if (global.isNull(global.G.units[i])) continue;
 
           var unit = global.G.units[i];
 
@@ -46,8 +46,6 @@ define([
               global.G.units[i].animSegments.length == 0) continue;
 
           unit.animSegments[0].steps++;
-          
-          //console.log("animating marker...");
          
           var seg = unit.animSegments[0];
 
@@ -95,7 +93,6 @@ define([
         
         // 20 is the buffer for the animation poly (to speed things up)
         if (poly2.getPath().getLength() > 20) {
-          console.log("new poly2");
           poly2 = new google.maps.Polyline([poly1.getPath().getAt(last - 1)]);
         }
 

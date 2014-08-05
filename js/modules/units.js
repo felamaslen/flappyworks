@@ -107,12 +107,6 @@ function(
       var distance = google.maps.geometry.spherical.computeDistanceBetween(global.G.theirUnitsRaw[i].position, this.position);
 
       if (distance < this.range) {
-        // stop the unit and start firing!
-        //this.moving = false;
-
-        // cancel any routes
-        //this.animSegments = [];
-
         // attack the enemy
         this.attack(i, sessUpdate);
       }
@@ -224,7 +218,7 @@ function(
     // game mode indicator
     if (typeof global.gameModeInd != "undefined")
       global.gameModeInd.remove();
-    global.gameModeInd = $("<div></div>")
+    global.gameModeInd = $("<div>")
       .addClass("gameMode")
       .addClass(attack ? "attack" : "defend");
 
@@ -236,12 +230,10 @@ function(
       if ((attack && !units[name].attack) ||
         (defend && !units[name].defence)) continue;
 
-        global.$d.unitsList.append($("<li></li>")
-          .addClass("list-item")
-          .addClass("unit")
-          .addClass("unit-" + name)
+        global.$d.unitsList.append($("<li>")
+          .addClass("list-item unit unit-" + name)
           .text(name)
-          .append($("<span></span>")
+          .append($("<span>")
             .addClass("cost")
             .text(units[name].cost)
             )
@@ -252,9 +244,9 @@ function(
             unit: units[name],
             type: name
           })
-          .append($("<div></div>")
+          .append($("<div>")
             .addClass("icon")
-            .append($("<img></img>").attr("src", units[name].icon))
+            .append($("<img>").attr("src", units[name].icon))
             )
           );
     }
